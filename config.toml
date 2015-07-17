@@ -1,0 +1,33 @@
+baseurl = "http://replace-this-with-your-hugo-site.com/"
+languageCode = "en-us"
+title = "Andriy Druk"
+theme = "startbootstrap-clean-blog"
+
+canonifyurls = true
+paginate = 10
+copyright = "Code released under the Apache 2.0 license."
+
+[author]
+  name = "Andriy Druk"
+
+[params]
+  DateForm = "Mon, Jan 2, 2006"
+  Description = "Yet Another Android Developer Blog"
+  Author = "Andriy Druk"
+  email = "andriy.druk@gmail.com"
+
+[[params.social]]
+  title = "twitter"
+  url = "https://twitter.com/AndriyDruk"
+[[params.social]]
+  title = "github"
+  url = "https://github.com/andriydruk"
+
+[[menu.main]]
+  name = "home"
+  url = "/"
+  weight = -200
+[[menu.main]]
+  name = "Archives"
+  url = "/post/"
+  weight = -180
