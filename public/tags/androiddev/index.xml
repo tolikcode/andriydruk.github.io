@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Androiddev on Andriy Druk</title>
-    <link>http://replace-this-with-your-hugo-site.com/tags/androiddev/</link>
+    <link>http://andriydruk.github.io/tags/androiddev/</link>
     <description>Recent content in Androiddev on Andriy Druk</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Code released under the Apache 2.0 license.</copyright>
     <lastBuildDate>Wed, 15 Jul 2015 21:39:00 +0300</lastBuildDate>
-    <atom:link href="http://replace-this-with-your-hugo-site.com/tags/androiddev/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://andriydruk.github.io/tags/androiddev/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Что такое .aar библиотеки?</title>
-      <link>http://replace-this-with-your-hugo-site.com/post/what_is_aars/</link>
+      <link>http://andriydruk.github.io/post/what_is_aars/</link>
       <pubDate>Wed, 15 Jul 2015 21:39:00 +0300</pubDate>
       
-      <guid>http://replace-this-with-your-hugo-site.com/post/what_is_aars/</guid>
+      <guid>http://andriydruk.github.io/post/what_is_aars/</guid>
       <description>
 
 &lt;p&gt;Уже прошло больше года с анонса Android &lt;a href=&#34;http://tools.android.com/tech-docs/new-build-system&#34;&gt;New Build System&lt;/a&gt;, работа над которой кипит и по сей день: в экспериментальной области все еще находится несколько увлекательных возможностей &lt;a href=&#34;http://tools.android.com/tech-docs/jackandjill&#34;&gt;Jack and Jill Tool Chain&lt;/a&gt; и &lt;a href=&#34;http://tools.android.com/tech-docs/new-build-system/gradle-experimental#TOC-Ndk-Integration&#34;&gt;NDK Integration&lt;/a&gt;.&lt;/p&gt;
@@ -177,10 +177,10 @@
     
     <item>
       <title>Добро пожаловать</title>
-      <link>http://replace-this-with-your-hugo-site.com/post/welcome/</link>
+      <link>http://andriydruk.github.io/post/welcome/</link>
       <pubDate>Tue, 07 Jul 2015 23:10:36 +0300</pubDate>
       
-      <guid>http://replace-this-with-your-hugo-site.com/post/welcome/</guid>
+      <guid>http://andriydruk.github.io/post/welcome/</guid>
       <description>&lt;p&gt;Привет всем и добро пожаловать в Yet Another Android Developer Blog!&lt;/p&gt;
 
 &lt;p&gt;Я только что создал этот блог o Android разработке. Причин, которые привели меня это сделать множество, и я постараюсь вам перечислять позже в этой статье.&lt;/p&gt;
