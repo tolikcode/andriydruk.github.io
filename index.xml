@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Andriy Druk</title>
+    <link>http://replace-this-with-your-hugo-site.com/</link>
+    <description>Recent content on Andriy Druk</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Code released under the Apache 2.0 license.</copyright>
+    <lastBuildDate>Wed, 15 Jul 2015 21:39:00 +0300</lastBuildDate>
+    <atom:link href="http://replace-this-with-your-hugo-site.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Что такое .aar библиотеки?</title>
+      <link>http://replace-this-with-your-hugo-site.com/post/what_is_aars/</link>
+      <pubDate>Wed, 15 Jul 2015 21:39:00 +0300</pubDate>
+      
+      <guid>http://replace-this-with-your-hugo-site.com/post/what_is_aars/</guid>
+      <description>
+
+&lt;p&gt;Уже прошло больше года с анонса Android &lt;a href=&#34;http://tools.android.com/tech-docs/new-build-system&#34;&gt;New Build System&lt;/a&gt;, работа над которой кипит и по сей день: в экспериментальной области все еще находится несколько увлекательных возможностей &lt;a href=&#34;http://tools.android.com/tech-docs/jackandjill&#34;&gt;Jack and Jill Tool Chain&lt;/a&gt; и &lt;a href=&#34;http://tools.android.com/tech-docs/new-build-system/gradle-experimental#TOC-Ndk-Integration&#34;&gt;NDK Integration&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Но одной из самых ожидаемых возможностей новой системы сборки стала поддержка aar бибилотек - нового бинарного формата бибилотек, который в отличии от jar бибилотек может содержать android ресурсы (res, assets, native libraries, etc).  В это статье я хотел поделиться своим опытом работы с aar бибилиотеками.&lt;/p&gt;
+
+&lt;h2 id=&#34;1-что-такое-aar-бибилотеки:2d39079d7dbc3e98619f859c896fcc85&#34;&gt;1. Что такое .aar бибилотеки?&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://tools.android.com/tech-docs/new-build-system/aar-format&#34;&gt;Официальная документация&lt;/a&gt; говорит о том что aar  - это бинарный дистрибутив Android Library Project и прдеставляет собой zip файл с расширением .aar, котороый содержит:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;/AndroidManifest.xml (mandatory)&lt;/li&gt;
+&lt;li&gt;/classes.jar (mandatory)&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;/res/ (mandatory)&lt;/li&gt;
+&lt;li&gt;/R.txt (mandatory)&lt;/li&gt;
+&lt;li&gt;/assets/ (optional)&lt;/li&gt;
+&lt;li&gt;/libs/*.jar (optional)&lt;/li&gt;
+&lt;li&gt;/jni/&lt;abi&gt;/*.so (optional)&lt;/li&gt;
+&lt;li&gt;/proguard.txt (optional)&lt;/li&gt;
+&lt;li&gt;/lint.jar (optional)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Разберем подробней. AndroidManifest.xml это оригинальный манифест с вашей библиотеки. Файл сlasses.jar содержит скомпилированные java классы библиотеки (они будут слиты с остальными во время компиляции основного проекта). Исходя из документации R.txt это выходной файл aapt (Android Asset Packaging Tool) с флагом &amp;ndash;output-text-symbols, тоесть это часть вашего R.java который будет слит с остальными результатами работы aapt при сборке основного проекта. Далее идут директории assets, res, libs и jni, которые содержат оригинальные файлы из каталога src вашей бибилотеки (часть содержимого каталога res может быть удаленно после выполнения обфускации). Файл proguard.txt копируется из вашей root директории библиотеки для того чтобы передать правила обфускации в основной проект. При  работе с .aar стоит учитывать что если флаг minifyEnabled в build.gradle файле вашей библиотеки установлен в true, то при сборке она будет обфусцирована. Также aar бибилитека может содержать пользовательские lint правила в &lt;a href=&#34;https://groups.google.com/forum/#!msg/adt-dev/seWAK5r1fjI/0ed2rztjDbEJ&#34;&gt;lint.jar&lt;/a&gt;, они будут распостраняться и на основной проект.&lt;/p&gt;
+
+&lt;h2 id=&#34;2-как-посторить-aar-библиотеку:2d39079d7dbc3e98619f859c896fcc85&#34;&gt;2. Как посторить .aar библиотеку?&lt;/h2&gt;
+
+&lt;p&gt;Для того чтобы построить aar бибилотеку достаточно выполнить ./grdlew assemble в корне вашего проекта. Эта команда соберет все flavour и buildTypes. Но по причине ограничений gradle по умолчанию приложениями будет использоваться всегда defaultRelease сборка вашей aar бибилотеки. Если вы хотите поменять default конфигурацию, это можно сделать так&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-gradle&#34;&gt;android {
+    defaultPublishConfig &amp;quot;debug&amp;quot;
+} 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;или так:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-gradle&#34;&gt;android {
+    defaultPublishConfig &amp;quot;flavor1Debug&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;В первом случае в качестве default конфигурации используется debug build, во втором debug build варианта flavor1. Кроме того вы можете включить публикацию всех конфигураций:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-gradle&#34;&gt;android {        
+    publishNonDefault true
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;3-как-подключить-aar-бибилиотеку:2d39079d7dbc3e98619f859c896fcc85&#34;&gt;3. Как подключить .aar бибилиотеку?&lt;/h2&gt;
+
+&lt;p&gt;Существует 4 способа подключения aar библиотек:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Подключение в качестве модуля&lt;/li&gt;
+&lt;li&gt;Плоский репозиторий (Flat directory)&lt;/li&gt;
+&lt;li&gt;Локальный репозиторий (Local maven repo)&lt;/li&gt;
+&lt;li&gt;Удаленный репозиторий (Remote maven repo)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;3-1-подключение-модуля:2d39079d7dbc3e98619f859c896fcc85&#34;&gt;3.1 Подключение модуля&lt;/h3&gt;
+
+&lt;p&gt;Это пожалуй самый простой способ и с ним знакомо большинство Android разработчиков. Вы можете импортировать библиотеку как модуль в ваш проект и установить зависимость в своем основном проекте следующим образом:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-gradle&#34;&gt;dependencies {
+    compile project(&#39;:your_library_module_name&#39;)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Также вы можете установить &lt;a href=&#34;http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Referencing-a-Library&#34;&gt;зависимость на определную конфигурацию вашей библотеки&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-gradle&#34;&gt;dependencies {
+    flavor1Compile project(path: &#39;:your_library_module_name&#39;, configuration: &#39;flavor1Release&#39;)
+    flavor2Compile project(path: &#39;:your_library_module_name&#39;, configuration: &#39;flavor2Release&#39;)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Такой подход позволяет вам легко вносить изменения в код вашей библиотеки и тут же получать aar при перекомпиляции. По большому счету вам даже не стоит задумывать о том что aar файл строится при сборке вашего проекта, в данном случае он выступает лишь в роли промежуточного звена сборки. Дальше мы расмотрим подходы подлючения собраных aar файлов.&lt;/p&gt;
+
+&lt;h3 id=&#34;3-1-плоский-репозиторий:2d39079d7dbc3e98619f859c896fcc85&#34;&gt;3.1 Плоский репозиторий&lt;/h3&gt;
+
+&lt;p&gt;Самый простой способ подключения aar бибилотек в собраном виде это простое копирование в директорию проекта. Для того чтобы установить зависимость на такой файл нужно включить директорию в список своих репозиториев в build.gradle&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-gradle&#34;&gt;repositories {
+    flatDir {
+        dirs &#39;path_to_folder_with_aar&#39;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;После этого можно подключать библиотеку:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-gradle&#34;&gt;dependencies {
+   compile &#39;com.example:library:1.0.0@aar&#39;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Версия бибилиотеки и namespace в данном случая ни на что не влияют, так как flatDir репозитории их просто игнорируют.&lt;/p&gt;
+
+&lt;h3 id=&#34;3-2-локальный-репозиторий:2d39079d7dbc3e98619f859c896fcc85&#34;&gt;3.2 Локальный репозиторий&lt;/h3&gt;
+
+&lt;p&gt;Для использования такого подхода вам нужен maven репозиторий разположений локально на вашем компьютере. Существует множество готовых gradle плагинов для публикации aar бибилиотек, но мы воспользуемся консольной устилитой mvn. Для начала следует проверить наличие установленого &lt;a href=&#34;https://maven.apache.org/&#34;&gt;maven&lt;/a&gt; в вашей системе.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-zsh&#34;&gt;mvn --version
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Если он отсутвует, его следует установить. Для публикации артефакта (в нашем случае .aar  библиотеки) в репозиторий используйте команду:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-zsh&#34;&gt;mvn install:install-file -Dfile=&amp;lt;path_to_your_aar&amp;gt; -DgroupId=&amp;lt;domain&amp;gt; -DartifactId=&amp;lt;artifact_id&amp;gt; -Dversion=&amp;lt;version&amp;gt; -Dpackaging=aar
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Например:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-zsh&#34;&gt;mvn install:install-file -Dfile=mDNSShared-release.aar -DgroupId=com.dnssd -DartifactId=mDNSShared -Dversion=1.0.0 -Dpackaging=aar
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;На самом деле команда mvn install выполнит копирование вашего aar файла в директорию локального репозитория и сгенерирует соотвествующий pom.xml файл. Перейдем в ~/.m2/repository директорию на вашем компьютере. После выполнения команды install в этой директории должны появится поддиректории вашего домена, в случае моего приемера это&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-zsh&#34;&gt;~/.m2/repository/com/dnssd/mDNSShared/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;В это каталоге располгаются все версии вашего aar артефакта (под этим термином подразумевается любой бинарный файл помещеный в maven репозиторий). В моем случае это директория 1.0.0 в которой содержится 3 файла: _remote.repositories, mDNSShared-1.0.1.aar, mDNSShared-1.0.1.pom. Теперь подключим бибилотеку из локального репозитория. Прежде всего нужно добавить локальный maven репозиторий в список доступных:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-gradle&#34;&gt;repositories {
+    mavenLocal()
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;После этого можно устанавливать зависимости с помощью ключего слова compile также как мы это делает с flatDir&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-gradle&#34;&gt;dependencies {
+    compile &#39;com.dnnsd:mDNSShared:1.0.0&#39;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Именно такой подход распотсранения aar использован в Android Support Libraries. Все локальные maven репозитории разпаковуются и обновляются вместе с sdk.  Можете заглянуть в директории ANDROID_HOME/extras/android/m2repository или ANDROID_HOME/extras/google/m2repository.&lt;/p&gt;
+
+&lt;h3 id=&#34;3-3-удаленный-репозиторий:2d39079d7dbc3e98619f859c896fcc85&#34;&gt;3.3 Удаленный репозиторий&lt;/h3&gt;
+
+&lt;p&gt;Подход с использвованием удаленного репозитория ничем не отличается от локального за исключением необходимости указания ссылки на репозиторий. Gradle соддержит ссылки на Maven Central и JCenter репозитории. Кроме этого gradle позволяет указывать прямой url на сервер maven репозитория:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-gradle&#34;&gt;repositories {
+    mavenCentral()
+    jCenter()
+    maven { url &#39;https://maven.fabric.io/repo&#39; }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Установка зависимостей аналогична предыдущим способам:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-gradle&#34;&gt;dependencies {
+    compile(&#39;com.crashlytics.sdk.android:crashlytics:2.2.4@aar&#39;) {
+        transitive = true;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Вот и все.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Добро пожаловать</title>
+      <link>http://replace-this-with-your-hugo-site.com/post/welcome/</link>
+      <pubDate>Tue, 07 Jul 2015 23:10:36 +0300</pubDate>
+      
+      <guid>http://replace-this-with-your-hugo-site.com/post/welcome/</guid>
+      <description>&lt;p&gt;Привет всем и добро пожаловать в Yet Another Android Developer Blog!&lt;/p&gt;
+
+&lt;p&gt;Я только что создал этот блог o Android разработке. Причин, которые привели меня это сделать множество, и я постараюсь вам перечислять позже в этой статье.&lt;/p&gt;
+
+&lt;p&gt;Санчала расскажу немного о себе: я - разработчик мобильных приложений. Со школы увлекаюсь разработкой программного обеспечения, окончил магистратуру &lt;a href=&#34;http://www.kpi.kharkov.ua/en/&#34;&gt;Kharkiv Polytechnic Institute&lt;/a&gt; по специальности Software Engeneering. На данный момент я работаю в должности &lt;a href=&#34;https://www.linkedin.com/profile/view?id=156417157&#34;&gt;Android Team Lead&lt;/a&gt; в Харькове (Украина). Помимо разработки програмного обеспечения я занимаюсь обучением студентов и управлением Android командой.&lt;/p&gt;
+
+&lt;p&gt;Как вы можете знать мобильная разработка является на данный момент одним из самых перспективных направлений. С моей точки зрения мобильная разработка в тоже время является одной из самых интересных областей. В своей професиональной карьере мне приходится работать с проектами разных мобильных платформ, но все же моя страсть это Android разработка. Возможно вас заинтересуют некоторые мои инструменты, которые я публикую в &lt;a href=&#34;https://play.google.com/store/apps/developer?id=Andriy+Druk&#34;&gt;Google Play&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Android действительно удивительная система. После многих лет разработки я наталкиваюсь на все новые и новые ее возможности, новые области применения, нахожу новые способы решения старых проблем. В этом блоге я хотел бы поделится с вами некоторыми паттернами, обзором новых для меня (а возможно и для вас) технологий или же своими мыслями о том в каком направлении движется android разработка в целом.&lt;/p&gt;
+
+&lt;p&gt;Я искренне надеюсь, что этот блог будет для вас источником информации, и поможет вам в будущей разработке. Не стесняйтесь комментировать мои статьи.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
