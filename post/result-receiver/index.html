@@ -9,18 +9,15 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Tags -- Andriy Druk</title>
+    <title>Result Receiver -- Andriy Druk</title>
 
-    
-    <link href="http://andriydruk.github.io/tags/index.xml" rel="alternate" type="application/rss+xml" title="Andriy Druk" />
-    <link href="http://andriydruk.github.io/tags/index.xml" rel="feed" type="application/rss+xml" title="Andriy Druk" />
     
 
     
-    <link href="http://andriydruk.github.io//css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://localhost:1313//css/bootstrap.min.css" rel="stylesheet">
 
     
-    <link href="http://andriydruk.github.io//css/clean-blog.min.css" rel="stylesheet">
+    <link href="http://localhost:1313//css/clean-blog.min.css" rel="stylesheet">
 
     
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -29,7 +26,7 @@
 
     
     </style>
-    <link rel="stylesheet" href="http://andriydruk.github.io/css/idea.css">
+    <link rel="stylesheet" href="http://localhost:1313/css/idea.css">
     <script src="https://yandex.st/highlightjs/8.0/highlight.min.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
 
@@ -60,11 +57,11 @@
                 <ul class="nav navbar-nav navbar-right">
                     
                     <li>
-                        <a href="http://andriydruk.github.io/">home</a>
+                        <a href="http://localhost:1313/">home</a>
                     </li>
                     
                     <li>
-                        <a href="http://andriydruk.github.io/post/">Archives</a>
+                        <a href="http://localhost:1313/post/">Archives</a>
                     </li>
                     
                   </ul>
@@ -77,37 +74,40 @@
 
 
     
-    <header class="intro-header" style="background-image: url('http://andriydruk.github.io//img/home-bg.jpg')">
-     <div class="container">
-       <div class="row">
-         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-           <div class="site-heading">
-             <h1>Tags</h1>
-             <hr class="small">
-             <span class="subheading">Tags</span>
+    
+    <header class="intro-header" style="background-image: url('http://localhost:1313///img/about-bg.jpg')">
+      
+      <div class="container">
+        <div class="row">
+           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+             <div class="post-heading">
+               <h1>Result Receiver</h1>
+               <h2 class="subheading"></h2>
+               <span class="meta">Posted by <a href="#">Andriy Druk</a> on Sat, Aug 8, 2015
+                 <br />
+                 In <a href="http://localhost:1313/categories/development" >Development</a>, <a href="http://localhost:1313/categories/golang" >Golang</a>, 
+
+                 <br />
+                 Tags <a href="http://localhost:1313/tags/go" >go</a> <a href="http://localhost:1313/tags/golang" >golang</a> <a href="http://localhost:1313/tags/templates" >templates</a> <a href="http://localhost:1313/tags/themes" >themes</a> <a href="http://localhost:1313/tags/development" >development</a> 
+
+               </span>
+             </div>
            </div>
-         </div>
-       </div>
-     </div>
+        </div>
+      </div>
     </header>
 
     
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-          <ul>
-            
-            
-            <li><a href="http://andriydruk.github.io/tags/androiddev">Androiddev</a> 2</li>
-            
-            <li><a href="http://andriydruk.github.io/tags/tools">Tools</a> 1</li>
-            
-            <li><a href="http://andriydruk.github.io/tags/development">Development</a> 1</li>
-            
-          </ul>
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <p>Есть одна неприятная особенность у ResultReciver: поскольку это IPC объект враппер IBinder, он не может быть сохраненым на диск в случае если система уничтожит вашу Activity. Причем система попытается подсунуть вам новый экземпляр ResultReciver, вместо экземпляра вашего наследника ResultReceiver. Следовательно при попытке считать его из Bundle вы получите ClassCastException.</p>
+
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
+    </article>
 
     <hr>
     
@@ -151,17 +151,20 @@
     </footer>
 
     
-    <script src="http://andriydruk.github.io//js/jquery.min.js"></script>
+    <script src="http://localhost:1313//js/jquery.min.js"></script>
 
     
-    <script src="http://andriydruk.github.io//js/bootstrap.min.js"></script>
+    <script src="http://localhost:1313//js/bootstrap.min.js"></script>
 
     
-    <script src="http://andriydruk.github.io//js/clean-blog.js"></script>
+    <script src="http://localhost:1313//js/clean-blog.js"></script>
 
     
 
-</body>
+<script data-no-instant>document.write('<script src="http://'
+        + (location.host || 'localhost').split(':')[0]
+		+ ':1313/livereload.js?mindelay=10"></'
+        + 'script>')</script></body>
 
 </html>
 
