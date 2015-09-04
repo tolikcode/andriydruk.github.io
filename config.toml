@@ -7,6 +7,8 @@ canonifyurls = true
 paginate = 10
 copyright = "Code released under the Apache 2.0 license."
 
+disqusShortname = "yetanotherandroiddeveloperblog"
+
 [author]
   name = "Andriy Druk"
 

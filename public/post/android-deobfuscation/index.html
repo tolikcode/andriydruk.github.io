@@ -88,7 +88,7 @@
                  In <a href="http://andriydruk.github.io/categories/development" >Development</a>, 
 
                  <br />
-                 Tags <a href="http://andriydruk.github.io/tags/tools" >tools</a> <a href="http://andriydruk.github.io/tags/development" >development</a> 
+                 Tags <a href="http://andriydruk.github.io/tags/tools" >tools</a> <a href="http://andriydruk.github.io/tags/androiddev" >androiddev</a> 
 
                </span>
              </div>
@@ -267,10 +267,27 @@ protected void onCreate(Bundle savedInstanceState) {
 
 <p>Подведем итог: залог успешной поддержки обфусцированного приложения это сохранения всех mapping файлов для всех выпущенных сборок. Хорошой практикой есть построение сборок на CI сервере с сохрарнением apk файлов и mapping файлов с тегами соотвествующих сборок (например 4 первых символа hash коммита). В таком случае если вы знаете с какой сборки былa получена трассировка стека, вы будете знать где искать соответсующий mapping файл. Также возможно стоит посмотреть в сторону сторонних сервисов сбора информации о аварийных ситуациях. Например, такие сервисы как Crashlytics деобфусцируют трасировки стеков на стороне сервера, что весьма удобно и не требует никаких дополнительных действий со стороны разработчика. Но вы должны четко понимать что при каждом построении сборки ваши mapping файлы будут отправляться на сервера Crashlytics. Что может быть не безопасно, ведь человек завладевший этими файлами не будет имееть никаких ограничений по деобфускации всего исходного кода вашего приложения.</p>
 
+                  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'yetanotherandroiddeveloperblog';
+    var disqus_identifier = 'http:\/\/andriydruk.github.io\/post\/android-deobfuscation\/';
+    var disqus_title = 'Деобфускация трассировок стека';
+    var disqus_url = 'http:\/\/andriydruk.github.io\/post\/android-deobfuscation\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
                 </div>
             </div>
         </div>
     </article>
+
+
 
     <hr>
     
