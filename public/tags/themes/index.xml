@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Themes on Andriy Druk</title>
+    <link>http://localhost:1313/tags/themes/</link>
+    <description>Recent content in Themes on Andriy Druk</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Code released under the Apache 2.0 license.</copyright>
+    <lastBuildDate>Sat, 08 Aug 2015 23:23:13 +0300</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/themes/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Result Receiver</title>
+      <link>http://localhost:1313/post/result-receiver/</link>
+      <pubDate>Sat, 08 Aug 2015 23:23:13 +0300</pubDate>
+      
+      <guid>http://localhost:1313/post/result-receiver/</guid>
+      <description>&lt;p&gt;Есть одна неприятная особенность у ResultReciver: поскольку это IPC объект враппер IBinder, он не может быть сохраненым на диск в случае если система уничтожит вашу Activity. Причем система попытается подсунуть вам новый экземпляр ResultReciver, вместо экземпляра вашего наследника ResultReceiver. Следовательно при попытке считать его из Bundle вы получите ClassCastException.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
