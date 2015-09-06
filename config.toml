@@ -1,6 +1,6 @@
 baseurl = "http://andriydruk.github.io/"
 languageCode = "en-us"
-title = "Andriy Druk"
+title = "Yet Another Android Developer Blog"
 theme = "startbootstrap-clean-blog"
 
 canonifyurls = true
@@ -14,7 +14,7 @@ disqusShortname = "yetanotherandroiddeveloperblog"
 
 [params]
   DateForm = "Mon, Jan 2, 2006"
-  Description = "Yet Another Android Developer Blog"
+  Description = "Andriy Druk"
   Author = "Andriy Druk"
   email = "andriy.druk@gmail.com"
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on Andriy Druk</title>
+    <title>Posts on Yet Another Android Developer Blog</title>
     <link>http://andriydruk.github.io/post/</link>
-    <description>Recent content in Posts on Andriy Druk</description>
+    <description>Recent content in Posts on Yet Another Android Developer Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Code released under the Apache 2.0 license.</copyright>
@@ -17,41 +17,41 @@
       
       <guid>http://andriydruk.github.io/post/mdnsresponder/</guid>
       <description>&lt;p&gt;&lt;strong&gt;What is Bonjour?&lt;/strong&gt;
-Wiki determination of Bonjour is&lt;/p&gt;
+Wiki definition of Bonjour is&lt;/p&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;Bonjour is Apple&amp;rsquo;s implementation of Zero-configuration networking (Zeroconf), a group of technologies that includes service discovery, address assignment, and hostname resolution. Bonjour locates devices such as printers, other computers, and the services that those devices offer on a local network using multicast Domain Name System (mDNS) service records.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;Apple determination is&lt;/p&gt;
+&lt;p&gt;Apple definition is&lt;/p&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;Bonjour, also known as zero-configuration networking, enables automatic discovery of devices and services on a local network using industry standard IP protocols. Bonjour makes it easy to discover, publish, and resolve network services with a sophisticated, yet easy-to-use, programming interface that is accessible from Cocoa, Ruby, Python, and other languages.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;In another words, is the software component that used for discovering another devices (PC, Mac, smartphones, printers, etc) in network via all available interfaces. In terminologies of Bonjour this called &amp;ldquo;service&amp;rdquo;. Any application in operation system can register service and assign it to opened port on this computer (actually Bonjour not guarantee that port in service&amp;rsquo;s metadata is opened and connected to app that registered this service). All services are registered in some domain (that&amp;rsquo;s mandatory parameter of all services and you can find domain naming conventions &lt;a href=&#34;https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/NetServices/Articles/domainnames.html&#34;&gt;here&lt;/a&gt;). Also applications can discover all available services in network(s) at any domain. You should understand that Bonjour is technology only for discovering services, all connection you should do by yourself anyway.&lt;/p&gt;
+&lt;p&gt;In other words, Bonjour is a software component that is used for other devices discovery (PC, Mac, smartphones, printers, etc) in a network via all available interfaces. A Bonjour term for a device on a network is &amp;ldquo;service&amp;rdquo;. Any application in your operating system can register a service and assign it to an opened port on your computer (actually Bonjour does not guarantee that a port in service&amp;rsquo;s metadata is opened and connected to the app that registered this service). All services are registered in some domain (that&amp;rsquo;s a mandatory parameter for all services and you can find domain naming conventions &lt;a href=&#34;https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/NetServices/Articles/domainnames.html&#34;&gt;here&lt;/a&gt;). Also applications can discover all available services at any domain. You should understand that Bonjour is only a technology for services discovery, all connection you have to do by yourself anyway.&lt;/p&gt;
 
 &lt;p&gt;You can find more information about Bonjour in &lt;a href=&#34;https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/NetServices/Introduction.html&#34;&gt;official documentation&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;What about Android? Can we use this powerful technology in ours Android projects?&lt;/strong&gt; Yes. Google use this technology with a lots of their projects. For example: you try to connect to Chromecast in your living room: it&amp;rsquo;s Bonjour. You are playing games with friends via wifi: it&amp;rsquo;s Bonjour. You print documents via wifi on your printer: it&amp;rsquo;s Bonjour.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;What about Android? Can we use this powerful technology in our Android projects?&lt;/strong&gt; Yes. Google uses this technology in lots of their projects. For example: you try to connect to Chromecast in your living room - it&amp;rsquo;s Bonjour. You are playing games with your friends via wifi - it&amp;rsquo;s Bonjour. You print documents via wifi on your printer - Bonjour is here again.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;There is standard Android API for it?&lt;/strong&gt; Yes. Google provides &lt;a href=&#34;http://developer.android.com/training/connect-devices-wirelessly/nsd.html&#34;&gt;Network Service Discovery API&lt;/a&gt; that use the same technology that Apple uses in Mac OS X and iOS (Oh, I forget to tell you that Bonjour is open-source). This API are  available from API level 16 (Android 4.1) and works in general well, but it not covered all Bonjour API. One of the most important part of Bonjour API is ability to share some metadata about service, also known as TXT records.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Is there a standard Android API for it?&lt;/strong&gt; Yes. Google provides &lt;a href=&#34;http://developer.android.com/training/connect-devices-wirelessly/nsd.html&#34;&gt;Network Service Discovery API&lt;/a&gt; that uses the same technology Apple uses in Mac OS X and iOS (Oh, I&amp;rsquo;ve forgotten to tell you that Bonjour is open-source). This API is available starting from API level 16 (Android 4.1) and works well in general, though it doesn&amp;rsquo;t cover all Bonjour functionality. One of the most important parts of Bonjour API is ability to share some metadata about a service, also known as TXT records.&lt;/p&gt;
 
-&lt;p&gt;That what &lt;a href=&#34;https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/NetServices/Articles/NetServicesArchitecture.html&#34;&gt;official documentation&lt;/a&gt; says about it:&lt;/p&gt;
+&lt;p&gt;That&amp;rsquo;s what &lt;a href=&#34;https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/NetServices/Articles/NetServicesArchitecture.html&#34;&gt;official documentation&lt;/a&gt; says about it:&lt;/p&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;The TXT record has the same name as the corresponding SRV record, and can contain a small amount of additional information about the service instance, typically no more than 100–200 bytes at most. This record may also be empty. For example, a network game could advertise the name of the map being used in a multiplayer game, and a chat program could advertise the availability of the user (for example, idle, away, or available). If you need to transmit larger amounts of data, the host should establish a connection with the client and send the data directly.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;It can be very useful and I can&amp;rsquo;t understand why this feature are not available in official SDK, because there are no technical reason for it.&lt;/p&gt;
+&lt;p&gt;This feature can be very useful and I don&amp;rsquo;t understand why it isn&amp;rsquo;t available in the official SDK. There is no technical reason for this.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;If there are any other options?&lt;/strong&gt; Yes, another option for Android developers is &lt;a href=&#34;http://jmdns.sourceforge.net&#34;&gt;jmDNS&lt;/a&gt; library. It&amp;rsquo;s open-source library and  is programmed in Java 1.6 (because for Android developers it matter) and is compatible with Apple&amp;rsquo;s Bonjour. You can use it at any Android API level and this library supports TXT records. But I have some issue with jmDNS (I got few crashes inside jmDNS from Crashlytcics, and I have no ideas how I can fix it) and it work pretty slow.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Are there any other options?&lt;/strong&gt; Yes, another option for Android developers is &lt;a href=&#34;http://jmdns.sourceforge.net&#34;&gt;jmDNS&lt;/a&gt; library. It&amp;rsquo;s an open-source library written in Java 1.6 (this matters for Android developers) and it&amp;rsquo;s compatible with Apple&amp;rsquo;s Bonjour. You can use it at any Android API level and this library supports TXT records. Yet I do have some issues with jmDNS (I got a few crashes inside jmDNS from Crashlytcics, and I have no idea how I can fix it) and it works pretty slow.&lt;/p&gt;
 
-&lt;p&gt;Also Google (not Android open source project) introduced a new cross-platform library &lt;a href=&#34;https://developers.google.com/nearby/&#34;&gt;Google Nearby API&lt;/a&gt;. This API consists of two conceptually different API: Nearby Messages API and the Nearby Connections API. Message API can be used for discovering services via all available interfaces (Wifi, Wifi-direct, Bluetooth 2.0 and LE) and connect two or more devices via Internet. Actually it&amp;rsquo;s very interesting idea in time of fast mobile internet (Maybe I will write about it more in another article). And Connections API can be used for discovering and connection via wifi interface. Actually it&amp;rsquo;s really good solution. You shouldn&amp;rsquo;t care about sockets, ports, discovering, connections and multithreading. All this features have been already done. But this solution work only with Android and iOS, and it&amp;rsquo;s not open-source (that&amp;rsquo;s why I pay attention about Google above). If you want discover some services from another system or your app works with another libraries (for example: printers or vnc servers) you should look to another options.&lt;/p&gt;
+&lt;p&gt;Also Google (not Android open source project) has introduced a new cross-platform library &lt;a href=&#34;https://developers.google.com/nearby/&#34;&gt;Google Nearby API&lt;/a&gt;. Its API consists of two conceptually different APIs: Nearby Messages API and Nearby Connections API. Message API can be used for services discovering via all available interfaces (Wifi, Wifi-direct, Bluetooth 2.0 and LE) and connecting two or more devices via Internet. Actually this is a very interesting idea in time of fast mobile internet (I might write more about it in another article). And Connections API can be used for discovering and connecting via wifi interface. Actually it&amp;rsquo;s a really good solution. You don&amp;rsquo;t need to bother with sockets, ports, discovering, connections and multithreading. All these have already been done for you. But this solution works only with Android and iOS, and it&amp;rsquo;s not open-source (that&amp;rsquo;s why I emphasize that it&amp;rsquo;s a Google project). If you want to discover some services from another system or your app works with other libraries (for example: printers or vnc servers) you should look for other options.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;Do you have any idea?&lt;/strong&gt; Yes, and it why I write this article. I have good news for you: you can just get Apple&amp;rsquo;s implementation of Bonjour and use it in your Android project.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Do you know any other options?&lt;/strong&gt; Yes, and that&amp;rsquo;s why I&amp;rsquo;m writing this article. I have good news for you: you can just get Apple&amp;rsquo;s implementation of Bonjour and use it in your Android project.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;WHAAAAAAT? Apple&amp;rsquo;s libraries in Android project?&lt;/strong&gt; Yes, it called mDnsResponder and it have been programmed at C many years ago (actually Apple bought it). Look at architecture overview from &lt;a href=&#34;http://opensource.apple.com/source/mDNSResponder/mDNSResponder-66.3/README.txt?txt&#34;&gt;documentation&lt;/a&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;WHAAAAAAT? Apple&amp;rsquo;s libraries in Android project?&lt;/strong&gt; Yes, it&amp;rsquo;s called mDnsResponder and it has been written in C many years ago (actually Apple has bought it). Here is its architecture overview from &lt;a href=&#34;http://opensource.apple.com/source/mDNSResponder/mDNSResponder-66.3/README.txt?txt&#34;&gt;documentation&lt;/a&gt;:&lt;/p&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;A typical mDNS program contains three components:&lt;/p&gt;
@@ -106,9 +106,9 @@ software should access through the &amp;ldquo;/usr/include/dns_sd.h&amp;rdquo; A
 which implements the mDNS and DNS-SD protocols.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;Actually Android uses the same solution with one system daemon and lots of applications. This daemon is available for developers since API 16 (Android 4.1) and you can connect to it from native level via dns-sd.h.&lt;/p&gt;
+&lt;p&gt;In fact Android uses the same solution in one system daemon and lots of applications. The daemon is available for developers since API 16 (Android 4.1) and you can connect to it from a native level via dns-sd.h.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;But I don&amp;rsquo;t know C/C++! do you have any Java wrapper for it?&lt;/strong&gt; No, but Apple has. Let&amp;rsquo;s compile it together. First of all you should compile mDnsResponder native client and you can find source code &lt;a href=&#34;https://android.googlesource.com/platform/external/mdnsresponder/&#34;&gt;here&lt;/a&gt;. It&amp;rsquo;s part of android open-source project and updated from time to time, but it is completely independent library that work through POSIX API. I believe, that you can use any version of it with any version of Android. Also you should add JNI bridge to this native source code. Just go to dns-sd.h file and look for version of mDNSResponer, in my case it&amp;rsquo;s:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;But I don&amp;rsquo;t know C/C++! Do you have any Java wrapper for it?&lt;/strong&gt; No, but Apple does. Let&amp;rsquo;s compile it together. First of all you need to compile mDnsResponder native client. You can find its source code &lt;a href=&#34;https://android.googlesource.com/platform/external/mdnsresponder/&#34;&gt;here&lt;/a&gt;. It&amp;rsquo;s a part of Android open-source project and it&amp;rsquo;s updated from time to time, but it is completely independent library that works through POSIX API. I believe, that you can use any version of it with any version of Android. Also you should add JNI bridge to this native source code. Just go to dns-sd.h file and look for version of mDNSResponer. In my case it is:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;/* _DNS_SD_H contains the mDNSResponder version number for this header file, formatted as follows:
  *   Major part of the build number * 10000 +
@@ -135,7 +135,7 @@ which implements the mDNS and DNS-SD protocols.&lt;/p&gt;
 #define _DNS_SD_H 3201080
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;It means that it&amp;rsquo;s mDNSResponder 320.10.80. Now go to &lt;a href=&#34;http://opensource.apple.com/tarballs/mDNSResponder/&#34;&gt;Apple Open Source&lt;/a&gt; site and find this version. Unzip archive and found folder /mDNSShared/Java/. Copy JNISupport.c file to you jni folder and all *.java files to your scr folder. Then add JNISupport to Android.mk file, in my case:&lt;/p&gt;
+&lt;p&gt;It means that mDNSResponder version is 320.10.80. Now go to &lt;a href=&#34;http://opensource.apple.com/tarballs/mDNSResponder/&#34;&gt;Apple Open Source&lt;/a&gt; site and find this version. Unzip downloaded archive and find folder /mDNSShared/Java/. Copy JNISupport.c file to your jni folder and all *.java files to your scr folder. Then add JNISupport to Android.mk file, in my case:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-makefile&#34;&gt;LOCAL_SRC_FILES :=  mDNSShared/dnssd_clientlib.c  \
                     mDNSShared/dnssd_clientstub.c \
@@ -143,16 +143,16 @@ which implements the mDNS and DNS-SD protocols.&lt;/p&gt;
                     mDNSShared/JNISupport.c
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;That&amp;rsquo;s all: compile you native code via command &amp;lsquo;ndk-build&amp;rsquo; and compile Android project.&lt;/p&gt;
+&lt;p&gt;That&amp;rsquo;s all. Compile the native code with &amp;lsquo;ndk-build&amp;rsquo; command and then build your Android project.&lt;/p&gt;
 
-&lt;p&gt;And one more thing: Android can stop daemon for save battery or for any other reasons if it doesn&amp;rsquo;t used. That&amp;rsquo;s why you should call next method before working with any code from com.apple.dnssd.*.&lt;/p&gt;
+&lt;p&gt;And one more thing: Android can stop the daemon to save battery or for some other reason(if it&amp;rsquo;s not used for example). That&amp;rsquo;s why you should call next method before working with any code from com.apple.dnssd.*.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;context.getSystemService(Context.NSD_SERVICE);
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Otherwise, mDNSResponder will throw checked exception &amp;ldquo;DNSD-SD Daemon not available&amp;rdquo;.&lt;/p&gt;
+&lt;p&gt;Otherwise, mDNSResponder will throw a checked exception &amp;ldquo;DNSD-SD Daemon not available&amp;rdquo;.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;Do you have any examples?&lt;/strong&gt; Yep, you can find example of using mDNSResponder (it contains compiled native libraries with last ndk version for all architectures) in my project Bonjour Browser, all code available on &lt;a href=&#34;https://github.com/andriydruk/BonjourBrowser&#34;&gt;GitHub&lt;/a&gt;. Also you can look on it in action on &lt;a href=&#34;https://play.google.com/store/apps/details?id=com.druk.bonjour.browser&amp;amp;hl=uk&#34;&gt;Google Play&lt;/a&gt; and it works really fast.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Do you have any examples?&lt;/strong&gt; Yep, you can find an example of mDNSResponder usage (containing compiled native libraries with  the latest ndk version for all architectures) in my project Bonjour Browser, all code is available on &lt;a href=&#34;https://github.com/andriydruk/BonjourBrowser&#34;&gt;GitHub&lt;/a&gt;. You can also see it in action in &lt;a href=&#34;https://play.google.com/store/apps/details?id=com.druk.bonjour.browser&amp;amp;hl=uk&#34;&gt;Google Play.&lt;/a&gt; It works really fast!&lt;/p&gt;
 </description>
     </item>
     
