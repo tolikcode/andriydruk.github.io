@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Tools on Andriy Druk</title>
+    <title>Tools on Yet Another Android Developer Blog</title>
     <link>http://andriydruk.github.io/tags/tools/</link>
-    <description>Recent content in Tools on Andriy Druk</description>
+    <description>Recent content in Tools on Yet Another Android Developer Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Code released under the Apache 2.0 license.</copyright>
