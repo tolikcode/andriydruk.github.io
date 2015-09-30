@@ -3,10 +3,6 @@
                       <h2 class="post-title">{{ .Title }}</h2>
                     </a>
                     <p class="post-meta">Posted by <a href="#">{{ .Site.Params.Author }}</a> on {{ dateFormat .Site.Params.DateForm .Date }}
-                    <br />
-                    {{ partial "categories.html" .}}
-                    <br />
-                    {{ partial "tags.html" .}}
                   </p>
                 </div>
                 <hr>
