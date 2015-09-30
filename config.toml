@@ -17,6 +17,7 @@ disqusShortname = "yetanotherandroiddeveloperblog"
   Description = "Andriy Druk"
   Author = "Andriy Druk"
   email = "andriy.druk@gmail.com"
+  Ganalytics = "UA-67278568-1"
 
 [[params.social]]
   title = "twitter"
