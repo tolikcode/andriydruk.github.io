@@ -3,6 +3,7 @@ date = "2015-07-07T23:10:36+03:00"
 title = "Добро пожаловать"
 tags = ["androiddev"]
 categories = ["Development"]
+image = "/img/welcome_bg.jpg"
 
 +++
 Привет всем и добро пожаловать в еще один Android Developer Blog!
