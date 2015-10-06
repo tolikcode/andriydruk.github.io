@@ -97,6 +97,35 @@
         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
           
                              <div class="post-preview">
+                 <a href="http://andriydruk.github.io/post/rxdnssd/">
+                      <h2 class="post-title">Wrap Annoying APIs With RxJava</h2>
+                    </a>
+                    <p class="post-meta">Posted by <a href="#">Andriy Druk</a> on Sun, Sep 13, 2015
+                    <br />
+                    
+                  </p>
+                  <p>
+                    <p><a href="http://reactivex.io/intro.html">Reactive Extensions (also known as ReactiveX or Rx)</a> is a library, that brings <a href="https://en.wikipedia.org/wiki/Functional_reactive_programming">FRP</a> programming paradigm at different platforms. And it&rsquo;s a breath of fresh air for android developers at Java 6 desert. A lot of articles about concept of RxJava and common usage have been already written. That&rsquo;s why I would like to publish my example of usage RxJava in Android just to show how you can wrap java APIs. In this article I will describe process of wrapping Java API of Apple’s DNSSD library (that in my opinion is annoying).</p>
+
+<p>DNSSD library&rsquo;s public API is a one Singleton that provides static methods that implement basic operation such as searching and advertising. All operations work asynchronously and results will be returned to you in callbacks at background thread. It&rsquo;s a usual java API, what&rsquo;s wrong with it? Let&rsquo;s imagine basic usage scenario of searching services in network:</p>
+
+<ul>
+<li>Browse service</li>
+<li>Resolve service</li>
+<li>Query records</li>
+<li>Update UI</li>
+</ul>
+
+<p>That&rsquo;s mean that you should start &lsquo;browse&rsquo; operation with BrowseCallback, in this callback start &lsquo;resolve&rsquo; with ResolveCallback and than inside this callback you start &lsquo;query records&rsquo; with QueryRecordsCallback and than send message to MainThread and here you update your UI. It turns to &lsquo;callback hell&rsquo;. Real problems start when user leaves your app before you get result from this chain and you should unsubscribe all listeners and cancel all operations.</p>
+
+<p>Ok, let&rsquo;s wrap this API with RxJava.</p>
+
+                  </p>
+                </div>
+                <hr>
+
+          
+                             <div class="post-preview">
                  <a href="http://andriydruk.github.io/post/mdnsresponder/">
                       <h2 class="post-title">Bonjour in Android applications</h2>
                     </a>
@@ -155,24 +184,6 @@ Wiki definition of Bonjour is</p>
                     <p>Уже прошло больше года с анонса Android <a href="http://tools.android.com/tech-docs/new-build-system">New Build System</a>, работа над которой кипит и по сей день: в экспериментальной области все еще находится несколько увлекательных возможностей <a href="http://tools.android.com/tech-docs/jackandjill">Jack and Jill Tool Chain</a> и <a href="http://tools.android.com/tech-docs/new-build-system/gradle-experimental#TOC-Ndk-Integration">NDK Integration</a>.</p>
 
 <p>Но одной из самых ожидаемых возможностей новой системы сборки стала поддержка aar бибилотек - нового бинарного формата бибилотек, который в отличии от jar бибилотек может содержать android ресурсы (res, assets, native libraries, etc).  В это статье я хотел поделиться своим опытом работы с aar бибилиотеками.</p>
-
-                  </p>
-                </div>
-                <hr>
-
-          
-                             <div class="post-preview">
-                 <a href="http://andriydruk.github.io/post/welcome/">
-                      <h2 class="post-title">Добро пожаловать</h2>
-                    </a>
-                    <p class="post-meta">Posted by <a href="#">Andriy Druk</a> on Tue, Jul 7, 2015
-                    <br />
-                    
-                  </p>
-                  <p>
-                    <p>Привет всем и добро пожаловать в еще один Android Developer Blog!</p>
-
-<p>Я долго вынашивал идею создания блога о разработке. Как полагается настоящему гику потратил немало времени на обзор существующих блогер платформ и статических генераторов сайтов, и вот наконец я добрался до написания статей. Но обо всем по порядку&hellip;</p>
 
                   </p>
                 </div>
