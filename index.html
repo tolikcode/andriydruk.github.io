@@ -105,9 +105,9 @@
                     
                   </p>
                   <p>
-                    <p><a href="http://reactivex.io/intro.html">Reactive Extensions (also known as ReactiveX or Rx)</a> is a library, that brings <a href="https://en.wikipedia.org/wiki/Functional_reactive_programming">FRP</a> programming paradigm at different platforms. And it&rsquo;s a breath of fresh air for android developers at Java 6 desert. A lot of articles about concept of RxJava and common usage have been already written. That&rsquo;s why I would like to publish my example of usage RxJava in Android just to show how you can wrap java APIs. In this article I will describe process of wrapping Java API of Apple’s DNSSD library (that in my opinion is annoying).</p>
+                    <p><a href="http://reactivex.io/intro.html">Reactive Extensions (also known as ReactiveX or Rx)</a> is a library, that brings <a href="https://en.wikipedia.org/wiki/Functional_reactive_programming">FRP</a> programming paradigm to different platforms. And it&rsquo;s a breath of fresh air for android developers in Java 6 desert. A lot of articles about RxJava concept and common usage have already been written and I don&rsquo;t want to explain it again. That&rsquo;s why I would like to publish my example of RxJava usage in Android just to show you how you can wrap Java APIs. In this article I will describe a process of Java API wrapping for Apple’s DNSSD library (which in my opinion is quite an annoying API).</p>
 
-<p>DNSSD library&rsquo;s public API is a one Singleton that provides static methods that implement basic operation such as searching and advertising. All operations work asynchronously and results will be returned to you in callbacks at background thread. It&rsquo;s a usual java API, what&rsquo;s wrong with it? Let&rsquo;s imagine basic usage scenario of searching services in network:</p>
+<p>DNSSD library&rsquo;s public API is a Singleton that provides static methods implementing basic operations such as searching or advertising. All operations work asynchronously and their results are returned to you in callbacks from a background thread. It&rsquo;s a usual Java API. What&rsquo;s wrong with it? Let&rsquo;s imagine a basic usage scenario of services search in a network:</p>
 
 <ul>
 <li>Browse service</li>
@@ -116,7 +116,7 @@
 <li>Update UI</li>
 </ul>
 
-<p>That&rsquo;s mean that you should start &lsquo;browse&rsquo; operation with BrowseCallback, in this callback start &lsquo;resolve&rsquo; with ResolveCallback and than inside this callback you start &lsquo;query records&rsquo; with QueryRecordsCallback and than send message to MainThread and here you update your UI. It turns to &lsquo;callback hell&rsquo;. Real problems start when user leaves your app before you get result from this chain and you should unsubscribe all listeners and cancel all operations.</p>
+<p>That means that you should start <code>browse</code> operation with a <code>BrowseCallback</code>. In this callback you start <code>resolve</code> with a <code>ResolveCallback</code>, and than inside <code>ResolveCallback</code> you start <code>queryRecords</code> with a <code>QueryRecordsCallback</code>. After that you send a message to the main thread, where you update your UI. This turns to a &lsquo;callback hell&rsquo;. Real problems arise when a user leaves your app before you&rsquo;ve got any results from this chain of callbacks, and you have to unsubscribe all listeners and to cancel all operations. Another big headacke is handling exceptions from all operations and forwarding it to UI.</p>
 
 <p>Ok, let&rsquo;s wrap this API with RxJava.</p>
 
