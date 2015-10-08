@@ -7,16 +7,16 @@ title = "Wrap Annoying APIs With RxJava"
 
 +++
 
-[Reactive Extensions (also known as ReactiveX or Rx)](http://reactivex.io/intro.html) is a library, that brings [FRP](https://en.wikipedia.org/wiki/Functional_reactive_programming) programming paradigm at different platforms. And it's a breath of fresh air for android developers at Java 6 desert. A lot of articles about concept of RxJava and common usage have been already written. That's why I would like to publish my example of usage RxJava in Android just to show how you can wrap java APIs. In this article I will describe process of wrapping Java API of Apple’s DNSSD library (that in my opinion is annoying). 
+[Reactive Extensions (also known as ReactiveX or Rx)](http://reactivex.io/intro.html) is a library, that brings [FRP](https://en.wikipedia.org/wiki/Functional_reactive_programming) programming paradigm to different platforms. And it's a breath of fresh air for android developers in Java 6 desert. A lot of articles about RxJava concept and common usage have already been written. That's why I would like to publish my example of RxJava usage in Android just to show you how you can wrap Java APIs. In this article I will describe a process of Java API wrapping for Apple’s DNSSD library (which in my opinion is quite an annoying API). 
 
-DNSSD library's public API is a one Singleton that provides static methods that implement basic operation such as searching and advertising. All operations work asynchronously and results will be returned to you in callbacks at background thread. It's a usual java API, what's wrong with it? Let's imagine basic usage scenario of searching services in network: 
+DNSSD library's public API is a Singleton that provides static methods implementing basic operations such as searching or advertising. All operations work asynchronously and their results are returned to you in callbacks from a background thread. It's a usual Java API. What's wrong with it? Let's imagine a basic usage scenario of services search in a network: 
 
 * Browse service
 * Resolve service
 * Query records
 * Update UI
 
-That's mean that you should start 'browse' operation with BrowseCallback, in this callback start 'resolve' with ResolveCallback and than inside this callback you start 'query records' with QueryRecordsCallback and than send message to MainThread and here you update your UI. It turns to 'callback hell'. Real problems start when user leaves your app before you get result from this chain and you should unsubscribe all listeners and cancel all operations. 
+That means that you should start 'browse' operation with a BrowseCallback. In this callback you start 'resolve' with a ResolveCallback, and than inside ResolveCallback you start 'query records' with a QueryRecordsCallback. After that you send a message to the MainThread, where you update your UI. This turns to a 'callback hell'. Real problems arise when a user leaves your app before you've got any results from this chain of callbacks, and you have to unsubscribe all listeners and to cancel all operations. 
 
 Ok, let's wrap this API with RxJava.
 
@@ -25,9 +25,9 @@ Ok, let's wrap this API with RxJava.
 **Intro**
 ------------- 
 
-If you don’t familiar with RxJava, I highly recommend you start from official documentation. In this article I won’t explain RxJava operators, only example of usage.
+If you aren't familiar with RxJava, I highly recommend you to start from the official documentation. In this article I'm not going to explain RxJava operators, only example of usage.
 
-Ok, firstly, lets look at DNSSD Apple API:
+Ok, firstly, let's take a look at DNSSD Apple API:
 
 ~~~java
 abstract public class DNSSD{
@@ -76,7 +76,7 @@ public interface BaseListener
 }
 ~~~
 
-Every method returns DNSSDService object, that actually is analog of [Subscription](http://reactivex.io/RxJava/javadoc/rx/Subscription.html) object from RxJava.
+Every method returns a DNSSDService object, that is actually an analog for [Subscription](http://reactivex.io/RxJava/javadoc/rx/Subscription.html) object in RxJava.
 
 ~~~java
 public interface DNSSDService
@@ -91,7 +91,7 @@ public interface DNSSDService
 } 
 ~~~
 
-I presented every operation (static method from DNSSD) as a RxJava Observable: 
+I've presented every operation (static method from DNSSD) as RxJava Observable: 
 
 ~~~java
 interface class RxDNSSDService {
@@ -99,7 +99,7 @@ interface class RxDNSSDService {
 }
 ~~~
 
-Actually implementation of getObservable method can be common for all operations. Let's transform interface to abstract class:
+Actually implementation of getObservable method can be common for all operations. Let's transform this interface to an abstract class:
 
 ~~~java
 abstract static class RxDNSSDService<T> {
@@ -134,9 +134,9 @@ abstract static class RxDNSSDService<T> {
 }
 ~~~
 
-Now method getObservable returns new Observalbe. Inside OnSubsribe callback I will check if subsriber is subscribed at this moment and call original DNSSD API.  Also I added [doOnUnsubscribe](http://reactivex.io/documentation/operators/do.html) operator where I will stop DNSSDService from Apple's library.
+Now method getObservable returns a new Observable. Inside OnSubsribe callback I will check if a subscriber is actually subscribed at that moment and call the original DNSSD API.  I've also added [doOnUnsubscribe](http://reactivex.io/documentation/operators/do.html) operator where I stop Apple's library DNSSDService.
 
-Before implementing classes extended RxDNSSDService I created BonjourService POJO class. Main idea is create chain of observables that will be operate with this class:
+Before implementing classes extending RxDNSSDService I've created a BonjourService POJO class. The main idea is to create a chain of observables that will operate with this class:
 
 ~~~java
 public class BonjourService {
@@ -160,7 +160,7 @@ public class BonjourService {
 
 **Browse** 
 ------------- 
-Ok, first operation I created is 'browse':
+Ok, the first operation I've implemented is 'browse':
 
 ~~~java
 public static Observable<BonjourService> browse(final String regType, final String domain) {
@@ -208,7 +208,7 @@ private static class BrowseListener implements com.apple.dnssd.BrowseListener{
 }
 ~~~
 
-'browse' is endless operation that's why it never calls onComplete method of Subscriber. Every time when DNSSD library calls serviceFound callback I emit new BonjourService object. But now I don't process serviceLost callback. In RxJava Observable presents line of event that happend at some time sequence. That's why I have to create some additional class (for example BrowseAnswer) that contains BonjourService and boolean flag. But it will destroy our idea about chain of observable with one type - BonjourService. Actually BonjourService already has a flag and I will use it to mark BonjourService as deleted. According to DNSSD documentation Apple uses next masks for flags:
+'browse' is an endless operation. That's why it never calls onComplete method on a Subscriber. Every time when DNSSD library calls a serviceFound callback I emit a new BonjourService object. At the moment I haven't yet implemented serviceLost callback. In RxJava Observable represents a series of events that happen at some time sequence. That's why I have to create some additional class (for example BrowseAnswer) that contains BonjourService and a boolean flag. But it will destroy our idea about chain of observable with one type - BonjourService. Actually BonjourService already has a flag and I will use it to mark BonjourService as deleted. According to DNSSD documentation Apple uses next masks for flags:
 
 ~~~java
 /**	Flag indicates to a {@link BrowseListener} that another result is
@@ -252,7 +252,7 @@ public static final int		BROWSE_DOMAINS = ( 1 << 6 );
 public static final int		REGISTRATION_DOMAINS = ( 1 << 7 );
 ~~~
 
-Despite of fact that not all of this flags uses with browse operation, we will create a new mask (1 << 8) for our DELETED flag. If you not familiar with bit shifts, this operator make shift for binary number to N position. In case above it's number 256. After adding new mask 'serviceLost' method looks like:
+Despite the fact that not all of these flags are used with 'browse' operation, we will create a new mask (1 << 8) for our DELETED flag. If you aren't familiar with bit shifts, this operator makes  a shift for a binary number to N position. In the example above this number is 256. After adding a new mask 'serviceLost' method looks like:
 
 ~~~java
 @Override
@@ -267,7 +267,8 @@ public void serviceLost(DNSSDService browser, int flags, int ifIndex, String ser
 }
 ~~~
 
-Now look to usage of my browse method:
+Now look at the usage of my browse method:
+
 ~~~java
 mSubscription = RxDNSSD.browse(mReqType, mDomain)
     .observeOn(AndroidSchedulers.mainThread())
@@ -283,16 +284,16 @@ mSubscription = RxDNSSD.browse(mReqType, mDomain)
     });
 ~~~
 
-I don't use subscribeOn, because DNSSD will create own thread and it's not a necessary to call all DNSSD API methods from background thread. But observeOn I use always, because all callbacks from DNSSD API will called from background thread.
+I don't use subscribeOn, because DNSSD will create its own thread and it's not necessary to call all DNSSD API methods from a background thread. However, I always use observeOn, because all callbacks from DNSSD API will be called from a background thread.
 
 **Resolve** 
 -------------
 
-Next operation is DNSSD.resolve(). I use this operation to resolve a service name to a target host name, port number, and txt record. 
-Unlike browse() operation this one will return Trasnformation, that transform  Observable of BonjourService to Observable of resolved BonourService. 
+Next operation is DNSSD.resolve(). I use this operation to resolve a service name to a target host, port number, and a txt record. 
+Unlike browse() operation this one will return Trasnformation, that transforms an Observable of BonjourService to an Observable of resolved BonourService. 
 
-First of all I applied a [flatMap](http://reactivex.io/documentation/operators/flatmap.html) to income Observalbe. Than in map's function I check if BonjourService contains DELETED flag, then emit this Observable (maybe information about this BonjourService will be usefull for Subsriber). 
-In other case I emit Observable from RxDNSSDService that will query record from DNSSD API.
+First of all I've applied a [flatMap](http://reactivex.io/documentation/operators/flatmap.html) to income Observalbe. Then in map's function I check if BonjourService contains DELETED flag. After that I emit this Observable (maybe the information about this BonjourService will be usefull for a Subsriber). 
+In another case I emit Observable from RxDNSSDService that will query record from DNSSD API.
 
 ~~~java
 public static Observable.Transformer<BonjourService, BonjourService> resolve() {
@@ -312,7 +313,7 @@ public static Observable.Transformer<BonjourService, BonjourService> resolve() {
 }
 ~~~
 
-If operation finish successfully, I will put resolved address to BonjourService's map and send it to Subscriber. Unlike browse() operation this one is not endless, that's why after emitting Bonjour Service I call onComplete. In case of cathing error, I forward error to Subscriber.
+If the operation finishes successfully, I will put resolved address to BonjourService's map and send it to a Subscriber. Unlike browse() operation this one is not endless, that's why after emitting Bonjour Service I call onComplete. In the case of error, I forward this error to a Subscriber.
 
 ~~~java
 private static class ResolveListener implements com.apple.dnssd.ResolveListener{
@@ -352,6 +353,7 @@ private static class ResolveListener implements com.apple.dnssd.ResolveListener{
 ~~~
 
 Example of usage:
+
 ~~~java
 mResolveSubscription = Observable.just(mService)
         .compose(RxDNSSD.resolve())
@@ -368,7 +370,7 @@ mResolveSubscription = Observable.just(mService)
 
 **Query Records** 
 ------------- 
-DNSSD.queryRecords() we use to query for an arbitrary DNS record. This operation is very similar to previos. 
+We use DNSSD.queryRecords() to query for an arbitrary DNS record. This operation is very similar to the previous one. 
 
 ~~~java
 public static Observable.Transformer<BonjourService, BonjourService> queryRecords() {
@@ -425,9 +427,10 @@ private static class QueryListener implements com.apple.dnssd.QueryListener{
 }
 ~~~
 
-If operation finish sucessfully, I put resolved address to BonjourService map and emmit this object. 
+If the operation finishes sucessfully, I put a resolved address to BonjourService map and emit this object. 
 
 Example of usage:
+
 ~~~java
 mResolveSubscription = Observable.just(mService)
         .compose(RxDNSSD.resolve())
@@ -443,7 +446,7 @@ mResolveSubscription = Observable.just(mService)
         });
 ~~~
 
-Creating of rx chains is very usefull. Because now you shouldn't care about canceling all operations and removing listeners. The only one thing you should do inside your onPause||onStop||onDestroy methods is mSubscription.cancel().
-Sample of using described wrapper (I called it RxDNSSD) you can find in my project [Bonjour Browser](https://github.com/andriydruk/BonjourBrowser). 
+Creating of Rx chains is very usefull because you don't need to care about canceling all operations and removing listeners. The only thing you have to do inside your onPause||onStop||onDestroy methods is to call mSubscription.cancel().
+You can find a usage af the described wrapper (I called it RxDNSSD) in my project [Bonjour Browser](https://github.com/andriydruk/BonjourBrowser). 
 
-That's all. Happy wrapping annoying APIs.
+That's all. Happy wrapping annoying APIs!
