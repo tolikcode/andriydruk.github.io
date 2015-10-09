@@ -29,13 +29,13 @@
 &lt;li&gt;Update UI&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;That means that you should start &lt;code&gt;browse&lt;/code&gt; operation with a &lt;code&gt;BrowseCallback&lt;/code&gt;. In this callback you start &lt;code&gt;resolve&lt;/code&gt; with a &lt;code&gt;ResolveCallback&lt;/code&gt;, and than inside &lt;code&gt;ResolveCallback&lt;/code&gt; you start &lt;code&gt;queryRecords&lt;/code&gt; with a &lt;code&gt;QueryRecordsCallback&lt;/code&gt;. After that you send a message to the main thread, where you update your UI. This turns to a &amp;lsquo;callback hell&amp;rsquo;. Real problems arise when a user leaves your app before you&amp;rsquo;ve got any results from this chain of callbacks, and you have to unsubscribe all listeners and to cancel all operations. Another big headacke is handling exceptions from all operations and forwarding it to UI.&lt;/p&gt;
+&lt;p&gt;That means that you should start &lt;code&gt;browse&lt;/code&gt; operation with a &lt;code&gt;BrowseCallback&lt;/code&gt;. In this callback you start &lt;code&gt;resolve&lt;/code&gt; with a &lt;code&gt;ResolveCallback&lt;/code&gt;, and than inside &lt;code&gt;ResolveCallback&lt;/code&gt; you start &lt;code&gt;queryRecords&lt;/code&gt; with a &lt;code&gt;QueryRecordsCallback&lt;/code&gt;. After that you send a message to the main thread, where you update your UI. This turns into &amp;lsquo;callback hell&amp;rsquo;. Real problems arise when a user leaves your app before you&amp;rsquo;ve got any results from this chain of callbacks, and you have to unsubscribe all listeners and to cancel all operations. Another big headache is exceptions handling from all operations and forwarding corresponding messages to the UI.&lt;/p&gt;
 
 &lt;p&gt;Ok, let&amp;rsquo;s wrap this API with RxJava.&lt;/p&gt;
 
 &lt;h2 id=&#34;intro:167ce4eccbd4d3a1fceeff7ec1945355&#34;&gt;&lt;strong&gt;Intro&lt;/strong&gt;&lt;/h2&gt;
 
-&lt;p&gt;If you aren&amp;rsquo;t familiar with RxJava, I highly recommend you to start from the &lt;a href=&#34;http://reactivex.io/intro.html&#34;&gt;official documentation&lt;/a&gt;. In this article I&amp;rsquo;m not going to explain RxJava operators, only example of usage.&lt;/p&gt;
+&lt;p&gt;If you aren&amp;rsquo;t familiar with RxJava, I highly recommend you to start from the &lt;a href=&#34;http://reactivex.io/intro.html&#34;&gt;official documentation&lt;/a&gt;. In this article I&amp;rsquo;m not going to explain RxJava operators, only examples of usage.&lt;/p&gt;
 
 &lt;p&gt;Ok, firstly, let&amp;rsquo;s take a look at DNSSD Apple API:&lt;/p&gt;
 
@@ -99,7 +99,7 @@ public interface BaseListener
 } 
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;I&amp;rsquo;ve written interface for creation &lt;code&gt;DNSSDService&lt;/code&gt;s and general method for creation &lt;code&gt;Observable&lt;/code&gt;s.&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;ve written an interface for &lt;code&gt;DNSSDService&lt;/code&gt;s creation  and a general method for &lt;code&gt;Observable&lt;/code&gt;s creation.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public interface DNSSDServiceCreator&amp;lt;T&amp;gt;{
     DNSSDService getService(Subscriber&amp;lt;? super T&amp;gt; subscriber) throws DNSSDException;
@@ -129,7 +129,7 @@ private &amp;lt;T&amp;gt; Observable&amp;lt;T&amp;gt; createObservable(DNSSDServ
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;I use trick with &lt;code&gt;final DNSSDService[] mService = new DNSSDService[1]&lt;/code&gt; to save &lt;code&gt;DNSSDService&lt;/code&gt; instance from &lt;a href=&#34;http://reactivex.io/RxJava/javadoc/rx/Observable.OnSubscribe.html&#34;&gt;&lt;code&gt;OnSubscribe&lt;/code&gt;&lt;/a&gt; callback and stop it inside &lt;a href=&#34;http://reactivex.io/documentation/operators/do.html&#34;&gt;&lt;code&gt;doOnUnsubscribe&lt;/code&gt;&lt;/a&gt; operator.&lt;/p&gt;
+&lt;p&gt;I use a trick with &lt;code&gt;final DNSSDService[] mService = new DNSSDService[1]&lt;/code&gt; to save &lt;code&gt;DNSSDService&lt;/code&gt; instance from &lt;a href=&#34;http://reactivex.io/RxJava/javadoc/rx/Observable.OnSubscribe.html&#34;&gt;&lt;code&gt;OnSubscribe&lt;/code&gt;&lt;/a&gt; callback and to stop it inside &lt;a href=&#34;http://reactivex.io/documentation/operators/do.html&#34;&gt;&lt;code&gt;doOnUnsubscribe&lt;/code&gt;&lt;/a&gt; operator.&lt;/p&gt;
 
 &lt;p&gt;Before implementing basic operations I&amp;rsquo;ve created a &lt;code&gt;BonjourService&lt;/code&gt; POJO class. The main idea is to create a chain of observables that will operate with this class:&lt;/p&gt;
 
@@ -197,7 +197,7 @@ private static class BrowseListener implements com.apple.dnssd.BrowseListener{
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;code&gt;browse&lt;/code&gt; is an endless operation. That&amp;rsquo;s why it never calls &lt;code&gt;onComplete&lt;/code&gt; method on a &lt;code&gt;Subscriber&lt;/code&gt;. Every time when DNSSD library calls a &lt;code&gt;serviceFound&lt;/code&gt; callback I emit a &lt;code&gt;new BonjourService&lt;/code&gt; object. Inside a &lt;code&gt;serviceLost&lt;/code&gt; callback I do the same, but with additional flag &lt;code&gt;BonjourService.DELETED&lt;/code&gt;. That&amp;rsquo;s why &lt;code&gt;Subsriber&lt;/code&gt; should always checks this flag before updating UI.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;browse&lt;/code&gt; is an endless operation. That&amp;rsquo;s why it never calls &lt;code&gt;onComplete&lt;/code&gt; method on a &lt;code&gt;Subscriber&lt;/code&gt;. Every time when DNSSD library calls a &lt;code&gt;serviceFound&lt;/code&gt; callback I emit a &lt;code&gt;new BonjourService&lt;/code&gt; object. Inside a &lt;code&gt;serviceLost&lt;/code&gt; callback I do the same, but with additional flag &lt;code&gt;BonjourService.DELETED&lt;/code&gt;. That&amp;rsquo;s why &lt;code&gt;Subsriber&lt;/code&gt; should always check this flag before updating of the UI.&lt;/p&gt;
 
 &lt;p&gt;Now look at the usage of my &lt;code&gt;browse&lt;/code&gt; method:&lt;/p&gt;
 
@@ -220,8 +220,8 @@ private static class BrowseListener implements com.apple.dnssd.BrowseListener{
 
 &lt;h2 id=&#34;resolve:167ce4eccbd4d3a1fceeff7ec1945355&#34;&gt;&lt;strong&gt;Resolve&lt;/strong&gt;&lt;/h2&gt;
 
-&lt;p&gt;Next operation is &lt;code&gt;resolve&lt;/code&gt;. I use this operation to resolve a service name to a target host, port number, and a txt record.
-Unlike &lt;code&gt;browse&lt;/code&gt; operation this one will return &lt;a href=&#34;https://github.com/ReactiveX/RxJava/wiki/Implementing-Your-Own-Operators&#34;&gt;&lt;code&gt;Transformer&lt;/code&gt;&lt;/a&gt;, that transforms an &lt;code&gt;Observable&lt;/code&gt; of &lt;code&gt;BonjourService&lt;/code&gt; to an &lt;code&gt;Observable&lt;/code&gt; of resolved &lt;code&gt;BonjourService&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Next operation is &lt;code&gt;resolve&lt;/code&gt;. I use this operation to resolve target host service name, port number, and a txt record.
+Unlike &lt;code&gt;browse&lt;/code&gt; operation this one will return &lt;a href=&#34;https://github.com/ReactiveX/RxJava/wiki/Implementing-Your-Own-Operators&#34;&gt;&lt;code&gt;Transformer&lt;/code&gt;&lt;/a&gt;, that transforms an &lt;code&gt;Observable&lt;/code&gt; of &lt;code&gt;BonjourService&lt;/code&gt; into an &lt;code&gt;Observable&lt;/code&gt; of resolved &lt;code&gt;BonjourService&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;First of all I&amp;rsquo;ve applied a &lt;a href=&#34;http://reactivex.io/documentation/operators/flatmap.html&#34;&gt;&lt;code&gt;flatMap&lt;/code&gt;&lt;/a&gt; to income &lt;code&gt;Observalbe&lt;/code&gt;. Then in map&amp;rsquo;s function I check if &lt;code&gt;BonjourService&lt;/code&gt; contains &lt;code&gt;DELETED&lt;/code&gt; flag then I return this &lt;code&gt;Observable&lt;/code&gt; (maybe the information about this &lt;code&gt;BonjourService&lt;/code&gt; will be usefull for a &lt;code&gt;Subsriber&lt;/code&gt;).
 In another case I return new &lt;code&gt;Observable&lt;/code&gt; that will query record from DNSSD API.&lt;/p&gt;
@@ -362,9 +362,9 @@ private static class QueryListener implements com.apple.dnssd.QueryListener{
         });
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Creating of Rx chains is very usefull because you don&amp;rsquo;t need to care about canceling all operations and removing listeners. The only thing you have to do inside your &lt;code&gt;onPause&lt;/code&gt;||&lt;code&gt;onStop&lt;/code&gt;||&lt;code&gt;onDestroy&lt;/code&gt; methods is to call &lt;code&gt;mSubscription.cancel()&lt;/code&gt;. Another big advantage is ability to handle all exceptions from chain in one place.&lt;/p&gt;
+&lt;p&gt;Creating of Rx chains is very usefull because you don&amp;rsquo;t need to care about canceling of all operations and listeners removal. The only thing you have to do inside your &lt;code&gt;onPause&lt;/code&gt;||&lt;code&gt;onStop&lt;/code&gt;||&lt;code&gt;onDestroy&lt;/code&gt; methods is to call &lt;code&gt;mSubscription.cancel()&lt;/code&gt;. Another big advantage is the ability to handle all exceptions from a chain in one place.&lt;/p&gt;
 
-&lt;p&gt;You can find a usage af the described wrapper (I called it &lt;a href=&#34;https://github.com/andriydruk/BonjourBrowser/blob/master/app/src/main/java/com/druk/bonjour/browser/dnssd/RxDNSSD.java&#34;&gt;&lt;code&gt;RxDNSSD&lt;/code&gt;&lt;/a&gt;) in my project &lt;a href=&#34;https://github.com/andriydruk/BonjourBrowser&#34;&gt;Bonjour Browser&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;You can find a usage of the described wrapper (I&amp;rsquo;ve named it &lt;a href=&#34;https://github.com/andriydruk/BonjourBrowser/blob/master/app/src/main/java/com/druk/bonjour/browser/dnssd/RxDNSSD.java&#34;&gt;&lt;code&gt;RxDNSSD&lt;/code&gt;&lt;/a&gt;) in my project &lt;a href=&#34;https://github.com/andriydruk/BonjourBrowser&#34;&gt;Bonjour Browser&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;That&amp;rsquo;s all. Happy wrapping annoying APIs!&lt;/p&gt;
 </description>

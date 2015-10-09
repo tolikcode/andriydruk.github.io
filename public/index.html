@@ -116,7 +116,7 @@
 <li>Update UI</li>
 </ul>
 
-<p>That means that you should start <code>browse</code> operation with a <code>BrowseCallback</code>. In this callback you start <code>resolve</code> with a <code>ResolveCallback</code>, and than inside <code>ResolveCallback</code> you start <code>queryRecords</code> with a <code>QueryRecordsCallback</code>. After that you send a message to the main thread, where you update your UI. This turns to a &lsquo;callback hell&rsquo;. Real problems arise when a user leaves your app before you&rsquo;ve got any results from this chain of callbacks, and you have to unsubscribe all listeners and to cancel all operations. Another big headacke is handling exceptions from all operations and forwarding it to UI.</p>
+<p>That means that you should start <code>browse</code> operation with a <code>BrowseCallback</code>. In this callback you start <code>resolve</code> with a <code>ResolveCallback</code>, and than inside <code>ResolveCallback</code> you start <code>queryRecords</code> with a <code>QueryRecordsCallback</code>. After that you send a message to the main thread, where you update your UI. This turns into &lsquo;callback hell&rsquo;. Real problems arise when a user leaves your app before you&rsquo;ve got any results from this chain of callbacks, and you have to unsubscribe all listeners and to cancel all operations. Another big headache is exceptions handling from all operations and forwarding corresponding messages to the UI.</p>
 
 <p>Ok, let&rsquo;s wrap this API with RxJava.</p>
 
