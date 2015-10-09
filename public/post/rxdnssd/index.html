@@ -303,7 +303,7 @@ private static class BrowseListener implements com.apple.dnssd.BrowseListener{
 <p>Next operation is <code>resolve</code>. I use this operation to resolve target host service name, port number, and a txt record.
 Unlike <code>browse</code> operation this one will return <a href="https://github.com/ReactiveX/RxJava/wiki/Implementing-Your-Own-Operators"><code>Transformer</code></a>, that transforms an <code>Observable</code> of <code>BonjourService</code> into an <code>Observable</code> of resolved <code>BonjourService</code>.</p>
 
-<p>First of all I&rsquo;ve applied a <a href="http://reactivex.io/documentation/operators/flatmap.html"><code>flatMap</code></a> to income <code>Observalbe</code>. Then in map&rsquo;s function I check if <code>BonjourService</code> contains <code>DELETED</code> flag then I return this <code>Observable</code> (maybe the information about this <code>BonjourService</code> will be usefull for a <code>Subsriber</code>).
+<p>First of all I&rsquo;ve applied a <a href="http://reactivex.io/documentation/operators/flatmap.html"><code>flatMap</code></a> to income <code>Observalbe</code>. Then in map&rsquo;s function I check if <code>BonjourService</code> contains <code>DELETED</code> flag then I return <code>Observable.just(bs)</code> (maybe the information about this <code>BonjourService</code> will be usefull for a <code>Subsriber</code>).
 In another case I return new <code>Observable</code> that will query record from DNSSD API.</p>
 
 <pre><code class="language-java">public static Observable.Transformer&lt;BonjourService, BonjourService&gt; resolve() {

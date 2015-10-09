@@ -220,7 +220,7 @@ I don't use `subscribeOn`, because DNSSD will create its own thread and it's not
 Next operation is `resolve`. I use this operation to resolve target host service name, port number, and a txt record. 
 Unlike `browse` operation this one will return [`Transformer`](https://github.com/ReactiveX/RxJava/wiki/Implementing-Your-Own-Operators), that transforms an `Observable` of `BonjourService` into an `Observable` of resolved `BonjourService`. 
 
-First of all I've applied a [`flatMap`](http://reactivex.io/documentation/operators/flatmap.html) to income `Observalbe`. Then in map's function I check if `BonjourService` contains `DELETED` flag then I return this `Observable` (maybe the information about this `BonjourService` will be usefull for a `Subsriber`). 
+First of all I've applied a [`flatMap`](http://reactivex.io/documentation/operators/flatmap.html) to income `Observalbe`. Then in map's function I check if `BonjourService` contains `DELETED` flag then I return `Observable.just(bs)` (maybe the information about this `BonjourService` will be usefull for a `Subsriber`). 
 In another case I return new `Observable` that will query record from DNSSD API.
 
 ~~~java
