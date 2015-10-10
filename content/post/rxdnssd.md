@@ -124,7 +124,7 @@ private <T> Observable<T> createObservable(DNSSDServiceCreator<T> mCreator){
 
 I use a trick with `final DNSSDService[] mService = new DNSSDService[1]` to save `DNSSDService` instance from [`OnSubscribe`](http://reactivex.io/RxJava/javadoc/rx/Observable.OnSubscribe.html) callback and to stop it inside [`doOnUnsubscribe`](http://reactivex.io/documentation/operators/do.html) operator.
 
-Before implementing basic operations I've created a `BonjourService` POJO class. The main idea is to create a chain of observables that will operate with this class:
+Before implementing basic operations I've created a `BonjourService` class. The main idea is to create a chain of observables that will operate with this class:
 
 ~~~java
 public class BonjourService {
@@ -134,6 +134,10 @@ public class BonjourService {
     public final String serviceName;
     public final String regType;
     public final String domain;
+
+    public Map<String, String> dnsRecords = new ArrayMap<>();
+    public String hostname;
+    public int port;
 
     public BonjourService(int flags, int ifIndex, String serviceName, String regType, 
     	String domain) {
@@ -258,7 +262,6 @@ private static class ResolveListener implements com.apple.dnssd.ResolveListener{
         mBonjourService.hostname = hostName;
         mBonjourService.dnsRecords.clear();
         mBonjourService.dnsRecords.putAll(parseTXTRecords(txtRecord));
-        mBonjourService.timestamp = System.currentTimeMillis();
         mSubscriber.onNext(mBonjourService);
         mSubscriber.onCompleted();
         resolver.stop();
@@ -277,7 +280,7 @@ private static class ResolveListener implements com.apple.dnssd.ResolveListener{
 Example of usage:
 
 ~~~java
-mResolveSubscription = RxDNSSD.browse(mReqType, mDomain)
+mSubscription = RxDNSSD.browse(mReqType, mDomain)
         .compose(RxDNSSD.resolve())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(bonjourService -> {
@@ -349,7 +352,7 @@ If the operation finishes sucessfully, I put a resolved address to `BonjourServi
 Example of usage:
 
 ~~~java
-mResolveSubscription = RxDNSSD.browse(mReqType, mDomain)
+mSubscription = RxDNSSD.browse(mReqType, mDomain)
         .compose(RxDNSSD.resolve())
         .compose(RxDNSSD.queryRecords())
         .observeOn(AndroidSchedulers.mainThread())

@@ -211,7 +211,7 @@ private &lt;T&gt; Observable&lt;T&gt; createObservable(DNSSDServiceCreator&lt;T&
 
 <p>I use a trick with <code>final DNSSDService[] mService = new DNSSDService[1]</code> to save <code>DNSSDService</code> instance from <a href="http://reactivex.io/RxJava/javadoc/rx/Observable.OnSubscribe.html"><code>OnSubscribe</code></a> callback and to stop it inside <a href="http://reactivex.io/documentation/operators/do.html"><code>doOnUnsubscribe</code></a> operator.</p>
 
-<p>Before implementing basic operations I&rsquo;ve created a <code>BonjourService</code> POJO class. The main idea is to create a chain of observables that will operate with this class:</p>
+<p>Before implementing basic operations I&rsquo;ve created a <code>BonjourService</code> class. The main idea is to create a chain of observables that will operate with this class:</p>
 
 <pre><code class="language-java">public class BonjourService {
 
@@ -220,6 +220,10 @@ private &lt;T&gt; Observable&lt;T&gt; createObservable(DNSSDServiceCreator&lt;T&
     public final String serviceName;
     public final String regType;
     public final String domain;
+
+    public Map&lt;String, String&gt; dnsRecords = new ArrayMap&lt;&gt;();
+    public String hostname;
+    public int port;
 
     public BonjourService(int flags, int ifIndex, String serviceName, String regType, 
     	String domain) {
@@ -339,7 +343,6 @@ In another case I return new <code>Observable</code> that will query record from
         mBonjourService.hostname = hostName;
         mBonjourService.dnsRecords.clear();
         mBonjourService.dnsRecords.putAll(parseTXTRecords(txtRecord));
-        mBonjourService.timestamp = System.currentTimeMillis();
         mSubscriber.onNext(mBonjourService);
         mSubscriber.onCompleted();
         resolver.stop();
@@ -357,7 +360,7 @@ In another case I return new <code>Observable</code> that will query record from
 
 <p>Example of usage:</p>
 
-<pre><code class="language-java">mResolveSubscription = RxDNSSD.browse(mReqType, mDomain)
+<pre><code class="language-java">mSubscription = RxDNSSD.browse(mReqType, mDomain)
         .compose(RxDNSSD.resolve())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(bonjourService -&gt; {
@@ -427,7 +430,7 @@ private static class QueryListener implements com.apple.dnssd.QueryListener{
 
 <p>Example of usage:</p>
 
-<pre><code class="language-java">mResolveSubscription = RxDNSSD.browse(mReqType, mDomain)
+<pre><code class="language-java">mSubscription = RxDNSSD.browse(mReqType, mDomain)
         .compose(RxDNSSD.resolve())
         .compose(RxDNSSD.queryRecords())
         .observeOn(AndroidSchedulers.mainThread())
