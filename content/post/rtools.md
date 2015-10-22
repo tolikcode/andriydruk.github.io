@@ -7,24 +7,24 @@ title = "R.tools"
 
 +++
 
-Hi everyone. Today I wanna announce my new app [R.tools](https://play.google.com/store/apps/details?id=com.druk.rtools). It's simple application for android developers, that provide information about device configuration. 
-I believe you know about android devices fragmentation and necessity to use alternative resources to support specific device configurations. This app will help you with it.
+Hi everyone. Today I want to announce my new app [R.tools](https://play.google.com/store/apps/details?id=com.druk.rtools). It's a simple application for android developers, that provides information about a device configuration. 
+I believe you know about android devices fragmentation and a necessity to use alternative resources to support specific device configurations. This app can help you with it.
 
 <!--more-->
 
-R.tools provides list of configuration qualifiers sorted by priority. You can check qualifiers that you are intrested and concatenate them to a resources folder name. Yes, I know that dozen of apps with similar functionality already exist at Google Play. But most of them are ugly or contained unnecessary advertisements or trackers. That's why I decided create a clean app with nice look. Also I see R.toors not only as tools app, but educational as well. 
+R.tools app provides a list of configuration qualifiers sorted by priority. You can check qualifiers that you are interested in and concatenate them to a resources folder name. Yes, I know that dozen of apps with similar functionality already exist on Google Play. However most of them are ugly or contain unnecessary advertisements or trackers. That's why I've decided to create a clean app with a nice look. Also I see R.toors not only as tools app, but educational as well.
 
 <div style="text-align:center" markdown="1">
 	<img src="/img/Screenshot_20151018-150757.png" alt="Mountain View">
 </div>
 
-App provides information about all qualifiers, such us ability to change value or min  SDK version.
+R.tools app provides information about all qualifiers, such as an ability to change a value or min  SDK version.
 
 <div style="text-align:center" markdown="1">
 	<img src="/img/Screenshot_001.png" alt="Mountain View">
 </div>
 
-And tablet version:
+And a tablet version:
 
 <div style="text-align:center" markdown="1">
 	<img src="/img/Screenshot_002.png" alt="Mountain View">
@@ -32,5 +32,5 @@ And tablet version:
 
 I hope this application will be usefull for you.
 
-Source code available at [GitHub](https://github.com/andriydruk/R.tools)
+Source code is available at [GitHub](https://github.com/andriydruk/R.tools)
 
