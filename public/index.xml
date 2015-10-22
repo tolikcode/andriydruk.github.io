@@ -16,22 +16,22 @@
       <pubDate>Sun, 18 Oct 2015 14:36:40 +0300</pubDate>
       
       <guid>http://andriydruk.github.io/post/rtools/</guid>
-      <description>&lt;p&gt;Hi everyone. Today I wanna announce my new app &lt;a href=&#34;https://play.google.com/store/apps/details?id=com.druk.rtools&#34;&gt;R.tools&lt;/a&gt;. It&amp;rsquo;s simple application for android developers, that provide information about device configuration.
-I believe you know about android devices fragmentation and necessity to use alternative resources to support specific device configurations. This app will help you with it.&lt;/p&gt;
+      <description>&lt;p&gt;Hi everyone. Today I want to announce my new app &lt;a href=&#34;https://play.google.com/store/apps/details?id=com.druk.rtools&#34;&gt;R.tools&lt;/a&gt;. It&amp;rsquo;s a simple application for android developers, that provides information about a device configuration.
+I believe you know about android devices fragmentation and a necessity to use alternative resources to support specific device configurations. This app can help you with it.&lt;/p&gt;
 
-&lt;p&gt;R.tools provides list of configuration qualifiers sorted by priority. You can check qualifiers that you are intrested and concatenate them to a resources folder name. Yes, I know that dozen of apps with similar functionality already exist at Google Play. But most of them are ugly or contained unnecessary advertisements or trackers. That&amp;rsquo;s why I decided create a clean app with nice look. Also I see R.toors not only as tools app, but educational as well.&lt;/p&gt;
+&lt;p&gt;R.tools app provides a list of configuration qualifiers sorted by priority. You can check qualifiers that you are interested in and concatenate them to a resources folder name. Yes, I know that dozen of apps with similar functionality already exist on Google Play. However most of them are ugly or contain unnecessary advertisements or trackers. That&amp;rsquo;s why I&amp;rsquo;ve decided to create a clean app with a nice look. Also I see R.toors not only as tools app, but educational as well.&lt;/p&gt;
 
 &lt;div style=&#34;text-align:center&#34; markdown=&#34;1&#34;&gt;
     &lt;img src=&#34;http://andriydruk.github.io/img/Screenshot_20151018-150757.png&#34; alt=&#34;Mountain View&#34;&gt;
 &lt;/div&gt;
 
-&lt;p&gt;App provides information about all qualifiers, such us ability to change value or min  SDK version.&lt;/p&gt;
+&lt;p&gt;R.tools app provides information about all qualifiers, such as an ability to change a value or min  SDK version.&lt;/p&gt;
 
 &lt;div style=&#34;text-align:center&#34; markdown=&#34;1&#34;&gt;
     &lt;img src=&#34;http://andriydruk.github.io/img/Screenshot_001.png&#34; alt=&#34;Mountain View&#34;&gt;
 &lt;/div&gt;
 
-&lt;p&gt;And tablet version:&lt;/p&gt;
+&lt;p&gt;And a tablet version:&lt;/p&gt;
 
 &lt;div style=&#34;text-align:center&#34; markdown=&#34;1&#34;&gt;
     &lt;img src=&#34;http://andriydruk.github.io/img/Screenshot_002.png&#34; alt=&#34;Mountain View&#34;&gt;
@@ -39,7 +39,7 @@ I believe you know about android devices fragmentation and necessity to use alte
 
 &lt;p&gt;I hope this application will be usefull for you.&lt;/p&gt;
 
-&lt;p&gt;Source code available at &lt;a href=&#34;https://github.com/andriydruk/R.tools&#34;&gt;GitHub&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Source code is available at &lt;a href=&#34;https://github.com/andriydruk/R.tools&#34;&gt;GitHub&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
     
