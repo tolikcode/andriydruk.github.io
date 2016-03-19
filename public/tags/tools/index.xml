@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tools on Yet Another Android Developer Blog</title>
-    <link>http://andriydruk.github.io/tags/tools/</link>
+    <link>http://andriydruk.com/tags/tools/</link>
     <description>Recent content in Tools on Yet Another Android Developer Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Code released under the Apache 2.0 license.</copyright>
     <lastBuildDate>Tue, 04 Aug 2015 22:40:49 +0300</lastBuildDate>
-    <atom:link href="http://andriydruk.github.io/tags/tools/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://andriydruk.com/tags/tools/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Деобфускация трассировок стека</title>
-      <link>http://andriydruk.github.io/post/android-deobfuscation/</link>
+      <link>http://andriydruk.com/post/android-deobfuscation/</link>
       <pubDate>Tue, 04 Aug 2015 22:40:49 +0300</pubDate>
       
-      <guid>http://andriydruk.github.io/post/android-deobfuscation/</guid>
+      <guid>http://andriydruk.com/post/android-deobfuscation/</guid>
       <description>&lt;p&gt;Одной из самых плохо описанных областей в Android разработке есть руководства по использованию инструментов разработчика. Поэтому я решил описать их в серии небольших статей. В этой статья я хочу рассказать о том какие инструменты предоставляет SDK для работы с трассировками стеков (stacktraces), полученых из выпущенных сборок.&lt;/p&gt;
 
 &lt;p&gt;Одной из проблем поддержки выпущенных Android приложений является деобфускация или retrace трассировок стеков полученнных из обфусцированных сборок. Для того чтобы разобраться в том как деобфусцировать трассировки стеков, нужно понять как работает обфускация. Стандратным способом обфускации в Android есть использования такого инструмента как ProGuard. Вот что о нем говорит &lt;a href=&#34;http://developer.android.com/tools/help/proguard.html#decoding&#34;&gt;официальная документация&lt;/a&gt;&lt;/p&gt;
@@ -110,7 +110,7 @@ protected void onCreate(Bundle savedInstanceState) {
 
 &lt;p&gt;Для деобфускации нам нужен файл mapping.txt из нашего build каталога. В моем случае путь к файлу app/build/outputs/mapping/debug/mapping.txt. Далее необходимо воспользоваться либо скриптом retrace.sh из ANDROID_HOME/tools/proguard/bin, либо воспользоваться GUI утилитой ProguadGUI из ANDROID_HOME/tools/proguard/lib/proguardgui.jar. Воспользовавшись GUI утилитой мы получим следующую трассировку стека:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://andriydruk.github.io/img/Screen Shot 2015-08-04 at 23.34.25.png&#34; alt=&#34;Alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://andriydruk.com/img/Screen Shot 2015-08-04 at 23.34.25.png&#34; alt=&#34;Alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Caused by: java.lang.RuntimeException: Stack deobfuscation example exception
     at com.druk.myapplication.MainActivity$CrashHelper.crash(Unknown Source)

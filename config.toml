@@ -1,8 +1,9 @@
-baseurl = "http://andriydruk.github.io/"
+baseurl = "http://andriydruk.com/"
 languageCode = "en-us"
 title = "Yet Another Android Developer Blog"
 theme = "hugo-material-blog"
 
+metadataformat = "yaml"
 canonifyurls = true
 paginate = 10
 copyright = "Code released under the Apache 2.0 license."
@@ -43,3 +44,7 @@ disqusShortname = "yetanotherandroiddeveloperblog"
   name = "Archives"
   url = "/post/"
   weight = -180
+
+[params.palette]
+   primary = "indigo"
+   accent  = "blue"
