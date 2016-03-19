@@ -9,6 +9,8 @@ title = "Wrap Annoying APIs With RxJava"
 
 [Reactive Extensions (also known as ReactiveX or Rx)](http://reactivex.io/intro.html) is a library, that brings [FRP](https://en.wikipedia.org/wiki/Functional_reactive_programming) programming paradigm to different platforms. And it's a breath of fresh air for android developers in Java 6 desert. A lot of articles about RxJava concept and common usage have already been written and I don't want to explain it again. That's why I would like to publish my example of RxJava usage in Android just to show you how you can wrap Java APIs. In this article I will describe a process of Java API wrapping for Apple’s DNSSD library (which in my opinion is quite an annoying API). 
 
+<!--more-->
+
 DNSSD library's public API is a Singleton that provides static methods implementing basic operations such as searching or advertising. All operations work asynchronously and their results are returned to you in callbacks from a background thread. It's a usual Java API. What's wrong with it? Let's imagine a basic usage scenario of services search in a network: 
 
 * Browse service
@@ -19,8 +21,6 @@ DNSSD library's public API is a Singleton that provides static methods implement
 That means that you should start `browse` operation with a `BrowseCallback`. In this callback you start `resolve` with a `ResolveCallback`, and than inside `ResolveCallback` you start `queryRecords` with a `QueryRecordsCallback`. After that you send a message to the main thread, where you update your UI. This turns into 'callback hell'. Real problems arise when a user leaves your app before you've got any results from this chain of callbacks, and you have to unsubscribe all listeners and to cancel all operations. Another big headache is exceptions handling from all operations and forwarding corresponding messages to the UI.
 
 Ok, let's wrap this API with RxJava.
-
-<!--more-->
 
 **Intro**
 ------------- 

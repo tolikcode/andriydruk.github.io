@@ -1,0 +1,72 @@
+<nav aria-label="Navigation">
+  <a href="{{ $.Site.BaseURL }}" class="project">
+    <div class="banner">
+      {{ with .Site.Params.logo }}
+        <div class="logo">
+          <img src="{{ $.Site.BaseURL }}{{ . }}">
+        </div>
+      {{ end }}
+      <div class="name">
+        <strong>{{ .Site.Params.Author }}</strong>
+          <br>
+          {{ .Site.Params.Position }}
+      </div>
+    </div>
+  </a>
+
+  <div class="scrollable">
+    <div class="wrapper">
+        <ul class="repo">
+          <li class="repo-download">
+            <a href="https://twitter.com/{{ .Site.Social.twitter }}" title="@{{ .Site.Social.twitter }} on Twitter" target="_blank">
+              <i style="ignore" class="icon icon-twitter"></i> Twitter
+            </a>
+          </li>
+          <li class="repo-stars">
+            <a href="https://github.com/{{ .Site.Social.github }}" title="@{{ .Site.Social.github }} on GitHub" target="_blank">
+              <i style="ignore" class="icon icon-github"></i> Github
+            </a>
+          </li>
+        </ul>
+        <hr>
+
+      <div class="toc">
+        <ul>
+          <li>
+            <span class="section">Articles</span>
+            <ul>
+                {{ range $.Site.Pages }}
+                <li class="anchor">
+                  <a title="{{ .Title | title }}" href="{{ .Permalink }}">{{ .Title | title }}</a>
+                </li>  
+                {{ end }}
+            </ul> 
+          </li>
+        </ul>
+
+        {{ if isset .Site.Params "author" }}
+        <hr>
+        <span class="section">The author</span>
+        
+        <ul>
+          {{ with .Site.Social.twitter }}
+          <li>
+            <a href="https://twitter.com/{{ . }}" target="_blank" title="@{{ . }} on Twitter">
+              @{{ . }} on Twitter
+            </a>
+          </li>
+          {{ end }}
+
+          {{ with .Site.Social.github }}
+          <li>
+            <a href="https://github.com/{{ . }}" target="_blank" title="@{{ . }} on GitHub">
+              @{{ . }} on GitHub
+            </a>
+          </li>
+          {{ end }}
+        </ul>
+        {{ end }}
+      </div>
+    </div>
+  </div>
+</nav>

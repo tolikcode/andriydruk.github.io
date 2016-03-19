@@ -1,102 +1,199 @@
 <!DOCTYPE html>
-<html lang="en-us">
+  
+  
+  
+  
+   <html class="no-js"> 
 
-<head>
-
+  <head lang="en-us">
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>Что такое .aar библиотеки?</title>
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
+    <title>Что такое .aar библиотеки? - Yet Another Android Developer Blog</title>
+    <meta name="generator" content="Hugo 0.15" />
 
     
-
+    <link rel="canonical" href="http://andriydruk.github.io/post/what_is_aars/">
     
-    <link href="http://andriydruk.github.io//css/bootstrap.min.css" rel="stylesheet">
 
-    
-    <link href="http://andriydruk.github.io//css/clean-blog.min.css" rel="stylesheet">
+    <meta property="og:url" content="http://andriydruk.github.io/post/what_is_aars/">
+    <meta property="og:title" content="Yet Another Android Developer Blog">
+    <meta property="og:image" content="http://andriydruk.github.io/img/logo.png">
+    <meta name="apple-mobile-web-app-title" content="Yet Another Android Developer Blog">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
+    <link rel="shortcut icon" type="image/x-icon" href="http://andriydruk.github.io/images/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="http://andriydruk.github.io/images/favicon.ico">
     
-    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
-
-    
+    <style>
+      @font-face {
+        font-family: 'Icon';
+        src: url('http://andriydruk.github.io/fonts/icon.eot?52m981');
+        src: url('http://andriydruk.github.io/fonts/icon.eot?#iefix52m981')
+               format('embedded-opentype'),
+             url('http://andriydruk.github.io/fonts/icon.woff?52m981')
+               format('woff'),
+             url('http://andriydruk.github.io/fonts/icon.ttf?52m981')
+               format('truetype'),
+             url('http://andriydruk.github.io/fonts/icon.svg?52m981#icon')
+               format('svg');
+        font-weight: normal;
+        font-style: normal;
+      }
     </style>
-    <link rel="stylesheet" href="http://andriydruk.github.io/css/idea.css">
+
+    <link rel="stylesheet" href="http://andriydruk.github.io/stylesheets/application.css">
+    <link rel="stylesheet" href="http://andriydruk.github.io/stylesheets/palettes.css">
+
+    
+    
+    
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:400,700|Roboto%2bMono">
+    <style>
+      body, input {
+        font-family: 'Roboto', Helvetica, Arial, sans-serif;
+      }
+      pre, code {
+        font-family: 'Roboto Mono', Menlo, 'Courier New', 'Courier', monospace;
+      }
+    </style>
+    
+    
+    <script src="http://andriydruk.github.io/javascripts/modernizr.js"></script>
+
+    
+    <link rel="stylesheet" href="http://andriydruk.github.io/stylesheets/idea.css">
     <script src="https://yandex.st/highlightjs/8.0/highlight.min.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
 
-
-    
-    
-    
-
-</head>
-
-<body>
-
-    
-    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
-        <div class="container-fluid">
-            
-            <div class="navbar-header page-scroll">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-            </div>
-
-                       
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-right">
-                    
-                    <li>
-                        <a href="http://andriydruk.github.io/">home</a>
-                    </li>
-                    
-                    <li>
-                        <a href="http://andriydruk.github.io/post/">Archives</a>
-                    </li>
-                    
-                  </ul>
-            </div>
-           
-
-        </div>
-        
-    </nav>
+  </head>
+  <body class=" ">
 
 
-    
-    
-    <header class="intro-header" style="background-image: url('http://andriydruk.github.io///img/material-001.jpg')">
-      
-      <div class="container">
-        <div class="row">
-           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-             <div class="post-heading">
-               <h1>Что Такое .Aar Библиотеки?</h1>
-               <h2 class="subheading"></h2>
-               <span class="meta">Posted by <a href="#">Andriy Druk</a> on Wed, Jul 15, 2015
-               </span>
-             </div>
-           </div>
-        </div>
+<div class="backdrop">
+	<div class="backdrop-paper"></div>
+</div>
+
+<input class="toggle" type="checkbox" id="toggle-drawer">
+<input class="toggle" type="checkbox" id="toggle-search">
+<label class="toggle-button overlay" for="toggle-drawer"></label>
+
+<header class="header">
+	<nav aria-label="Header">
+  <div class="bar default">
+    <div class="button button-menu" role="button" aria-label="Menu">
+      <label class="toggle-button icon icon-menu" for="toggle-drawer">
+        <span></span>
+      </label>
+    </div>
+    <div class="stretch">
+      <div class="title">
+        Что такое .aar библиотеки?
       </div>
-    </header>
-
+    </div>
     
-    <article>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                  
+        
+  </div>
+  <div class="bar search">
+    <div class="button button-close" role="button" aria-label="Close">
+      <label class="toggle-button icon icon-back" for="toggle-search"></label>
+    </div>
+    <div class="stretch">
+      <div class="field">
+        <input class="query" type="text" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck>
+      </div>
+    </div>
+    <div class="button button-reset" role="button" aria-label="Search">
+      <button class="toggle-button icon icon-close" id="reset-search"></button>
+    </div>
+  </div>
+</nav>
+</header>
+
+<main class="main">
+	<div class="drawer">
+		<nav aria-label="Navigation">
+  <a href="http://andriydruk.github.io/" class="project">
+    <div class="banner">
+      
+        <div class="logo">
+          <img src="http://andriydruk.github.io/img/logo.png">
+        </div>
+      
+      <div class="name">
+        <strong>Andriy Druk</strong>
+          <br>
+          Software Mobile Engineer
+      </div>
+    </div>
+  </a>
+
+  <div class="scrollable">
+    <div class="wrapper">
+        <ul class="repo">
+          <li class="repo-download">
+            <a href="https://twitter.com/AndriyDruk" title="@AndriyDruk on Twitter" target="_blank">
+              <i style="ignore" class="icon icon-twitter"></i> Twitter
+            </a>
+          </li>
+          <li class="repo-stars">
+            <a href="https://github.com/andriydruk" title="@andriydruk on GitHub" target="_blank">
+              <i style="ignore" class="icon icon-github"></i> Github
+            </a>
+          </li>
+        </ul>
+        <hr>
+
+      <div class="toc">
+        <ul>
+          <li>
+            <span class="section">Articles</span>
+            <ul>
+                
+                <li class="anchor">
+                  <a title="R.Tools" href="http://andriydruk.github.io/post/rtools/">R.Tools</a>
+                </li>  
+                
+                <li class="anchor">
+                  <a title="Wrap Annoying APIs With RxJava" href="http://andriydruk.github.io/post/rxdnssd/">Wrap Annoying APIs With RxJava</a>
+                </li>  
+                
+                <li class="anchor">
+                  <a title="Bonjour In Android Applications" href="http://andriydruk.github.io/post/mdnsresponder/">Bonjour In Android Applications</a>
+                </li>  
+                
+                <li class="anchor">
+                  <a title="Деобфускация Трассировок Стека" href="http://andriydruk.github.io/post/android-deobfuscation/">Деобфускация Трассировок Стека</a>
+                </li>  
+                
+                <li class="anchor">
+                  <a title="Что Такое .Aar Библиотеки?" href="http://andriydruk.github.io/post/what_is_aars/">Что Такое .Aar Библиотеки?</a>
+                </li>  
+                
+                <li class="anchor">
+                  <a title="Добро Пожаловать" href="http://andriydruk.github.io/post/welcome/">Добро Пожаловать</a>
+                </li>  
+                
+            </ul> 
+          </li>
+        </ul>
+
+        
+      </div>
+    </div>
+  </div>
+</nav>
+
+	</div>
+
+	<article class="article">
+		<div class="wrapper">
+			<h1>
+				Что такое .aar библиотеки? 
+				<a class="headerlink" href="#" title="Permanent link">Wed, Jul 15, 2015</a>
+			</h1>
+
+			
 
 <p>Уже прошло больше года с анонса Android <a href="http://tools.android.com/tech-docs/new-build-system">New Build System</a>, работа над которой кипит и по сей день: в экспериментальной области все еще находится несколько увлекательных возможностей <a href="http://tools.android.com/tech-docs/jackandjill">Jack and Jill Tool Chain</a> и <a href="http://tools.android.com/tech-docs/new-build-system/gradle-experimental#TOC-Ndk-Integration">NDK Integration</a>.</p>
 
@@ -253,7 +350,9 @@
 
 <p>Вот и все.</p>
 
-                  <div id="disqus_thread"></div>
+			<h1></h1>
+			<br>
+			<div id="disqus_thread"></div>
 <script type="text/javascript">
     var disqus_shortname = 'yetanotherandroiddeveloperblog';
     var disqus_identifier = 'http:\/\/andriydruk.github.io\/post\/what_is_aars\/';
@@ -268,75 +367,68 @@
 </script>
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-                </div>
+			<footer class="footer">
+				
+
+<nav class="pagination" aria-label="Footer">
+  <div class="previous">
+  
+      <a href="http://andriydruk.github.io/post/welcome/" title="Добро пожаловать">
+        <span class="direction">
+          Previous
+        </span>
+        <div class="page">
+          <div class="button button-previous" role="button" aria-label="Previous">
+            <i class="icon icon-back"></i>
+          </div>
+          <div class="stretch">
+            <div class="title">
+              Добро пожаловать
             </div>
+          </div>
         </div>
-    </article>
+      </a>
+  
+  </div>
 
-
-
-    <hr>
-    
-    <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                  <ul class="list-inline text-center">
-                    <li>
-                      <a href="mailto:andriy.druk@gmail.com">
-                        <span class="fa-stack fa-lg">
-                          <i class="fa fa-circle fa-stack-2x"></i>
-                          <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
-                        </span>
-                      </a>
-                    </li>
-                    
-                    <li>
-                      <a href="https://twitter.com/AndriyDruk">
-                        <span class="fa-stack fa-lg">
-                          <i class="fa fa-circle fa-stack-2x"></i>
-                          <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
-                        </span>
-                      </a>
-                    </li>
-                    
-                    <li>
-                      <a href="https://github.com/andriydruk">
-                        <span class="fa-stack fa-lg">
-                          <i class="fa fa-circle fa-stack-2x"></i>
-                          <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                        </span>
-                      </a>
-                    </li>
-                    
-                  </ul>
-                  <p class="copyright text-muted">Code released under the Apache 2.0 license.</p>
-                </div>
+  <div class="next">
+  
+      <a href="http://andriydruk.github.io/post/android-deobfuscation/" title="Деобфускация трассировок стека">
+        <span class="direction">
+          Next
+        </span>
+        <div class="page">
+          <div class="stretch">
+            <div class="title">
+              Деобфускация трассировок стека
             </div>
+          </div>
+          <div class="button button-next" role="button" aria-label="Next">
+            <i class="icon icon-forward"></i>
+          </div>
         </div>
-    </footer>
-
-    
-    <script src="http://andriydruk.github.io//js/jquery.min.js"></script>
-
-    
-    <script src="http://andriydruk.github.io//js/bootstrap.min.js"></script>
-
-    
-    <script src="http://andriydruk.github.io//js/clean-blog.js"></script>
-
-    
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-  ga('create', 'UA-67278568-1', 'auto');
-  ga('send', 'pageview');
-</script>
+      </a>
+  
+  </div>
+</nav>
 
 
-</body>
 
-</html>
 
+			</footer>
+		</div>
+	</article>
+
+	<div class="results" role="status" aria-live="polite">
+		<div class="scrollable">
+			<div class="wrapper">
+				<div class="meta"></div>
+				<div class="list"></div>
+			</div>
+		</div>
+	</div>
+</main>
+
+    <script>
+      var base_url = 'http:\/\/andriydruk.github.io\/';
+      var repo_id  = '

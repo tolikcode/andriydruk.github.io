@@ -1,7 +1,7 @@
 baseurl = "http://andriydruk.github.io/"
 languageCode = "en-us"
 title = "Yet Another Android Developer Blog"
-theme = "startbootstrap-clean-blog"
+theme = "hugo-material-blog"
 
 canonifyurls = true
 paginate = 10
@@ -18,6 +18,12 @@ disqusShortname = "yetanotherandroiddeveloperblog"
   Author = "Andriy Druk"
   email = "andriy.druk@gmail.com"
   Ganalytics = "UA-67278568-1"
+  logo = "img/logo.png"
+  Position = "Software Mobile Engineer"
+  # Google Analytics
+  # 
+  # Add your tracking code as first value followed by a comma
+  google_analytics = ["auto", "UA-67278568-1"]
 
 [[params.social]]
   title = "twitter"
@@ -25,6 +31,9 @@ disqusShortname = "yetanotherandroiddeveloperblog"
 [[params.social]]
   title = "github"
   url = "https://github.com/andriydruk"
+[social]
+  twitter = "AndriyDruk"
+  github  = "andriydruk"
 
 [[menu.main]]
   name = "home"

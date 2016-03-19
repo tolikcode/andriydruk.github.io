@@ -13,6 +13,8 @@ Wiki definition of Bonjour is
 
 > Bonjour is Apple's implementation of Zero-configuration networking (Zeroconf), a group of technologies that includes service discovery, address assignment, and hostname resolution. Bonjour locates devices such as printers, other computers, and the services that those devices offer on a local network using multicast Domain Name System (mDNS) service records.
 
+<!--more-->
+
 Apple definition is
 
 > Bonjour, also known as zero-configuration networking, enables automatic discovery of devices and services on a local network using industry standard IP protocols. Bonjour makes it easy to discover, publish, and resolve network services with a sophisticated, yet easy-to-use, programming interface that is accessible from Cocoa, Ruby, Python, and other languages.
@@ -20,8 +22,6 @@ Apple definition is
 In other words, Bonjour is a software component that is used for other devices discovery (PC, Mac, smartphones, printers, etc) in a network via all available interfaces. A Bonjour term for a device on a network is "service". Any application in your operating system can register a service and assign it to an opened port on your computer (actually Bonjour does not guarantee that a port in service's metadata is opened and connected to the app that registered this service). All services are registered in some domain (that's a mandatory parameter for all services and you can find domain naming conventions [here](https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/NetServices/Articles/domainnames.html)). Also applications can discover all available services at any domain. You should understand that Bonjour is only a technology for services discovery, all connection you have to do by yourself anyway.
 
 You can find more information about Bonjour in [official documentation](https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/NetServices/Introduction.html).
-
-<!--more-->
 
 **What about Android? Can we use this powerful technology in our Android projects?** Yes. Google uses this technology in lots of their projects. For example: you try to connect to Chromecast in your living room - it's Bonjour. You are playing games with your friends via wifi - it's Bonjour. You print documents via wifi on your printer - Bonjour is here again.
 

@@ -1,266 +1,294 @@
 <!DOCTYPE html>
-<html lang="en-us">
+  
+  
+  
+  
+   <html class="no-js"> 
 
-<head>
-
+  <head lang="en-us">
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     <title>Yet Another Android Developer Blog</title>
+    <meta name="generator" content="Hugo 0.15" />
 
     
-    <link href="http://andriydruk.github.io/index.xml" rel="alternate" type="application/rss+xml" title="Yet Another Android Developer Blog" />
-    <link href="http://andriydruk.github.io/index.xml" rel="feed" type="application/rss+xml" title="Yet Another Android Developer Blog" />
+    <link rel="canonical" href="http://andriydruk.github.io/">
     
 
-    
-    <link href="http://andriydruk.github.io//css/bootstrap.min.css" rel="stylesheet">
+    <meta property="og:url" content="http://andriydruk.github.io/">
+    <meta property="og:title" content="Yet Another Android Developer Blog">
+    <meta property="og:image" content="http://andriydruk.github.io/img/logo.png">
+    <meta name="apple-mobile-web-app-title" content="Yet Another Android Developer Blog">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
+    <link rel="shortcut icon" type="image/x-icon" href="http://andriydruk.github.io/images/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="http://andriydruk.github.io/images/favicon.ico">
     
-    <link href="http://andriydruk.github.io//css/clean-blog.min.css" rel="stylesheet">
-
-    
-    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
-
-    
+    <style>
+      @font-face {
+        font-family: 'Icon';
+        src: url('http://andriydruk.github.io/fonts/icon.eot?52m981');
+        src: url('http://andriydruk.github.io/fonts/icon.eot?#iefix52m981')
+               format('embedded-opentype'),
+             url('http://andriydruk.github.io/fonts/icon.woff?52m981')
+               format('woff'),
+             url('http://andriydruk.github.io/fonts/icon.ttf?52m981')
+               format('truetype'),
+             url('http://andriydruk.github.io/fonts/icon.svg?52m981#icon')
+               format('svg');
+        font-weight: normal;
+        font-style: normal;
+      }
     </style>
-    <link rel="stylesheet" href="http://andriydruk.github.io/css/idea.css">
+
+    <link rel="stylesheet" href="http://andriydruk.github.io/stylesheets/application.css">
+    <link rel="stylesheet" href="http://andriydruk.github.io/stylesheets/palettes.css">
+
+    
+    
+    
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:400,700|Roboto%2bMono">
+    <style>
+      body, input {
+        font-family: 'Roboto', Helvetica, Arial, sans-serif;
+      }
+      pre, code {
+        font-family: 'Roboto Mono', Menlo, 'Courier New', 'Courier', monospace;
+      }
+    </style>
+    
+    
+    <script src="http://andriydruk.github.io/javascripts/modernizr.js"></script>
+
+    
+    <link rel="stylesheet" href="http://andriydruk.github.io/stylesheets/idea.css">
     <script src="https://yandex.st/highlightjs/8.0/highlight.min.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
 
+  </head>
+  <body class=" ">
 
+
+
+
+<div class="backdrop">
+	<div class="backdrop-paper"></div>
+</div>
+
+<input class="toggle" type="checkbox" id="toggle-drawer">
+<input class="toggle" type="checkbox" id="toggle-search">
+<label class="toggle-button overlay" for="toggle-drawer"></label>
+
+<header class="header">
+	<nav aria-label="Header">
+  <div class="bar default">
+    <div class="button button-menu" role="button" aria-label="Menu">
+      <label class="toggle-button icon icon-menu" for="toggle-drawer">
+        <span></span>
+      </label>
+    </div>
+    <div class="stretch">
+      <div class="title">
+        Yet Another Android Developer Blog
+      </div>
+    </div>
     
-    
-    
-
-</head>
-
-<body>
-
-    
-    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
-        <div class="container-fluid">
-            
-            <div class="navbar-header page-scroll">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-            </div>
-
-                       
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-right">
-                    
-                    <li>
-                        <a href="http://andriydruk.github.io/">home</a>
-                    </li>
-                    
-                    <li>
-                        <a href="http://andriydruk.github.io/post/">Archives</a>
-                    </li>
-                    
-                  </ul>
-            </div>
-           
-
-        </div>
         
-    </nav>
+  </div>
+  <div class="bar search">
+    <div class="button button-close" role="button" aria-label="Close">
+      <label class="toggle-button icon icon-back" for="toggle-search"></label>
+    </div>
+    <div class="stretch">
+      <div class="field">
+        <input class="query" type="text" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck>
+      </div>
+    </div>
+    <div class="button button-reset" role="button" aria-label="Search">
+      <button class="toggle-button icon icon-close" id="reset-search"></button>
+    </div>
+  </div>
+</nav>
+</header>
 
+<main class="main">
+	<div class="drawer">
+		<nav aria-label="Navigation">
+  <a href="http://andriydruk.github.io/" class="project">
+    <div class="banner">
+      
+        <div class="logo">
+          <img src="http://andriydruk.github.io/img/logo.png">
+        </div>
+      
+      <div class="name">
+        <strong>Andriy Druk</strong>
+          <br>
+          Software Mobile Engineer
+      </div>
+    </div>
+  </a>
 
-    
-    <header class="intro-header" style="background-image: url('http://andriydruk.github.io//img/home-bg.jpg')">
-     <div class="container">
-       <div class="row">
-         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-           <div class="site-heading">
-             <h1>Yet Another Android Developer Blog</h1>
-             <hr class="small">
-             <span class="subheading">Andriy Druk</span>
-           </div>
-         </div>
-       </div>
-     </div>
-    </header>
+  <div class="scrollable">
+    <div class="wrapper">
+        <ul class="repo">
+          <li class="repo-download">
+            <a href="https://twitter.com/AndriyDruk" title="@AndriyDruk on Twitter" target="_blank">
+              <i style="ignore" class="icon icon-twitter"></i> Twitter
+            </a>
+          </li>
+          <li class="repo-stars">
+            <a href="https://github.com/andriydruk" title="@andriydruk on GitHub" target="_blank">
+              <i style="ignore" class="icon icon-github"></i> Github
+            </a>
+          </li>
+        </ul>
+        <hr>
 
-    
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <div class="toc">
+        <ul>
+          <li>
+            <span class="section">Articles</span>
+            <ul>
+                
+                <li class="anchor">
+                  <a title="R.Tools" href="http://andriydruk.github.io/post/rtools/">R.Tools</a>
+                </li>  
+                
+                <li class="anchor">
+                  <a title="Wrap Annoying APIs With RxJava" href="http://andriydruk.github.io/post/rxdnssd/">Wrap Annoying APIs With RxJava</a>
+                </li>  
+                
+                <li class="anchor">
+                  <a title="Bonjour In Android Applications" href="http://andriydruk.github.io/post/mdnsresponder/">Bonjour In Android Applications</a>
+                </li>  
+                
+                <li class="anchor">
+                  <a title="Деобфускация Трассировок Стека" href="http://andriydruk.github.io/post/android-deobfuscation/">Деобфускация Трассировок Стека</a>
+                </li>  
+                
+                <li class="anchor">
+                  <a title="Что Такое .Aar Библиотеки?" href="http://andriydruk.github.io/post/what_is_aars/">Что Такое .Aar Библиотеки?</a>
+                </li>  
+                
+                <li class="anchor">
+                  <a title="Добро Пожаловать" href="http://andriydruk.github.io/post/welcome/">Добро Пожаловать</a>
+                </li>  
+                
+            </ul> 
+          </li>
+        </ul>
+
+        
+      </div>
+    </div>
+  </div>
+</nav>
+
+	</div>
+
+	<article class="article">
+		<div class="wrapper">
           
-                             <div class="post-preview">
-                 <a href="http://andriydruk.github.io/post/rtools/">
-                      <h2 class="post-title">R.tools</h2>
-                    </a>
-                    <p class="post-meta">Posted by <a href="#">Andriy Druk</a> on Sun, Oct 18, 2015
-                    <br />
-                    
-                  </p>
-                  <p>
-                    <p>Hi everyone. Today I want to announce my new app <a href="https://play.google.com/store/apps/details?id=com.druk.rtools">R.tools</a>. It&rsquo;s a simple application for android developers, that provides information about a device configuration.
+				     <a href="http://andriydruk.github.io/post/rtools/"><h2>R.tools</h2></a>
+				     <p>
+				        <p>Hi everyone. Today I want to announce my new app <a href="https://play.google.com/store/apps/details?id=com.druk.rtools">R.tools</a>. It&rsquo;s a simple application for android developers, that provides information about a device configuration.
 I believe you know about android devices fragmentation and a necessity to use alternative resources to support specific device configurations. This app can help you with it.</p>
 
-                  </p>
-                </div>
-                <hr>
-
+				     </p>   
+				      <h1 style="padding:0px 0 15px"></h1>
           
-                             <div class="post-preview">
-                 <a href="http://andriydruk.github.io/post/rxdnssd/">
-                      <h2 class="post-title">Wrap Annoying APIs With RxJava</h2>
-                    </a>
-                    <p class="post-meta">Posted by <a href="#">Andriy Druk</a> on Sun, Sep 13, 2015
-                    <br />
-                    
-                  </p>
-                  <p>
-                    <p><a href="http://reactivex.io/intro.html">Reactive Extensions (also known as ReactiveX or Rx)</a> is a library, that brings <a href="https://en.wikipedia.org/wiki/Functional_reactive_programming">FRP</a> programming paradigm to different platforms. And it&rsquo;s a breath of fresh air for android developers in Java 6 desert. A lot of articles about RxJava concept and common usage have already been written and I don&rsquo;t want to explain it again. That&rsquo;s why I would like to publish my example of RxJava usage in Android just to show you how you can wrap Java APIs. In this article I will describe a process of Java API wrapping for Apple’s DNSSD library (which in my opinion is quite an annoying API).</p>
+				     <a href="http://andriydruk.github.io/post/rxdnssd/"><h2>Wrap Annoying APIs With RxJava</h2></a>
+				     <p>
+				        <p><a href="http://reactivex.io/intro.html">Reactive Extensions (also known as ReactiveX or Rx)</a> is a library, that brings <a href="https://en.wikipedia.org/wiki/Functional_reactive_programming">FRP</a> programming paradigm to different platforms. And it&rsquo;s a breath of fresh air for android developers in Java 6 desert. A lot of articles about RxJava concept and common usage have already been written and I don&rsquo;t want to explain it again. That&rsquo;s why I would like to publish my example of RxJava usage in Android just to show you how you can wrap Java APIs. In this article I will describe a process of Java API wrapping for Apple’s DNSSD library (which in my opinion is quite an annoying API).</p>
 
-<p>DNSSD library&rsquo;s public API is a Singleton that provides static methods implementing basic operations such as searching or advertising. All operations work asynchronously and their results are returned to you in callbacks from a background thread. It&rsquo;s a usual Java API. What&rsquo;s wrong with it? Let&rsquo;s imagine a basic usage scenario of services search in a network:</p>
-
-<ul>
-<li>Browse service</li>
-<li>Resolve service</li>
-<li>Query records</li>
-<li>Update UI</li>
-</ul>
-
-<p>That means that you should start <code>browse</code> operation with a <code>BrowseCallback</code>. In this callback you start <code>resolve</code> with a <code>ResolveCallback</code>, and than inside <code>ResolveCallback</code> you start <code>queryRecords</code> with a <code>QueryRecordsCallback</code>. After that you send a message to the main thread, where you update your UI. This turns into &lsquo;callback hell&rsquo;. Real problems arise when a user leaves your app before you&rsquo;ve got any results from this chain of callbacks, and you have to unsubscribe all listeners and to cancel all operations. Another big headache is exceptions handling from all operations and forwarding corresponding messages to the UI.</p>
-
-<p>Ok, let&rsquo;s wrap this API with RxJava.</p>
-
-                  </p>
-                </div>
-                <hr>
-
+				     </p>   
+				      <h1 style="padding:0px 0 15px"></h1>
           
-                             <div class="post-preview">
-                 <a href="http://andriydruk.github.io/post/mdnsresponder/">
-                      <h2 class="post-title">Bonjour in Android applications</h2>
-                    </a>
-                    <p class="post-meta">Posted by <a href="#">Andriy Druk</a> on Sat, Sep 5, 2015
-                    <br />
-                    
-                  </p>
-                  <p>
-                    <p><strong>What is Bonjour?</strong>
+				     <a href="http://andriydruk.github.io/post/mdnsresponder/"><h2>Bonjour in Android applications</h2></a>
+				     <p>
+				        <p><strong>What is Bonjour?</strong>
 Wiki definition of Bonjour is</p>
 
 <blockquote>
 <p>Bonjour is Apple&rsquo;s implementation of Zero-configuration networking (Zeroconf), a group of technologies that includes service discovery, address assignment, and hostname resolution. Bonjour locates devices such as printers, other computers, and the services that those devices offer on a local network using multicast Domain Name System (mDNS) service records.</p>
 </blockquote>
 
-<p>Apple definition is</p>
-
-<blockquote>
-<p>Bonjour, also known as zero-configuration networking, enables automatic discovery of devices and services on a local network using industry standard IP protocols. Bonjour makes it easy to discover, publish, and resolve network services with a sophisticated, yet easy-to-use, programming interface that is accessible from Cocoa, Ruby, Python, and other languages.</p>
-</blockquote>
-
-<p>In other words, Bonjour is a software component that is used for other devices discovery (PC, Mac, smartphones, printers, etc) in a network via all available interfaces. A Bonjour term for a device on a network is &ldquo;service&rdquo;. Any application in your operating system can register a service and assign it to an opened port on your computer (actually Bonjour does not guarantee that a port in service&rsquo;s metadata is opened and connected to the app that registered this service). All services are registered in some domain (that&rsquo;s a mandatory parameter for all services and you can find domain naming conventions <a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/NetServices/Articles/domainnames.html">here</a>). Also applications can discover all available services at any domain. You should understand that Bonjour is only a technology for services discovery, all connection you have to do by yourself anyway.</p>
-
-<p>You can find more information about Bonjour in <a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/NetServices/Introduction.html">official documentation</a>.</p>
-
-                  </p>
-                </div>
-                <hr>
-
+				     </p>   
+				      <h1 style="padding:0px 0 15px"></h1>
           
-                             <div class="post-preview">
-                 <a href="http://andriydruk.github.io/post/android-deobfuscation/">
-                      <h2 class="post-title">Деобфускация трассировок стека</h2>
-                    </a>
-                    <p class="post-meta">Posted by <a href="#">Andriy Druk</a> on Tue, Aug 4, 2015
-                    <br />
-                    
-                  </p>
-                  <p>
-                    <p>Одной из самых плохо описанных областей в Android разработке есть руководства по использованию инструментов разработчика. Поэтому я решил описать их в серии небольших статей. В этой статья я хочу рассказать о том какие инструменты предоставляет SDK для работы с трассировками стеков (stacktraces), полученых из выпущенных сборок.</p>
+				     <a href="http://andriydruk.github.io/post/android-deobfuscation/"><h2>Деобфускация трассировок стека</h2></a>
+				     <p>
+				        <p>Одной из самых плохо описанных областей в Android разработке есть руководства по использованию инструментов разработчика. Поэтому я решил описать их в серии небольших статей. В этой статья я хочу рассказать о том какие инструменты предоставляет SDK для работы с трассировками стеков (stacktraces), полученых из выпущенных сборок.</p>
 
-                  </p>
-                </div>
-                <hr>
-
+				     </p>   
+				      <h1 style="padding:0px 0 15px"></h1>
           
-          
-          <ul class="pager">
-            <li class="next">
-              <a href="http://andriydruk.github.io//post/">Older Posts &rarr;</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
+				     <a href="http://andriydruk.github.io/post/what_is_aars/"><h2>Что такое .aar библиотеки?</h2></a>
+				     <p>
+				        <p>Уже прошло больше года с анонса Android <a href="http://tools.android.com/tech-docs/new-build-system">New Build System</a>, работа над которой кипит и по сей день: в экспериментальной области все еще находится несколько увлекательных возможностей <a href="http://tools.android.com/tech-docs/jackandjill">Jack and Jill Tool Chain</a> и <a href="http://tools.android.com/tech-docs/new-build-system/gradle-experimental#TOC-Ndk-Integration">NDK Integration</a>.</p>
 
-    <hr>
-    
-    <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                  <ul class="list-inline text-center">
-                    <li>
-                      <a href="mailto:andriy.druk@gmail.com">
-                        <span class="fa-stack fa-lg">
-                          <i class="fa fa-circle fa-stack-2x"></i>
-                          <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
-                        </span>
-                      </a>
-                    </li>
-                    
-                    <li>
-                      <a href="https://twitter.com/AndriyDruk">
-                        <span class="fa-stack fa-lg">
-                          <i class="fa fa-circle fa-stack-2x"></i>
-                          <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
-                        </span>
-                      </a>
-                    </li>
-                    
-                    <li>
-                      <a href="https://github.com/andriydruk">
-                        <span class="fa-stack fa-lg">
-                          <i class="fa fa-circle fa-stack-2x"></i>
-                          <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                        </span>
-                      </a>
-                    </li>
-                    
-                  </ul>
-                  <p class="copyright text-muted">Code released under the Apache 2.0 license.</p>
-                </div>
+<p>Но одной из самых ожидаемых возможностей новой системы сборки стала поддержка aar бибилотек - нового бинарного формата бибилотек, который в отличии от jar бибилотек может содержать android ресурсы (res, assets, native libraries, etc).  В это статье я хотел поделиться своим опытом работы с aar бибилиотеками.</p>
+
+				     </p>   
+				      <h1 style="padding:0px 0 15px"></h1>
+          
+				     <a href="http://andriydruk.github.io/post/welcome/"><h2>Добро пожаловать</h2></a>
+				     <p>
+				        <p>Привет всем и добро пожаловать в еще один Android Developer Blog!</p>
+
+<p>Я долго вынашивал идею создания блога о разработке. Как полагается настоящему гику потратил немало времени на обзор существующих блогер платформ и статических генераторов сайтов, и вот наконец я добрался до написания статей. Но обо всем по порядку&hellip;</p>
+
+				     </p>   
+				      <h1 style="padding:0px 0 15px"></h1>
+          
+
+			<footer class="footer">
+				
+
+
+
+<nav class="pagination" aria-label="Footer">
+  <div class="previous">
+  </div>
+
+  
+  
+  <div class="next">
+      <a href="http://andriydruk.github.io/post/what_is_aars/" title="Что такое .aar библиотеки?">
+        <span class="direction">
+          Next
+        </span>
+        <div class="page">
+          <div class="stretch">
+            <div class="title">
+              Что такое .aar библиотеки?
             </div>
+          </div>
+          <div class="button button-next" role="button" aria-label="Next">
+            <i class="icon icon-forward"></i>
+          </div>
         </div>
-    </footer>
-
-    
-    <script src="http://andriydruk.github.io//js/jquery.min.js"></script>
-
-    
-    <script src="http://andriydruk.github.io//js/bootstrap.min.js"></script>
-
-    
-    <script src="http://andriydruk.github.io//js/clean-blog.js"></script>
-
-    
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-  ga('create', 'UA-67278568-1', 'auto');
-  ga('send', 'pageview');
-</script>
+      </a>
+  </div>
+</nav>
 
 
-</body>
+			</footer>
+		</div>
+	</article>
 
-</html>
+	<div class="results" role="status" aria-live="polite">
+		<div class="scrollable">
+			<div class="wrapper">
+				<div class="meta"></div>
+				<div class="list"></div>
+			</div>
+		</div>
+	</div>
+</main>
 
+    <script>
+      var base_url = 'http:\/\/andriydruk.github.io\/';
+      var repo_id  = '
