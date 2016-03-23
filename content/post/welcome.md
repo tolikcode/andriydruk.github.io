@@ -28,7 +28,7 @@ Feel free to contact me
 * [LinkedIn](https://www.linkedin.com/in/andriy-druk-23147344)
 
 ## About this blog
-This blog built with [Hugo](https://gohugo.io) using [Material Docs](https://github.com/digitalcraftsman/hugo-material-docs) theme. It's a like breathe of fresh air for me after Jekyll and Octopress. Special thanks to the creators of this theme - [Martin Donath](https://github.com/squidfunk) and [Digitalcraftsman](https://github.com/digitalcraftsman).
+This blog built with [Hugo](https://gohugo.io) using [Material Docs](https://github.com/digitalcraftsman/hugo-material-docs) theme. It's a like breathe of fresh air for me after Jekyll and Octopress. Special thanks to the creators of this theme - [Martin Donath](https://github.com/squidfunk) and [Digitalcraftsman](https://github.com/digitalcraftsman). Also big thanks to my editor - [Tolik Code](https://github.com/tolikcode).
 
 ## License 
 All articles and code are published under the Apache License
