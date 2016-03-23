@@ -1,21 +1,46 @@
 +++
 date = "2015-07-07T23:10:36+03:00"
-title = "Добро пожаловать"
-tags = ["androiddev"]
-categories = ["Development"]
+title = "Andriy Druk"
 image = "/img/welcome_bg.jpg"
 
 +++
-Привет всем и добро пожаловать в еще один Android Developer Blog!
 
-Я долго вынашивал идею создания блога о разработке. Как полагается настоящему гику потратил немало времени на обзор существующих блогер платформ и статических генераторов сайтов, и вот наконец я добрался до написания статей. Но обо всем по порядку...
+Hello everyone and welcome to Yet Another Android Developer Blog!
+
+I've thought a lot about creating a blog about software development in past. As a true engineer I spent a huge amount of time to reviewing the existing blogger platforms and static website generator, and finally, I've started to write articles. But first things first...
 
 <!--more-->
 
-Сначала расскажу немного о себе. Основной род моей деятельности это разработка мобильных приложений. Еще со школы я увлекаюсь математикой и программированием, окончил магистратуру [Kharkiv Polytechnic Institute](http://www.kpi.kharkov.ua/en/) по специальности Software Engeneering. На данный момент я занимаю должность [Android Team Lead](https://www.linkedin.com/profile/view?id=156417157) в Харькове (Украина). Помимо разработки занимаюсь обучением студентов и управлением командой.  
+First of all a few words about myself. I am a software engineer from Ukraine. Ever since I was in high school, I was interested in mathematics and programming. I received master's degree in Software Engineering after graduating from [Kharkiv Polytechnic Institute](http://www.kpi.kharkov.ua/en/). At this moment, I hold the position of [Android Team Lead] (https://www.linkedin.com/profile/view?id=156417157) in Kharkiv (Ukraine). In addition to developing mobile apps, I'm responsible for training trainees and managing a team. 
 
-Как вы можете знать мобильная разработка является на данный момент одним из самых перспективных направлений в индустрии. С моей точки зрения, это еще и одна из самых интересных областей. В своей профессиональной карьере мне приходится работать с проектами на разных мобильных платформах, но все же моя страсть это Android. Возможно вас заинтересуют некоторые мои инструменты, которые я публикую в [Google Play](https://play.google.com/store/apps/developer?id=Andriy+Druk).
+As you may know, the mobile development is currently one of the most promising trends in the industry. From my point of view, it is also one of the most interesting areas. In my professional career, I faced with projects for different mobile platforms, but still my passion is Android. Perhaps you might be interested in some of my tools for developers that I publish in the [Google Play] (https://play.google.com/store/apps/developer?id=Andriy+Druk).
 
-Android действительно удивительная система. После многих лет работы с ней я все еще наталкиваюсь на новые ее возможности, новые области применения, новые способы решения проблем. В этом блоге я хотел бы поделиться с вами некоторыми паттернами, обзором новых для меня технологий или же просто своими мыслями о индустрии. 
+Android is amazing system. It's a really flexible, rich on APIs and quickdeveloping. In articles at this blog I would like to share with you some software design patterns, overviews of new technologies or just my thoughts about the industry.
 
-Я искренне надеюсь, что этот блог будет для вас источником полезной информации, и поможет вам в будущей разработке. И конечно же меня интересует ваши мнение, поэтому не стесняйтесь комментировать статьи. Буду рад конструктивной критике.
+I really hope that this blog will be for you a source of useful information and help you in the future development. And of course I'm interested in your feedback, so feel free to comment on articles.
+
+## Contact me
+Feel free to contact me
+
+* andriy.druk@gmail.com
+* [Twitter](https://twitter.com/AndriyDruk) 
+* [Github](https://github.com/andriydruk)
+* [LinkedIn](https://www.linkedin.com/in/andriy-druk-23147344)
+
+## About this blog
+This blog built with [Hugo](https://gohugo.io) using [Material Docs](https://github.com/digitalcraftsman/hugo-material-docs) theme. It's a like breathe of fresh air for me after Jekyll and Octopress. Special thanks to the creators of this theme - [Martin Donath](https://github.com/squidfunk) and [Digitalcraftsman](https://github.com/digitalcraftsman).
+
+## License 
+All articles and code are published under the Apache License
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
