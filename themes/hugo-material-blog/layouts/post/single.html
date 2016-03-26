@@ -19,8 +19,15 @@
 
 	<article class="article">
 		<div class="wrapper">
+			<h1>
+				{{ .Title }} {{ if .IsDraft }} (Draft){{ end }}
+				<a class="headerlink" href="#" title="Permanent link">{{ dateFormat .Site.Params.DateForm .Date }}</a>
+			</h1>
+
 			{{ .Content }}
+			<h1></h1>
 			<br>
+			{{ template "_internal/disqus.html" . }}
 			<footer class="footer">
 				{{ partial "footer" . }}
 			</footer>

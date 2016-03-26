@@ -1,9 +1,15 @@
 +++
 date = "2015-07-07T23:10:36+03:00"
-title = "Andriy Druk"
+title = "About Me"
 image = "/img/welcome_bg.jpg"
 
 +++
+
+<!--<
+div style="text-align:center" markdown="1">
+	<img src="/img/welcome_bg.jpg" alt="my photo">
+</div>
+-->
 
 Hello everyone and welcome to Yet Another Android Developer Blog!
 
@@ -22,7 +28,7 @@ I really hope that this blog will be a source of useful information for you and 
 ## Contact me
 Feel free to contact me
 
-* andriy.druk@gmail.com
+* [andriy.druk@gmail.com](mailto:andriy.druk@gmail.com)
 * [Twitter](https://twitter.com/AndriyDruk) 
 * [Github](https://github.com/andriydruk)
 * [LinkedIn](https://www.linkedin.com/in/andriy-druk-23147344)

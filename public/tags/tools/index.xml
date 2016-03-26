@@ -16,15 +16,13 @@
       <pubDate>Tue, 04 Aug 2015 22:40:49 +0300</pubDate>
       
       <guid>http://andriydruk.com/post/android-deobfuscation/</guid>
-      <description>&lt;p&gt;Одной из самых плохо описанных областей в Android разработке есть руководства по использованию инструментов разработчика. Поэтому я решил описать их в серии небольших статей. В этой статья я хочу рассказать о том какие инструменты предоставляет SDK для работы с трассировками стеков (stacktraces), полученых из выпущенных сборок.&lt;/p&gt;
-
-&lt;p&gt;Одной из проблем поддержки выпущенных Android приложений является деобфускация или retrace трассировок стеков полученнных из обфусцированных сборок. Для того чтобы разобраться в том как деобфусцировать трассировки стеков, нужно понять как работает обфускация. Стандратным способом обфускации в Android есть использования такого инструмента как ProGuard. Вот что о нем говорит &lt;a href=&#34;http://developer.android.com/tools/help/proguard.html#decoding&#34;&gt;официальная документация&lt;/a&gt;&lt;/p&gt;
+      <description>&lt;p&gt;One of the problems of supporting android application is deobfuscation or retrace stack traces obtained from obfuscated release build. In order to understand how deobfuscate a stack trace, you need to understand how the obfuscation actually works. The Standart way of obfuscation in android development is using tools such as the ProGuard. That&amp;rsquo;s what the &lt;a href=&#34;http://developer.android.com/tools/help/proguard.html#decoding&#34;&gt;official documentation&lt;/a&gt; says&lt;/p&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;The ProGuard tool shrinks, optimizes, and obfuscates your code by removing unused code and renaming classes, fields, and methods with semantically obscure names.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;Ну чтож звучит неплохо, попробуем на практике. Начнем с самого простого: создадим новый проект с помощью Android Studio и включим обфускацию для отладочных сборок:&lt;/p&gt;
+&lt;p&gt;Well, sounds good. Let&amp;rsquo;s try to practice. I will create a new project by using Android Studio and add next options to build.grade file to obfuscate debug builds:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-gradle&#34;&gt;buildTypes {
     debug {
@@ -38,7 +36,7 @@
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Выкинем новое исключение в методе onCreate класса MainActivity&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s throw new Exception in onCreate method of MainActivity class:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@Override
 protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +47,7 @@ protected void onCreate(Bundle savedInstanceState) {
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;После запуска получим трассировку стека похожую на следующую&lt;/p&gt;
+&lt;p&gt;After running you will get something like:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Caused by: java.lang.RuntimeException: Stack deobfuscation example exception
     at com.druk.myapplication.MainActivity.onCreate(Unknown Source)
@@ -67,7 +65,7 @@ protected void onCreate(Bundle savedInstanceState) {
     at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:615)
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Почему же после обфускации MainActivity осталась MainActivity? Дело в том что помимо конфигурационого файла proguard-rules.pro в нашем каталоге (который в сгенерированном примере долежен быть пустым), ProGuard использует стандратные правила обфускации Android проектов из SDK, которые и ослабляют обфускацию наследников Activity. В документации Proguard можно найти следующие правила для Android проектов:&lt;/p&gt;
+&lt;p&gt;Why after obfuscation the MainActivity is still the MainActivity? The fact is that in addition to the configuration file proguard-rules.pro in our catalog, ProGuard uses default rules of Android projects obfuscation from the SDK, which weaken obfuscation of Activity&amp;rsquo;s inheritors. The documentation contains next guidelines for Android projects:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;-keep public class * extends android.app.Activity
 -keep public class * extends android.app.Application

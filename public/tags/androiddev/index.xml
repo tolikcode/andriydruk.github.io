@@ -162,15 +162,13 @@ which implements the mDNS and DNS-SD protocols.&lt;/p&gt;
       <pubDate>Tue, 04 Aug 2015 22:40:49 +0300</pubDate>
       
       <guid>http://andriydruk.com/post/android-deobfuscation/</guid>
-      <description>&lt;p&gt;Одной из самых плохо описанных областей в Android разработке есть руководства по использованию инструментов разработчика. Поэтому я решил описать их в серии небольших статей. В этой статья я хочу рассказать о том какие инструменты предоставляет SDK для работы с трассировками стеков (stacktraces), полученых из выпущенных сборок.&lt;/p&gt;
-
-&lt;p&gt;Одной из проблем поддержки выпущенных Android приложений является деобфускация или retrace трассировок стеков полученнных из обфусцированных сборок. Для того чтобы разобраться в том как деобфусцировать трассировки стеков, нужно понять как работает обфускация. Стандратным способом обфускации в Android есть использования такого инструмента как ProGuard. Вот что о нем говорит &lt;a href=&#34;http://developer.android.com/tools/help/proguard.html#decoding&#34;&gt;официальная документация&lt;/a&gt;&lt;/p&gt;
+      <description>&lt;p&gt;One of the problems of supporting android application is deobfuscation or retrace stack traces obtained from obfuscated release build. In order to understand how deobfuscate a stack trace, you need to understand how the obfuscation actually works. The Standart way of obfuscation in android development is using tools such as the ProGuard. That&amp;rsquo;s what the &lt;a href=&#34;http://developer.android.com/tools/help/proguard.html#decoding&#34;&gt;official documentation&lt;/a&gt; says&lt;/p&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;The ProGuard tool shrinks, optimizes, and obfuscates your code by removing unused code and renaming classes, fields, and methods with semantically obscure names.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;Ну чтож звучит неплохо, попробуем на практике. Начнем с самого простого: создадим новый проект с помощью Android Studio и включим обфускацию для отладочных сборок:&lt;/p&gt;
+&lt;p&gt;Well, sounds good. Let&amp;rsquo;s try to practice. I will create a new project by using Android Studio and add next options to build.grade file to obfuscate debug builds:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-gradle&#34;&gt;buildTypes {
     debug {
@@ -184,7 +182,7 @@ which implements the mDNS and DNS-SD protocols.&lt;/p&gt;
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Выкинем новое исключение в методе onCreate класса MainActivity&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s throw new Exception in onCreate method of MainActivity class:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@Override
 protected void onCreate(Bundle savedInstanceState) {
@@ -195,7 +193,7 @@ protected void onCreate(Bundle savedInstanceState) {
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;После запуска получим трассировку стека похожую на следующую&lt;/p&gt;
+&lt;p&gt;After running you will get something like:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Caused by: java.lang.RuntimeException: Stack deobfuscation example exception
     at com.druk.myapplication.MainActivity.onCreate(Unknown Source)
@@ -213,7 +211,7 @@ protected void onCreate(Bundle savedInstanceState) {
     at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:615)
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Почему же после обфускации MainActivity осталась MainActivity? Дело в том что помимо конфигурационого файла proguard-rules.pro в нашем каталоге (который в сгенерированном примере долежен быть пустым), ProGuard использует стандратные правила обфускации Android проектов из SDK, которые и ослабляют обфускацию наследников Activity. В документации Proguard можно найти следующие правила для Android проектов:&lt;/p&gt;
+&lt;p&gt;Why after obfuscation the MainActivity is still the MainActivity? The fact is that in addition to the configuration file proguard-rules.pro in our catalog, ProGuard uses default rules of Android projects obfuscation from the SDK, which weaken obfuscation of Activity&amp;rsquo;s inheritors. The documentation contains next guidelines for Android projects:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;-keep public class * extends android.app.Activity
 -keep public class * extends android.app.Application
@@ -491,26 +489,6 @@ protected void onCreate(Bundle savedInstanceState) {
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Вот и все.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Добро пожаловать</title>
-      <link>http://andriydruk.com/post/welcome/</link>
-      <pubDate>Tue, 07 Jul 2015 23:10:36 +0300</pubDate>
-      
-      <guid>http://andriydruk.com/post/welcome/</guid>
-      <description>&lt;p&gt;Привет всем и добро пожаловать в еще один Android Developer Blog!&lt;/p&gt;
-
-&lt;p&gt;Я долго вынашивал идею создания блога о разработке. Как полагается настоящему гику потратил немало времени на обзор существующих блогер платформ и статических генераторов сайтов, и вот наконец я добрался до написания статей. Но обо всем по порядку&amp;hellip;&lt;/p&gt;
-
-&lt;p&gt;Сначала расскажу немного о себе. Основной род моей деятельности это разработка мобильных приложений. Еще со школы я увлекаюсь математикой и программированием, окончил магистратуру &lt;a href=&#34;http://www.kpi.kharkov.ua/en/&#34;&gt;Kharkiv Polytechnic Institute&lt;/a&gt; по специальности Software Engeneering. На данный момент я занимаю должность &lt;a href=&#34;https://www.linkedin.com/profile/view?id=156417157&#34;&gt;Android Team Lead&lt;/a&gt; в Харькове (Украина). Помимо разработки занимаюсь обучением студентов и управлением командой.&lt;/p&gt;
-
-&lt;p&gt;Как вы можете знать мобильная разработка является на данный момент одним из самых перспективных направлений в индустрии. С моей точки зрения, это еще и одна из самых интересных областей. В своей профессиональной карьере мне приходится работать с проектами на разных мобильных платформах, но все же моя страсть это Android. Возможно вас заинтересуют некоторые мои инструменты, которые я публикую в &lt;a href=&#34;https://play.google.com/store/apps/developer?id=Andriy+Druk&#34;&gt;Google Play&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Android действительно удивительная система. После многих лет работы с ней я все еще наталкиваюсь на новые ее возможности, новые области применения, новые способы решения проблем. В этом блоге я хотел бы поделиться с вами некоторыми паттернами, обзором новых для меня технологий или же просто своими мыслями о индустрии.&lt;/p&gt;
-
-&lt;p&gt;Я искренне надеюсь, что этот блог будет для вас источником полезной информации, и поможет вам в будущей разработке. И конечно же меня интересует ваши мнение, поэтому не стесняйтесь комментировать статьи. Буду рад конструктивной критике.&lt;/p&gt;
 </description>
     </item>
     

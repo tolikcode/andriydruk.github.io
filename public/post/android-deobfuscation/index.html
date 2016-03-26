@@ -67,7 +67,7 @@
     <script>hljs.initHighlightingOnLoad();</script>
 
   </head>
-  <body class="palette-primary-indigo palette-accent-blue">
+  <body class="palette-primary-red palette-accent-pink">
 
 
 <div class="backdrop">
@@ -86,11 +86,18 @@
         <span></span>
       </label>
     </div>
-    <div class="stretch">
-      <div class="title">
-        Деобфускация трассировок стека
-      </div>
+    
+    <div class="button button-previous" role="button" aria-label="Previous">
+            <a href="http://andriydruk.com/"><i class="icon icon-back"></i></a>
     </div>
+    
+    <a href="http://andriydruk.com/">
+          <div class="stretch">
+            <div class="title">
+              Деобфускация трассировок стека
+            </div>
+          </div>
+    </a>
     
         
   </div>
@@ -113,7 +120,7 @@
 <main class="main">
 	<div class="drawer">
 		<nav aria-label="Navigation">
-  <a href="http://andriydruk.com/" class="project">
+  <a href="http://andriydruk.com/about" class="project">
     <div class="banner">
       
         <div class="logo">
@@ -170,10 +177,6 @@
                   <a title="Что Такое .Aar Библиотеки?" href="http://andriydruk.com/post/what_is_aars/">Что Такое .Aar Библиотеки?</a>
                 </li>  
                 
-                <li class="anchor">
-                  <a title="Добро Пожаловать" href="http://andriydruk.com/post/welcome/">Добро Пожаловать</a>
-                </li>  
-                
             </ul> 
           </li>
         </ul>
@@ -193,15 +196,13 @@
 				<a class="headerlink" href="#" title="Permanent link">Tue, Aug 4, 2015</a>
 			</h1>
 
-			<p>Одной из самых плохо описанных областей в Android разработке есть руководства по использованию инструментов разработчика. Поэтому я решил описать их в серии небольших статей. В этой статья я хочу рассказать о том какие инструменты предоставляет SDK для работы с трассировками стеков (stacktraces), полученых из выпущенных сборок.</p>
-
-<p>Одной из проблем поддержки выпущенных Android приложений является деобфускация или retrace трассировок стеков полученнных из обфусцированных сборок. Для того чтобы разобраться в том как деобфусцировать трассировки стеков, нужно понять как работает обфускация. Стандратным способом обфускации в Android есть использования такого инструмента как ProGuard. Вот что о нем говорит <a href="http://developer.android.com/tools/help/proguard.html#decoding">официальная документация</a></p>
+			<p>One of the problems of supporting android application is deobfuscation or retrace stack traces obtained from obfuscated release build. In order to understand how deobfuscate a stack trace, you need to understand how the obfuscation actually works. The Standart way of obfuscation in android development is using tools such as the ProGuard. That&rsquo;s what the <a href="http://developer.android.com/tools/help/proguard.html#decoding">official documentation</a> says</p>
 
 <blockquote>
 <p>The ProGuard tool shrinks, optimizes, and obfuscates your code by removing unused code and renaming classes, fields, and methods with semantically obscure names.</p>
 </blockquote>
 
-<p>Ну чтож звучит неплохо, попробуем на практике. Начнем с самого простого: создадим новый проект с помощью Android Studio и включим обфускацию для отладочных сборок:</p>
+<p>Well, sounds good. Let&rsquo;s try to practice. I will create a new project by using Android Studio and add next options to build.grade file to obfuscate debug builds:</p>
 
 <pre><code class="language-gradle">buildTypes {
     debug {
@@ -215,7 +216,7 @@
 }
 </code></pre>
 
-<p>Выкинем новое исключение в методе onCreate класса MainActivity</p>
+<p>Let&rsquo;s throw new Exception in onCreate method of MainActivity class:</p>
 
 <pre><code class="language-java">@Override
 protected void onCreate(Bundle savedInstanceState) {
@@ -226,7 +227,7 @@ protected void onCreate(Bundle savedInstanceState) {
 }
 </code></pre>
 
-<p>После запуска получим трассировку стека похожую на следующую</p>
+<p>After running you will get something like:</p>
 
 <pre><code class="language-java">Caused by: java.lang.RuntimeException: Stack deobfuscation example exception
     at com.druk.myapplication.MainActivity.onCreate(Unknown Source)
@@ -244,7 +245,7 @@ protected void onCreate(Bundle savedInstanceState) {
     at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:615)
 </code></pre>
 
-<p>Почему же после обфускации MainActivity осталась MainActivity? Дело в том что помимо конфигурационого файла proguard-rules.pro в нашем каталоге (который в сгенерированном примере долежен быть пустым), ProGuard использует стандратные правила обфускации Android проектов из SDK, которые и ослабляют обфускацию наследников Activity. В документации Proguard можно найти следующие правила для Android проектов:</p>
+<p>Why after obfuscation the MainActivity is still the MainActivity? The fact is that in addition to the configuration file proguard-rules.pro in our catalog, ProGuard uses default rules of Android projects obfuscation from the SDK, which weaken obfuscation of Activity&rsquo;s inheritors. The documentation contains next guidelines for Android projects:</p>
 
 <pre><code class="language-java">-keep public class * extends android.app.Activity
 -keep public class * extends android.app.Application
@@ -439,4 +440,18 @@ protected void onCreate(Bundle savedInstanceState) {
 
     <script>
       var base_url = 'http:\/\/andriydruk.com\/';
-      var repo_id  = '
+      var repo_id  = '';
+    </script>
+    <script src="http://andriydruk.com/javascripts/application.js"></script>
+    
+    
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-67278568-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </body>
+</html>

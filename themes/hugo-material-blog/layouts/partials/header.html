@@ -5,11 +5,19 @@
         <span></span>
       </label>
     </div>
-    <div class="stretch">
-      <div class="title">
-        {{ .Title }}
-      </div>
+    {{ if .IsHome }}
+    {{ else }}
+    <div class="button button-previous" role="button" aria-label="Previous">
+            <a href="{{ $.Site.BaseURL }}"><i class="icon icon-back"></i></a>
     </div>
+    {{ end }}
+    <a href="{{ $.Site.BaseURL }}">
+          <div class="stretch">
+            <div class="title">
+              {{ .Title }}
+            </div>
+          </div>
+    </a>
     
     <!-- TODO: disabled until Hugo supports the generation of a content index natively 
     <div class="button button-search" role="button" aria-label="Search">

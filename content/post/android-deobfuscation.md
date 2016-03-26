@@ -9,13 +9,13 @@ title = "Деобфускация трассировок стека"
 
 +++
 
-Одной из самых плохо описанных областей в Android разработке есть руководства по использованию инструментов разработчика. Поэтому я решил описать их в серии небольших статей. В этой статья я хочу рассказать о том какие инструменты предоставляет SDK для работы с трассировками стеков (stacktraces), полученых из выпущенных сборок.  
-<!--more-->
-Одной из проблем поддержки выпущенных Android приложений является деобфускация или retrace трассировок стеков полученнных из обфусцированных сборок. Для того чтобы разобраться в том как деобфусцировать трассировки стеков, нужно понять как работает обфускация. Стандратным способом обфускации в Android есть использования такого инструмента как ProGuard. Вот что о нем говорит [официальная документация](http://developer.android.com/tools/help/proguard.html#decoding)
+One of the problems of supporting android application is deobfuscation or retrace stack traces obtained from obfuscated release build. In order to understand how deobfuscate a stack trace, you need to understand how the obfuscation actually works. The Standart way of obfuscation in android development is using tools such as the ProGuard. That's what the [official documentation] (http://developer.android.com/tools/help/proguard.html#decoding) says
 
 > The ProGuard tool shrinks, optimizes, and obfuscates your code by removing unused code and renaming classes, fields, and methods with semantically obscure names. 
 
-Ну чтож звучит неплохо, попробуем на практике. Начнем с самого простого: создадим новый проект с помощью Android Studio и включим обфускацию для отладочных сборок:
+<!--more-->
+
+Well, sounds good. Let's try to practice. I will create a new project by using Android Studio and add next options to build.grade file to obfuscate debug builds:
 
 ~~~gradle
 buildTypes {
@@ -30,7 +30,7 @@ buildTypes {
 }
 ~~~
     
-Выкинем новое исключение в методе onCreate класса MainActivity
+Let's throw new Exception in onCreate method of MainActivity class:
    
 ~~~java
 @Override
@@ -42,7 +42,7 @@ protected void onCreate(Bundle savedInstanceState) {
 }
 ~~~
     
-После запуска получим трассировку стека похожую на следующую
+After running you will get something like:
 
 ~~~java    
 Caused by: java.lang.RuntimeException: Stack deobfuscation example exception
@@ -61,7 +61,7 @@ Caused by: java.lang.RuntimeException: Stack deobfuscation example exception
     at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:615)
 ~~~
 
-Почему же после обфускации MainActivity осталась MainActivity? Дело в том что помимо конфигурационого файла proguard-rules.pro в нашем каталоге (который в сгенерированном примере долежен быть пустым), ProGuard использует стандратные правила обфускации Android проектов из SDK, которые и ослабляют обфускацию наследников Activity. В документации Proguard можно найти следующие правила для Android проектов:
+Why after obfuscation the MainActivity is still the MainActivity? The fact is that in addition to the configuration file proguard-rules.pro in our catalog, ProGuard uses default rules of Android projects obfuscation from the SDK, which weaken obfuscation of Activity's inheritors. The documentation contains next guidelines for Android projects:
 
 ~~~java
 -keep public class * extends android.app.Activity
