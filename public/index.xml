@@ -553,347 +553,11 @@ which implements the mDNS and DNS-SD protocols.&lt;/p&gt;
     </item>
     
     <item>
-      <title>Деобфускация трассировок стека</title>
-      <link>http://andriydruk.com/post/android-deobfuscation/</link>
-      <pubDate>Tue, 04 Aug 2015 22:40:49 +0300</pubDate>
-      
-      <guid>http://andriydruk.com/post/android-deobfuscation/</guid>
-      <description>&lt;p&gt;One of the problems of supporting android application is deobfuscation or retrace stack traces obtained from obfuscated release build. In order to understand how deobfuscate a stack trace, you need to understand how the obfuscation actually works. The Standart way of obfuscation in android development is using tools such as the ProGuard. That&amp;rsquo;s what the &lt;a href=&#34;http://developer.android.com/tools/help/proguard.html#decoding&#34;&gt;official documentation&lt;/a&gt; says&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;The ProGuard tool shrinks, optimizes, and obfuscates your code by removing unused code and renaming classes, fields, and methods with semantically obscure names.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Well, sounds good. Let&amp;rsquo;s try to practice. I will create a new project by using Android Studio and add next options to build.grade file to obfuscate debug builds:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-gradle&#34;&gt;buildTypes {
-    debug {
-        minifyEnabled true
-        proguardFiles getDefaultProguardFile(&#39;proguard-android.txt&#39;), &#39;proguard-rules.pro&#39;
-    }
-    release {
-        minifyEnabled false
-        proguardFiles getDefaultProguardFile(&#39;proguard-android.txt&#39;), &#39;proguard-rules.pro&#39;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Let&amp;rsquo;s throw new Exception in onCreate method of MainActivity class:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@Override
-protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
-
-    throw new RuntimeException(&amp;quot;Stack deobfuscation example exception&amp;quot;);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;After running you will get something like:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Caused by: java.lang.RuntimeException: Stack deobfuscation example exception
-    at com.druk.myapplication.MainActivity.onCreate(Unknown Source)
-    at android.app.Activity.performCreate(Activity.java:6162)
-    at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1107)
-    at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2370)
-    at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2477)
-    at android.app.ActivityThread.-wrap11(ActivityThread.java)
-    at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1345)
-    at android.os.Handler.dispatchMessage(Handler.java:102)
-    at android.os.Looper.loop(Looper.java:148)
-    at android.app.ActivityThread.main(ActivityThread.java:5415)
-    at java.lang.reflect.Method.invoke(Native Method)
-    at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:725)
-    at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:615)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Why after obfuscation the MainActivity is still the MainActivity? The fact is that in addition to the configuration file proguard-rules.pro in our catalog, ProGuard uses default rules of Android projects obfuscation from the SDK, which weaken obfuscation of Activity&amp;rsquo;s inheritors. The documentation contains next guidelines for Android projects:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;-keep public class * extends android.app.Activity
--keep public class * extends android.app.Application
--keep public class * extends android.app.Service
--keep public class * extends android.content.BroadcastReceiver
--keep public class * extends android.content.ContentProvider
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Тоесть по умолчанию ProGuard оставляет все имена классов, которые являются наследниками android.app.Activity. Продолжим наш эксперемент: создадим внутренни статический класс, который поможет нам вызвать аварийную ситуацию в нашем приложении&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;private static class CrashHelper{
-
-    public static void crash(){
-        throw new RuntimeException(&amp;quot;Stack deobfuscation example exception&amp;quot;);
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Вызвав статический метод crash в onCreate мы получим следующую трассировку стека:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Caused by: java.lang.RuntimeException: Stack deobfuscation example exception
-     at com.druk.myapplication.a.b(Unknown Source)
-     at com.druk.myapplication.a.a(Unknown Source)
-     at com.druk.myapplication.MainActivity.onCreate(Unknown Source)
-     at android.app.Activity.performCreate(Activity.java:6162)
-     at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1107)
-     at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2370)
-     at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2477)
-     at android.app.ActivityThread.-wrap11(ActivityThread.java)
-     at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1345)
-     at android.os.Handler.dispatchMessage(Handler.java:102)
-     at android.os.Looper.loop(Looper.java:148)
-     at android.app.ActivityThread.main(ActivityThread.java:5415)
-     at java.lang.reflect.Method.invoke(Native Method)
-     at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:725)
-     at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:615)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Похоже это то что мы хотели получить. У некоторого мифического класса &amp;lsquo;а&amp;rsquo; был вызван метод &amp;lsquo;a&amp;rsquo;, в теле которого был вызван метод &amp;lsquo;b&amp;rsquo;.&lt;/p&gt;
-
-&lt;p&gt;Для деобфускации нам нужен файл mapping.txt из нашего build каталога. В моем случае путь к файлу app/build/outputs/mapping/debug/mapping.txt. Далее необходимо воспользоваться либо скриптом retrace.sh из ANDROID_HOME/tools/proguard/bin, либо воспользоваться GUI утилитой ProguadGUI из ANDROID_HOME/tools/proguard/lib/proguardgui.jar. Воспользовавшись GUI утилитой мы получим следующую трассировку стека:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://andriydruk.com/img/Screen Shot 2015-08-04 at 23.34.25.png&#34; alt=&#34;Alt text&#34; /&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Caused by: java.lang.RuntimeException: Stack deobfuscation example exception
-    at com.druk.myapplication.MainActivity$CrashHelper.crash(Unknown Source)
-    at com.druk.myapplication.MainActivity$CrashHelper.access$000(Unknown Source)
-    at com.druk.myapplication.MainActivity.onCreate(Unknown Source)
-    at android.app.Activity.performCreate(Activity.java:6162)
-    at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1107)
-    at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2370)
-    at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2477)
-    at android.app.ActivityThread.-wrap11(ActivityThread.java)
-    at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1345)
-    at android.os.Handler.dispatchMessage(Handler.java:102)
-    at android.os.Looper.loop(Looper.java:148)
-    at android.app.ActivityThread.main(ActivityThread.java:5415)
-    at java.lang.reflect.Method.invoke(Native Method)
-    at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:725)
-    at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:615)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Хорошо когда в методе у нас всего одна строка, но на практике такое встречается редко. Поэтому неплохо было бы получить номер строки вместо Unknown Source. Согласно &lt;a href=&#34;http://proguard.sourceforge.net/manual/examples.html#stacktrace&#34;&gt;официальной документации&lt;/a&gt; для этого нужно в файл настроек proguard добавить&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;-printmapping out.map
--renamesourcefileattribute SourceFile
--keepattributes SourceFile,LineNumberTable
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Первая строка в нашем случае не нужна, потому что она включена в Android проектах по умолчанию. Третья строка включает сохранение имен исходных файлов и таблицы номеров строк (что мы и хотели получить). Но стоит обратить внимание на вторую строку. Это правило переименовывает все имена исходных файлов в  &amp;ldquo;SourceFile&amp;rdquo;, что является весьма важным в обфускации таких языков как Java, где зачастую Class name == Source file name. Также это возволяет не выдать внутрених классов, так как после обфускации связь между внутреним и внешним классами обычно разрывается.&lt;/p&gt;
-
-&lt;p&gt;В итоге после добавления новых правил мы получим следующую трассировку стека:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Caused by: java.lang.RuntimeException: Stack deobfuscation example exception
-    at com.druk.myapplication.a.b(SourceFile:42)
-    at com.druk.myapplication.a.a(SourceFile:40)
-    at com.druk.myapplication.MainActivity.onCreate(SourceFile:15)
-    at android.app.Activity.performCreate(Activity.java:6162)
-    at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1107)
-    at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2370)
-    at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2477)
-    at android.app.ActivityThread.-wrap11(ActivityThread.java)
-    at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1345)
-    at android.os.Handler.dispatchMessage(Handler.java:102)
-    at android.os.Looper.loop(Looper.java:148)
-    at android.app.ActivityThread.main(ActivityThread.java:5415)
-    at java.lang.reflect.Method.invoke(Native Method)
-    at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:725)
-    at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:615)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;И после деобфускации:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Caused by: java.lang.RuntimeException: Stack deobfuscation example exception
-    at com.druk.myapplication.MainActivity$CrashHelper.crash(SourceFile:42)
-    at com.druk.myapplication.MainActivity$CrashHelper.access$000(SourceFile:40)
-    at com.druk.myapplication.MainActivity.onCreate(SourceFile:15)
-    at android.app.Activity.performCreate(Activity.java:6162)
-    at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1107)
-    at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2370)
-    at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2477)
-    at android.app.ActivityThread.-wrap11(ActivityThread.java)
-    at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1345)
-    at android.os.Handler.dispatchMessage(Handler.java:102)
-    at android.os.Looper.loop(Looper.java:148)
-    at android.app.ActivityThread.main(ActivityThread.java:5415)
-    at java.lang.reflect.Method.invoke(Native Method)
-    at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:725)
-    at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:615)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Подведем итог: залог успешной поддержки обфусцированного приложения это сохранения всех mapping файлов для всех выпущенных сборок. Хорошой практикой есть построение сборок на CI сервере с сохрарнением apk файлов и mapping файлов с тегами соотвествующих сборок (например 4 первых символа hash коммита). В таком случае если вы знаете с какой сборки былa получена трассировка стека, вы будете знать где искать соответсующий mapping файл. Также возможно стоит посмотреть в сторону сторонних сервисов сбора информации о аварийных ситуациях. Например, такие сервисы как Crashlytics деобфусцируют трасировки стеков на стороне сервера, что весьма удобно и не требует никаких дополнительных действий со стороны разработчика. Но вы должны четко понимать что при каждом построении сборки ваши mapping файлы будут отправляться на сервера Crashlytics. Что может быть не безопасно, ведь человек завладевший этими файлами не будет имееть никаких ограничений по деобфускации всего исходного кода вашего приложения.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Что такое .aar библиотеки?</title>
-      <link>http://andriydruk.com/post/what_is_aars/</link>
-      <pubDate>Wed, 15 Jul 2015 21:39:00 +0300</pubDate>
-      
-      <guid>http://andriydruk.com/post/what_is_aars/</guid>
-      <description>
-
-&lt;p&gt;Уже прошло больше года с анонса Android &lt;a href=&#34;http://tools.android.com/tech-docs/new-build-system&#34;&gt;New Build System&lt;/a&gt;, работа над которой кипит и по сей день: в экспериментальной области все еще находится несколько увлекательных возможностей &lt;a href=&#34;http://tools.android.com/tech-docs/jackandjill&#34;&gt;Jack and Jill Tool Chain&lt;/a&gt; и &lt;a href=&#34;http://tools.android.com/tech-docs/new-build-system/gradle-experimental#TOC-Ndk-Integration&#34;&gt;NDK Integration&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Но одной из самых ожидаемых возможностей новой системы сборки стала поддержка aar бибилотек - нового бинарного формата бибилотек, который в отличии от jar бибилотек может содержать android ресурсы (res, assets, native libraries, etc).  В это статье я хотел поделиться своим опытом работы с aar бибилиотеками.&lt;/p&gt;
-
-&lt;h2 id=&#34;1-что-такое-aar-бибилотеки:2d39079d7dbc3e98619f859c896fcc85&#34;&gt;1. Что такое .aar бибилотеки?&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://tools.android.com/tech-docs/new-build-system/aar-format&#34;&gt;Официальная документация&lt;/a&gt; говорит о том что aar  - это бинарный дистрибутив Android Library Project и прдеставляет собой zip файл с расширением .aar, котороый содержит:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;/AndroidManifest.xml (mandatory)&lt;/li&gt;
-&lt;li&gt;/classes.jar (mandatory)&lt;br /&gt;&lt;/li&gt;
-&lt;li&gt;/res/ (mandatory)&lt;/li&gt;
-&lt;li&gt;/R.txt (mandatory)&lt;/li&gt;
-&lt;li&gt;/assets/ (optional)&lt;/li&gt;
-&lt;li&gt;/libs/*.jar (optional)&lt;/li&gt;
-&lt;li&gt;/jni/&lt;abi&gt;/*.so (optional)&lt;/li&gt;
-&lt;li&gt;/proguard.txt (optional)&lt;/li&gt;
-&lt;li&gt;/lint.jar (optional)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Разберем подробней. AndroidManifest.xml это оригинальный манифест с вашей библиотеки. Файл сlasses.jar содержит скомпилированные java классы библиотеки (они будут слиты с остальными во время компиляции основного проекта). Исходя из документации R.txt это выходной файл aapt (Android Asset Packaging Tool) с флагом &amp;ndash;output-text-symbols, тоесть это часть вашего R.java который будет слит с остальными результатами работы aapt при сборке основного проекта. Далее идут директории assets, res, libs и jni, которые содержат оригинальные файлы из каталога src вашей бибилотеки (часть содержимого каталога res может быть удаленно после выполнения обфускации). Файл proguard.txt копируется из вашей root директории библиотеки для того чтобы передать правила обфускации в основной проект. При  работе с .aar стоит учитывать что если флаг minifyEnabled в build.gradle файле вашей библиотеки установлен в true, то при сборке она будет обфусцирована. Также aar бибилитека может содержать пользовательские lint правила в &lt;a href=&#34;https://groups.google.com/forum/#!msg/adt-dev/seWAK5r1fjI/0ed2rztjDbEJ&#34;&gt;lint.jar&lt;/a&gt;, они будут распостраняться и на основной проект.&lt;/p&gt;
-
-&lt;h2 id=&#34;2-как-посторить-aar-библиотеку:2d39079d7dbc3e98619f859c896fcc85&#34;&gt;2. Как посторить .aar библиотеку?&lt;/h2&gt;
-
-&lt;p&gt;Для того чтобы построить aar бибилотеку достаточно выполнить ./grdlew assemble в корне вашего проекта. Эта команда соберет все flavour и buildTypes. Но по причине ограничений gradle по умолчанию приложениями будет использоваться всегда defaultRelease сборка вашей aar бибилотеки. Если вы хотите поменять default конфигурацию, это можно сделать так&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-gradle&#34;&gt;android {
-    defaultPublishConfig &amp;quot;debug&amp;quot;
-} 
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;или так:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-gradle&#34;&gt;android {
-    defaultPublishConfig &amp;quot;flavor1Debug&amp;quot;
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;В первом случае в качестве default конфигурации используется debug build, во втором debug build варианта flavor1. Кроме того вы можете включить публикацию всех конфигураций:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-gradle&#34;&gt;android {        
-    publishNonDefault true
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;3-как-подключить-aar-бибилиотеку:2d39079d7dbc3e98619f859c896fcc85&#34;&gt;3. Как подключить .aar бибилиотеку?&lt;/h2&gt;
-
-&lt;p&gt;Существует 4 способа подключения aar библиотек:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Подключение в качестве модуля&lt;/li&gt;
-&lt;li&gt;Плоский репозиторий (Flat directory)&lt;/li&gt;
-&lt;li&gt;Локальный репозиторий (Local maven repo)&lt;/li&gt;
-&lt;li&gt;Удаленный репозиторий (Remote maven repo)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;3-1-подключение-модуля:2d39079d7dbc3e98619f859c896fcc85&#34;&gt;3.1 Подключение модуля&lt;/h3&gt;
-
-&lt;p&gt;Это пожалуй самый простой способ и с ним знакомо большинство Android разработчиков. Вы можете импортировать библиотеку как модуль в ваш проект и установить зависимость в своем основном проекте следующим образом:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-gradle&#34;&gt;dependencies {
-    compile project(&#39;:your_library_module_name&#39;)
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Также вы можете установить &lt;a href=&#34;http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Referencing-a-Library&#34;&gt;зависимость на определную конфигурацию вашей библотеки&lt;/a&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-gradle&#34;&gt;dependencies {
-    flavor1Compile project(path: &#39;:your_library_module_name&#39;, configuration: &#39;flavor1Release&#39;)
-    flavor2Compile project(path: &#39;:your_library_module_name&#39;, configuration: &#39;flavor2Release&#39;)
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Такой подход позволяет вам легко вносить изменения в код вашей библиотеки и тут же получать aar при перекомпиляции. По большому счету вам даже не стоит задумывать о том что aar файл строится при сборке вашего проекта, в данном случае он выступает лишь в роли промежуточного звена сборки. Дальше мы расмотрим подходы подлючения собраных aar файлов.&lt;/p&gt;
-
-&lt;h3 id=&#34;3-1-плоский-репозиторий:2d39079d7dbc3e98619f859c896fcc85&#34;&gt;3.1 Плоский репозиторий&lt;/h3&gt;
-
-&lt;p&gt;Самый простой способ подключения aar бибилотек в собраном виде это простое копирование в директорию проекта. Для того чтобы установить зависимость на такой файл нужно включить директорию в список своих репозиториев в build.gradle&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-gradle&#34;&gt;repositories {
-    flatDir {
-        dirs &#39;path_to_folder_with_aar&#39;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;После этого можно подключать библиотеку:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-gradle&#34;&gt;dependencies {
-   compile &#39;com.example:library:1.0.0@aar&#39;
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Версия бибилиотеки и namespace в данном случая ни на что не влияют, так как flatDir репозитории их просто игнорируют.&lt;/p&gt;
-
-&lt;h3 id=&#34;3-2-локальный-репозиторий:2d39079d7dbc3e98619f859c896fcc85&#34;&gt;3.2 Локальный репозиторий&lt;/h3&gt;
-
-&lt;p&gt;Для использования такого подхода вам нужен maven репозиторий разположений локально на вашем компьютере. Существует множество готовых gradle плагинов для публикации aar бибилиотек, но мы воспользуемся консольной устилитой mvn. Для начала следует проверить наличие установленого &lt;a href=&#34;https://maven.apache.org/&#34;&gt;maven&lt;/a&gt; в вашей системе.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-zsh&#34;&gt;mvn --version
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Если он отсутвует, его следует установить. Для публикации артефакта (в нашем случае .aar  библиотеки) в репозиторий используйте команду:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-zsh&#34;&gt;mvn install:install-file -Dfile=&amp;lt;path_to_your_aar&amp;gt; -DgroupId=&amp;lt;domain&amp;gt; -DartifactId=&amp;lt;artifact_id&amp;gt; -Dversion=&amp;lt;version&amp;gt; -Dpackaging=aar
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Например:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-zsh&#34;&gt;mvn install:install-file -Dfile=mDNSShared-release.aar -DgroupId=com.dnssd -DartifactId=mDNSShared -Dversion=1.0.0 -Dpackaging=aar
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;На самом деле команда mvn install выполнит копирование вашего aar файла в директорию локального репозитория и сгенерирует соотвествующий pom.xml файл. Перейдем в ~/.m2/repository директорию на вашем компьютере. После выполнения команды install в этой директории должны появится поддиректории вашего домена, в случае моего приемера это&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-zsh&#34;&gt;~/.m2/repository/com/dnssd/mDNSShared/
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;В это каталоге располгаются все версии вашего aar артефакта (под этим термином подразумевается любой бинарный файл помещеный в maven репозиторий). В моем случае это директория 1.0.0 в которой содержится 3 файла: _remote.repositories, mDNSShared-1.0.1.aar, mDNSShared-1.0.1.pom. Теперь подключим бибилотеку из локального репозитория. Прежде всего нужно добавить локальный maven репозиторий в список доступных:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-gradle&#34;&gt;repositories {
-    mavenLocal()
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;После этого можно устанавливать зависимости с помощью ключего слова compile также как мы это делает с flatDir&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-gradle&#34;&gt;dependencies {
-    compile &#39;com.dnnsd:mDNSShared:1.0.0&#39;
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Именно такой подход распотсранения aar использован в Android Support Libraries. Все локальные maven репозитории разпаковуются и обновляются вместе с sdk.  Можете заглянуть в директории ANDROID_HOME/extras/android/m2repository или ANDROID_HOME/extras/google/m2repository.&lt;/p&gt;
-
-&lt;h3 id=&#34;3-3-удаленный-репозиторий:2d39079d7dbc3e98619f859c896fcc85&#34;&gt;3.3 Удаленный репозиторий&lt;/h3&gt;
-
-&lt;p&gt;Подход с использвованием удаленного репозитория ничем не отличается от локального за исключением необходимости указания ссылки на репозиторий. Gradle соддержит ссылки на Maven Central и JCenter репозитории. Кроме этого gradle позволяет указывать прямой url на сервер maven репозитория:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-gradle&#34;&gt;repositories {
-    mavenCentral()
-    jCenter()
-    maven { url &#39;https://maven.fabric.io/repo&#39; }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Установка зависимостей аналогична предыдущим способам:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-gradle&#34;&gt;dependencies {
-    compile(&#39;com.crashlytics.sdk.android:crashlytics:2.2.4@aar&#39;) {
-        transitive = true;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Вот и все.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>About Me</title>
-      <link>http://andriydruk.com/about/</link>
+      <title>Welcome</title>
+      <link>http://andriydruk.com/post/about/</link>
       <pubDate>Tue, 07 Jul 2015 23:10:36 +0300</pubDate>
       
-      <guid>http://andriydruk.com/about/</guid>
+      <guid>http://andriydruk.com/post/about/</guid>
       <description>
 
 &lt;!--&lt;
@@ -902,17 +566,19 @@ div style=&#34;text-align:center&#34; markdown=&#34;1&#34;&gt;
 &lt;/div&gt;
 --&gt;
 
-&lt;p&gt;Hello everyone and welcome to Yet Another Android Developer Blog!&lt;/p&gt;
+&lt;p&gt;Hello everyone and welcome to &lt;a href=&#34;andriydruk.com&#34;&gt;Yet Another Android Developer Blog&lt;/a&gt;!&lt;/p&gt;
 
 &lt;p&gt;I&amp;rsquo;ve thought a lot about creating a blog about software development in the past. As a true engineer I spent a huge amount of time reviewing existing blogger platforms and static website generators, and finally, I&amp;rsquo;ve started to write articles. But first things first&amp;hellip;&lt;/p&gt;
 
-&lt;p&gt;First of all a few words about myself. I am a software engineer from Ukraine. Ever since I was in high school, I was interested in mathematics and programming. I received a master&amp;rsquo;s degree in Software Engineering from &lt;a href=&#34;http://www.kpi.kharkov.ua/en/&#34;&gt;Kharkiv Polytechnic Institute&lt;/a&gt;. At the moment, I hold a position of &lt;a href=&#34;https://www.linkedin.com/profile/view?id=156417157&#34;&gt;Android Team Lead&lt;/a&gt; in Kharkiv (Ukraine). Besides mobile apps development I&amp;rsquo;m responsible for trainees instruction and team management.&lt;/p&gt;
+&lt;p&gt;First of all a few words about myself. I am a software engineer from Ukraine. Ever since I was in high school, I was interested in mathematics and programming. I received a master&amp;rsquo;s degree in Software Engineering from &lt;a href=&#34;http://www.kpi.kharkov.ua/en/&#34;&gt;Kharkiv Polytechnic Institute&lt;/a&gt;. At the moment, I hold a position of &lt;a href=&#34;https://www.linkedin.com/profile/view?id=156417157&#34;&gt;Android Team Lead&lt;/a&gt; in Kharkiv (Ukraine).&lt;/p&gt;
 
-&lt;p&gt;As you may know, the mobile development is currently one of the most promising trends in the industry. From my point of view, it is also one of the most interesting ones. In my professional career, I faced with projects for different mobile platforms, but still my passion is Android. Perhaps you might be interested in some of my tools for developers that I publish in the &lt;a href=&#34;https://play.google.com/store/apps/developer?id=Andriy+Druk&#34;&gt;Google Play&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;As you may know, the mobile development is currently one of the most promising trends in the industry. From my point of view, it is also one of the most interesting ones. In my professional career, I faced with projects for different mobile platforms, but still my passion is Android.&lt;/p&gt;
 
 &lt;p&gt;Android is an amazing system. It&amp;rsquo;s really flexible, rich with APIs and rapidly developing. In this blog I would like to share with you some software design patterns, overviews of new technologies or just my thoughts about the industry.&lt;/p&gt;
 
 &lt;p&gt;I really hope that this blog will be a source of useful information for you and it will help you in your future development. And of course I&amp;rsquo;m interested in your feedback, so feel free to comment on the articles.&lt;/p&gt;
+
+&lt;p&gt;Perhaps you might be interested in some of my tools for developers that I publish in the &lt;a href=&#34;https://play.google.com/store/apps/developer?id=Andriy+Druk&#34;&gt;Google Play&lt;/a&gt;.&lt;/p&gt;
 
 &lt;h2 id=&#34;contact-me:6083a88ee3411b0d17ce02d738f69d47&#34;&gt;Contact me&lt;/h2&gt;
 
@@ -927,7 +593,7 @@ div style=&#34;text-align:center&#34; markdown=&#34;1&#34;&gt;
 
 &lt;h2 id=&#34;about-this-blog:6083a88ee3411b0d17ce02d738f69d47&#34;&gt;About this blog&lt;/h2&gt;
 
-&lt;p&gt;This blog built with &lt;a href=&#34;https://gohugo.io&#34;&gt;Hugo&lt;/a&gt; using &lt;a href=&#34;https://github.com/digitalcraftsman/hugo-material-docs&#34;&gt;Material Docs&lt;/a&gt; theme. It&amp;rsquo;s a like breathe of fresh air for me after Jekyll and Octopress. Special thanks to the creators of this theme - &lt;a href=&#34;https://github.com/squidfunk&#34;&gt;Martin Donath&lt;/a&gt; and &lt;a href=&#34;https://github.com/digitalcraftsman&#34;&gt;Digitalcraftsman&lt;/a&gt;. Also big thanks to my editor - &lt;a href=&#34;https://github.com/tolikcode&#34;&gt;Tolik Code&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;This blog built with &lt;a href=&#34;https://gohugo.io&#34;&gt;Hugo&lt;/a&gt; on &lt;a href=&#34;https://pages.github.com&#34;&gt;Github pages&lt;/a&gt;. It&amp;rsquo;s a like breathe of fresh air for me after Jekyll and Octopress. Special thanks to my editor - &lt;a href=&#34;https://github.com/tolikcode&#34;&gt;Tolik Code&lt;/a&gt;.&lt;/p&gt;
 
 &lt;h2 id=&#34;license:6083a88ee3411b0d17ce02d738f69d47&#34;&gt;License&lt;/h2&gt;
 

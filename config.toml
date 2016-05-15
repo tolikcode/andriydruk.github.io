@@ -1,7 +1,7 @@
 baseurl = "http://andriydruk.com/"
 languageCode = "en-us"
 title = "Yet Another Android Developer Blog"
-theme = "hugo-material-blog"
+theme = "min-blog"
 
 metadataformat = "yaml"
 canonifyurls = true
@@ -15,7 +15,7 @@ disqusShortname = "yetanotherandroiddeveloperblog"
 
 [params]
   DateForm = "Mon, Jan 2, 2006"
-  Description = "Andriy Druk"
+  Description = "Hi, my name is Andriy Druk. I'm a software engineer from Ukraine."
   Author = "Andriy Druk"
   email = "andriy.druk@gmail.com"
   Ganalytics = "UA-67278568-1"
@@ -35,6 +35,7 @@ disqusShortname = "yetanotherandroiddeveloperblog"
 [social]
   twitter = "AndriyDruk"
   github  = "andriydruk"
+  linkedin = "andriy-druk-23147344"
 
 [[menu.main]]
   name = "home"

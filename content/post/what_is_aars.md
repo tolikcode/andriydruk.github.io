@@ -2,7 +2,7 @@
 categories = ["Development"]
 date = "2015-07-15T21:39:00+03:00"
 description = ""
-draft = false
+draft = true
 image = "/img/material-001.jpg"
 tags = ["androiddev"]
 title = "Что такое .aar библиотеки?"
