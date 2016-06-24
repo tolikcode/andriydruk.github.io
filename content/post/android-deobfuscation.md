@@ -2,20 +2,18 @@
 categories = ["Development"]
 date = "2015-08-04T22:40:49+03:00"
 description = ""
-draft = true
+draft = false
 image = "/img/material-002.jpg"
 tags = ["tools", "androiddev"]
-title = "Деобфускация трассировок стека"
+title = "Stacktrace deobfuscation"
 
 +++
 
-One of the problems of supporting android application is deobfuscation or retrace stack traces obtained from obfuscated release build. In order to understand how deobfuscate a stack trace, you need to understand how the obfuscation actually works. The Standart way of obfuscation in android development is using tools such as the ProGuard. That's what the [official documentation] (http://developer.android.com/tools/help/proguard.html#decoding) says
+One of the problems of supporting Android application is deobfuscation or retrace stack traces obtained from obfuscated release build. To figure out how to deobfuscate a stack trace, you need to understand how actually the obfuscation works. The standard way of obfuscation in Android development is using tools such as the ProGuard. That's what the [official documentation] (http://developer.android.com/tools/help/proguard.html#decoding) says
 
-> The ProGuard tool shrinks, optimizes, and obfuscates your code by removing unused code and renaming classes, fields, and methods with semantically obscure names. 
+> The ProGuard tool shrinks, optimizesstatic innerand obfuscates your code by removing unused code and renaming classes, fields, and methods with semantically obscure names. 
 
-<!--more-->
-
-Well, sounds good. Let's try to practice. I will create a new project by using Android Studio and add next options to build.grade file to obfuscate debug builds:
+Well, looks good. Let's try to practice. I will create a new project by using Android Studio and add next options to `build.gradle` file to obfuscate `debug` builds:
 
 ~~~gradle
 buildTypes {
@@ -30,7 +28,7 @@ buildTypes {
 }
 ~~~
     
-Let's throw new Exception in onCreate method of MainActivity class:
+Let's throw `Exception` in `onCreate` method of `MainActivity` class:
    
 ~~~java
 @Override
@@ -61,7 +59,7 @@ Caused by: java.lang.RuntimeException: Stack deobfuscation example exception
     at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:615)
 ~~~
 
-Why after obfuscation the MainActivity is still the MainActivity? The fact is that in addition to the configuration file proguard-rules.pro in our catalog, ProGuard uses default rules of Android projects obfuscation from the SDK, which weaken obfuscation of Activity's inheritors. The documentation contains next guidelines for Android projects:
+Why after obfuscation the `MainActivity` is still the `MainActivity`? The fact is that in addition to the configuration file `proguard-rules.pro` in our catalog, ProGuard uses default rules of Android projects obfuscation from the SDK, which weaken obfuscation of `Activity's` inheritors. The documentation contains following guidelines for Android projects:
 
 ~~~java
 -keep public class * extends android.app.Activity
@@ -71,7 +69,7 @@ Why after obfuscation the MainActivity is still the MainActivity? The fact is th
 -keep public class * extends android.content.ContentProvider
 ~~~
 
-Тоесть по умолчанию ProGuard оставляет все имена классов, которые являются наследниками android.app.Activity. Продолжим наш эксперемент: создадим внутренни статический класс, который поможет нам вызвать аварийную ситуацию в нашем приложении
+By default ProGuard will keep names of all inheritance of `android.app.Activity`. Ok, I created an inner static class to avoid this rule.
 
 ~~~java
 private static class CrashHelper{
@@ -81,8 +79,8 @@ private static class CrashHelper{
     }
 }
 ~~~
-     
-Вызвав статический метод crash в onCreate мы получим следующую трассировку стека:
+
+Now when I call method crash from `onCreate` I got:     
 
 ~~~java 
 Caused by: java.lang.RuntimeException: Stack deobfuscation example exception
@@ -103,9 +101,9 @@ Caused by: java.lang.RuntimeException: Stack deobfuscation example exception
      at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:615)
 ~~~
 
-Похоже это то что мы хотели получить. У некоторого мифического класса 'а' был вызван метод 'a', в теле которого был вызван метод 'b'.
+It's exactly what we are looking for: the exception was thrown in method `b` of class `a` that was called from method 'a'.
 
-Для деобфускации нам нужен файл mapping.txt из нашего build каталога. В моем случае путь к файлу app/build/outputs/mapping/debug/mapping.txt. Далее необходимо воспользоваться либо скриптом retrace.sh из ANDROID_HOME/tools/proguard/bin, либо воспользоваться GUI утилитой ProguadGUI из ANDROID_HOME/tools/proguard/lib/proguardgui.jar. Воспользовавшись GUI утилитой мы получим следующую трассировку стека:
+For deobfuscation we needed file `mapping.txt` from `build`. In my case path ro the file was `app/build/outputs/mapping/debug/mapping.txt`. Next you need to run script retrace.sh from `ANDROID_HOME/tools/proguard/bin` or run GUI utilits called ProguadGUI from `ANDROID_HOME/tools/proguard/lib/proguardgui.jar`. I used GUI utils and got next:
 
 ![Alt text](/img/Screen Shot 2015-08-04 at 23.34.25.png)
 
@@ -128,17 +126,17 @@ Caused by: java.lang.RuntimeException: Stack deobfuscation example exception
     at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:615)
 ~~~
 
-Хорошо когда в методе у нас всего одна строка, но на практике такое встречается редко. Поэтому неплохо было бы получить номер строки вместо Unknown Source. Согласно [официальной документации](http://proguard.sourceforge.net/manual/examples.html#stacktrace) для этого нужно в файл настроек proguard добавить
+One more thing, we need numbers of line in a file where the crash occurred instead of current `Unknown Source`. According to [official docs](http://proguard.sourceforge.net/manual/examples.html#stacktrace) for that you should add next lines to ProGuard properties:
  
 ~~~java
 -printmapping out.map
--renamesourcefileattribute SourceFile
 -keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute SourceFile
 ~~~
 
-Первая строка в нашем случае не нужна, потому что она включена в Android проектах по умолчанию. Третья строка включает сохранение имен исходных файлов и таблицы номеров строк (что мы и хотели получить). Но стоит обратить внимание на вторую строку. Это правило переименовывает все имена исходных файлов в  "SourceFile", что является весьма важным в обфускации таких языков как Java, где зачастую Class name == Source file name. Также это возволяет не выдать внутрених классов, так как после обфускации связь между внутреним и внешним классами обычно разрывается.
+The first rule is already in Android project by default, will skip it. The second rule will switch on saving of source filename and table of line numbers. But the most interesting is the third one that will rename all filename to `Source file`. It's critical for languages like Java where filenames are usually the same to class name. Also, it will hide relations between inner and outer classes.
 
-В итоге после добавления новых правил мы получим следующую трассировку стека:
+After updating proguard file I got:
 
 ~~~java
 Caused by: java.lang.RuntimeException: Stack deobfuscation example exception
@@ -159,7 +157,7 @@ Caused by: java.lang.RuntimeException: Stack deobfuscation example exception
     at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:615)
 ~~~
 
-И после деобфускации:
+And after deobfuscation:
 
 ~~~java
 Caused by: java.lang.RuntimeException: Stack deobfuscation example exception
@@ -180,4 +178,4 @@ Caused by: java.lang.RuntimeException: Stack deobfuscation example exception
     at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:615)
 ~~~
 
-Подведем итог: залог успешной поддержки обфусцированного приложения это сохранения всех mapping файлов для всех выпущенных сборок. Хорошой практикой есть построение сборок на CI сервере с сохрарнением apk файлов и mapping файлов с тегами соотвествующих сборок (например 4 первых символа hash коммита). В таком случае если вы знаете с какой сборки былa получена трассировка стека, вы будете знать где искать соответсующий mapping файл. Также возможно стоит посмотреть в сторону сторонних сервисов сбора информации о аварийных ситуациях. Например, такие сервисы как Crashlytics деобфусцируют трасировки стеков на стороне сервера, что весьма удобно и не требует никаких дополнительных действий со стороны разработчика. Но вы должны четко понимать что при каждом построении сборки ваши mapping файлы будут отправляться на сервера Crashlytics. Что может быть не безопасно, ведь человек завладевший этими файлами не будет имееть никаких ограничений по деобфускации всего исходного кода вашего приложения.
+To summarize, I can strongly recommend you to keep all mapping file for your release builds to be able to deobfuscate stack traces from crash logs. Best practice is building releases on your CI server with saving apk and mapping file with tags of releases. At this case, you will always know where you can find mapping file for you release build. Also, there are a lot of services that provide automatic deobfuscation of stack traces such as Fabric or Google Play Developer Console. But keep in mind that you provide your mapping file to 3-rd party service, and they can deobfuscate your builds and get all source code.
