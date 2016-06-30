@@ -1,10 +1,8 @@
 +++
-categories = ["Development"]
 date = "2015-08-04T22:40:49+03:00"
 description = ""
 draft = false
 image = "/img/material-002.jpg"
-tags = ["tools", "androiddev"]
 title = "Stacktrace deobfuscation"
 
 +++

@@ -1,208 +1,84 @@
 <!DOCTYPE html>
-  
-  
-  
-  
-   <html class="no-js"> 
-
-  <head lang="en-us">
+<html lang="en-us">
+<head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
-    <title>Деобфускация трассировок стека - Yet Another Android Developer Blog</title>
-    <meta name="generator" content="Hugo 0.15" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Stacktrace deobfuscation</title>
 
     
-    <link rel="canonical" href="http://andriydruk.com/post/android-deobfuscation/">
-    
+    <link rel="shortcut icon" type="image/png" href="http://andriydruk.com//favicon.png"/>
 
-    <meta property="og:url" content="http://andriydruk.com/post/android-deobfuscation/">
-    <meta property="og:title" content="Yet Another Android Developer Blog">
-    <meta property="og:image" content="http://andriydruk.com/img/logo.png">
-    <meta name="apple-mobile-web-app-title" content="Yet Another Android Developer Blog">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
-    <link rel="shortcut icon" type="image/x-icon" href="http://andriydruk.com/images/favicon.ico">
-    <link rel="icon" type="image/x-icon" href="http://andriydruk.com/images/favicon.ico">
     
+    <link href="http://andriydruk.com//css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+    
+    <script src="https://use.fontawesome.com/b50aa728ce.js"></script>
     <style>
-      @font-face {
-        font-family: 'Icon';
-        src: url('http://andriydruk.com/fonts/icon.eot?52m981');
-        src: url('http://andriydruk.com/fonts/icon.eot?#iefix52m981')
-               format('embedded-opentype'),
-             url('http://andriydruk.com/fonts/icon.woff?52m981')
-               format('woff'),
-             url('http://andriydruk.com/fonts/icon.ttf?52m981')
-               format('truetype'),
-             url('http://andriydruk.com/fonts/icon.svg?52m981#icon')
-               format('svg');
-        font-weight: normal;
-        font-style: normal;
+      i {
+        margin: 7px;
+      }
+      a.uncolored {
+        color: inherit;
+        font-weight: inherit;
+      }
+      a {
+        font-weight: bold;
       }
     </style>
 
-    <link rel="stylesheet" href="http://andriydruk.com/stylesheets/application.css">
-    <link rel="stylesheet" href="http://andriydruk.com/stylesheets/palettes.css">
-
     
-    
-    
-    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:400,700|Roboto%2bMono">
-    <style>
-      body, input {
-        font-family: 'Roboto', Helvetica, Arial, sans-serif;
-      }
-      pre, code {
-        font-family: 'Roboto Mono', Menlo, 'Courier New', 'Courier', monospace;
-      }
-    </style>
-    
-    
-    <script src="http://andriydruk.com/javascripts/modernizr.js"></script>
-
-    
-    <link rel="stylesheet" href="http://andriydruk.com/stylesheets/idea.css">
+    <link rel="stylesheet" href="http://andriydruk.com/css/idea.css">
     <script src="https://yandex.st/highlightjs/8.0/highlight.min.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
 
-  </head>
-  <body class="palette-primary-red palette-accent-pink">
+</head>
+<body>
+<br>
+<br>
 
 
-<div class="backdrop">
-	<div class="backdrop-paper"></div>
-</div>
-
-<input class="toggle" type="checkbox" id="toggle-drawer">
-<input class="toggle" type="checkbox" id="toggle-search">
-<label class="toggle-button overlay" for="toggle-drawer"></label>
-
-<header class="header">
-	<nav aria-label="Header">
-  <div class="bar default">
-    <div class="button button-menu" role="button" aria-label="Menu">
-      <label class="toggle-button icon icon-menu" for="toggle-drawer">
-        <span></span>
-      </label>
-    </div>
     
-    <div class="button button-previous" role="button" aria-label="Previous">
-            <a href="http://andriydruk.com/"><i class="icon icon-back"></i></a>
-    </div>
+    <header class="intro-header">
+     <div class="container">
+       <div class="row">
+         <a href="http://andriydruk.com/"><img src="http://andriydruk.com//img/logo.jpg" class="img-circle center-block" width="120" height="120"></a>
+       </div>
+       <div class="row">
+         <div class="col-lg-6 col-lg-offset-3 col-md-10 col-md-offset-1">
+             <h1 class="text-uppercase text-center">Stacktrace Deobfuscation</h1>
+             
+                  <h4 class="text-center">
+                    <small>
+                      Published Tue, Aug 4, 2015 <strong>by <a href="mailto:andriy.druk@gmail.com?Subject=Stacktrace%20Deobfuscation" class="uncolored">Andriy Druk</a></strong>
+                    </small>
+                  </h4>
+            
+            <hr class="small">
+         </div>
+       </div>
+     </div>
+    </header>
+
     
-    <a href="http://andriydruk.com/">
-          <div class="stretch">
-            <div class="title">
-              Деобфускация трассировок стека
-            </div>
-          </div>
-    </a>
-    
-        
-  </div>
-  <div class="bar search">
-    <div class="button button-close" role="button" aria-label="Close">
-      <label class="toggle-button icon icon-back" for="toggle-search"></label>
-    </div>
-    <div class="stretch">
-      <div class="field">
-        <input class="query" type="text" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck>
-      </div>
-    </div>
-    <div class="button button-reset" role="button" aria-label="Search">
-      <button class="toggle-button icon icon-close" id="reset-search"></button>
-    </div>
-  </div>
-</nav>
-</header>
-
-<main class="main">
-	<div class="drawer">
-		<nav aria-label="Navigation">
-  <a href="http://andriydruk.com/about" class="project">
-    <div class="banner">
-      
-        <div class="logo">
-          <img src="http://andriydruk.com/img/logo.png">
-        </div>
-      
-      <div class="name">
-        <strong>Andriy Druk</strong>
-          <br>
-          Software Mobile Engineer
-      </div>
-    </div>
-  </a>
-
-  <div class="scrollable">
-    <div class="wrapper">
-        <ul class="repo">
-          <li class="repo-download">
-            <a href="https://twitter.com/AndriyDruk" title="@AndriyDruk on Twitter" target="_blank">
-              <i style="ignore" class="icon icon-twitter"></i> Twitter
-            </a>
-          </li>
-          <li class="repo-stars">
-            <a href="https://github.com/andriydruk" title="@andriydruk on GitHub" target="_blank">
-              <i style="ignore" class="icon icon-github"></i> Github
-            </a>
-          </li>
-        </ul>
-        <hr>
-
-      <div class="toc">
-        <ul>
-          <li>
-            <span class="section">Articles</span>
-            <ul>
-                
-                <li class="anchor">
-                  <a title="R.Tools" href="http://andriydruk.com/post/rtools/">R.Tools</a>
-                </li>  
-                
-                <li class="anchor">
-                  <a title="Wrap Annoying APIs With RxJava" href="http://andriydruk.com/post/rxdnssd/">Wrap Annoying APIs With RxJava</a>
-                </li>  
-                
-                <li class="anchor">
-                  <a title="Bonjour In Android Applications" href="http://andriydruk.com/post/mdnsresponder/">Bonjour In Android Applications</a>
-                </li>  
-                
-                <li class="anchor">
-                  <a title="Деобфускация Трассировок Стека" href="http://andriydruk.com/post/android-deobfuscation/">Деобфускация Трассировок Стека</a>
-                </li>  
-                
-                <li class="anchor">
-                  <a title="Что Такое .Aar Библиотеки?" href="http://andriydruk.com/post/what_is_aars/">Что Такое .Aar Библиотеки?</a>
-                </li>  
-                
-            </ul> 
-          </li>
-        </ul>
-
-        
-      </div>
-    </div>
-  </div>
-</nav>
-
-	</div>
-
-	<article class="article">
-		<div class="wrapper">
-			<h1>
-				Деобфускация трассировок стека 
-				<a class="headerlink" href="#" title="Permanent link">Tue, Aug 4, 2015</a>
-			</h1>
-
-			<p>One of the problems of supporting android application is deobfuscation or retrace stack traces obtained from obfuscated release build. In order to understand how deobfuscate a stack trace, you need to understand how the obfuscation actually works. The Standart way of obfuscation in android development is using tools such as the ProGuard. That&rsquo;s what the <a href="http://developer.android.com/tools/help/proguard.html#decoding">official documentation</a> says</p>
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-1">
+                  <p>One of the problems of supporting Android application is deobfuscation or retrace stack traces obtained from obfuscated release build. To figure out how to deobfuscate a stack trace, you need to understand how actually the obfuscation works. The standard way of obfuscation in Android development is using tools such as the ProGuard. That&rsquo;s what the <a href="http://developer.android.com/tools/help/proguard.html#decoding">official documentation</a> says</p>
 
 <blockquote>
-<p>The ProGuard tool shrinks, optimizes, and obfuscates your code by removing unused code and renaming classes, fields, and methods with semantically obscure names.</p>
+<p>The ProGuard tool shrinks, optimizesstatic innerand obfuscates your code by removing unused code and renaming classes, fields, and methods with semantically obscure names.</p>
 </blockquote>
 
-<p>Well, sounds good. Let&rsquo;s try to practice. I will create a new project by using Android Studio and add next options to build.grade file to obfuscate debug builds:</p>
+<p>Well, looks good. Let&rsquo;s try to practice. I will create a new project by using Android Studio and add next options to <code>build.gradle</code> file to obfuscate <code>debug</code> builds:</p>
 
 <pre><code class="language-gradle">buildTypes {
     debug {
@@ -216,7 +92,7 @@
 }
 </code></pre>
 
-<p>Let&rsquo;s throw new Exception in onCreate method of MainActivity class:</p>
+<p>Let&rsquo;s throw <code>Exception</code> in <code>onCreate</code> method of <code>MainActivity</code> class:</p>
 
 <pre><code class="language-java">@Override
 protected void onCreate(Bundle savedInstanceState) {
@@ -245,7 +121,7 @@ protected void onCreate(Bundle savedInstanceState) {
     at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:615)
 </code></pre>
 
-<p>Why after obfuscation the MainActivity is still the MainActivity? The fact is that in addition to the configuration file proguard-rules.pro in our catalog, ProGuard uses default rules of Android projects obfuscation from the SDK, which weaken obfuscation of Activity&rsquo;s inheritors. The documentation contains next guidelines for Android projects:</p>
+<p>Why after obfuscation the <code>MainActivity</code> is still the <code>MainActivity</code>? The fact is that in addition to the configuration file <code>proguard-rules.pro</code> in our catalog, ProGuard uses default rules of Android projects obfuscation from the SDK, which weaken obfuscation of <code>Activity's</code> inheritors. The documentation contains following guidelines for Android projects:</p>
 
 <pre><code class="language-java">-keep public class * extends android.app.Activity
 -keep public class * extends android.app.Application
@@ -254,7 +130,7 @@ protected void onCreate(Bundle savedInstanceState) {
 -keep public class * extends android.content.ContentProvider
 </code></pre>
 
-<p>Тоесть по умолчанию ProGuard оставляет все имена классов, которые являются наследниками android.app.Activity. Продолжим наш эксперемент: создадим внутренни статический класс, который поможет нам вызвать аварийную ситуацию в нашем приложении</p>
+<p>By default ProGuard will keep names of all inheritance of <code>android.app.Activity</code>. Ok, I created an inner static class to avoid this rule.</p>
 
 <pre><code class="language-java">private static class CrashHelper{
 
@@ -264,7 +140,7 @@ protected void onCreate(Bundle savedInstanceState) {
 }
 </code></pre>
 
-<p>Вызвав статический метод crash в onCreate мы получим следующую трассировку стека:</p>
+<p>Now when I call method crash from <code>onCreate</code> I got:</p>
 
 <pre><code class="language-java">Caused by: java.lang.RuntimeException: Stack deobfuscation example exception
      at com.druk.myapplication.a.b(Unknown Source)
@@ -284,9 +160,9 @@ protected void onCreate(Bundle savedInstanceState) {
      at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:615)
 </code></pre>
 
-<p>Похоже это то что мы хотели получить. У некоторого мифического класса &lsquo;а&rsquo; был вызван метод &lsquo;a&rsquo;, в теле которого был вызван метод &lsquo;b&rsquo;.</p>
+<p>It&rsquo;s exactly what we are looking for: the exception was thrown in method <code>b</code> of class <code>a</code> that was called from method &lsquo;a&rsquo;.</p>
 
-<p>Для деобфускации нам нужен файл mapping.txt из нашего build каталога. В моем случае путь к файлу app/build/outputs/mapping/debug/mapping.txt. Далее необходимо воспользоваться либо скриптом retrace.sh из ANDROID_HOME/tools/proguard/bin, либо воспользоваться GUI утилитой ProguadGUI из ANDROID_HOME/tools/proguard/lib/proguardgui.jar. Воспользовавшись GUI утилитой мы получим следующую трассировку стека:</p>
+<p>For deobfuscation we needed file <code>mapping.txt</code> from <code>build</code>. In my case path ro the file was <code>app/build/outputs/mapping/debug/mapping.txt</code>. Next you need to run script retrace.sh from <code>ANDROID_HOME/tools/proguard/bin</code> or run GUI utilits called ProguadGUI from <code>ANDROID_HOME/tools/proguard/lib/proguardgui.jar</code>. I used GUI utils and got next:</p>
 
 <p><img src="http://andriydruk.com/img/Screen Shot 2015-08-04 at 23.34.25.png" alt="Alt text" /></p>
 
@@ -308,16 +184,16 @@ protected void onCreate(Bundle savedInstanceState) {
     at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:615)
 </code></pre>
 
-<p>Хорошо когда в методе у нас всего одна строка, но на практике такое встречается редко. Поэтому неплохо было бы получить номер строки вместо Unknown Source. Согласно <a href="http://proguard.sourceforge.net/manual/examples.html#stacktrace">официальной документации</a> для этого нужно в файл настроек proguard добавить</p>
+<p>One more thing, we need numbers of line in a file where the crash occurred instead of current <code>Unknown Source</code>. According to <a href="http://proguard.sourceforge.net/manual/examples.html#stacktrace">official docs</a> for that you should add next lines to ProGuard properties:</p>
 
 <pre><code class="language-java">-printmapping out.map
--renamesourcefileattribute SourceFile
 -keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute SourceFile
 </code></pre>
 
-<p>Первая строка в нашем случае не нужна, потому что она включена в Android проектах по умолчанию. Третья строка включает сохранение имен исходных файлов и таблицы номеров строк (что мы и хотели получить). Но стоит обратить внимание на вторую строку. Это правило переименовывает все имена исходных файлов в  &ldquo;SourceFile&rdquo;, что является весьма важным в обфускации таких языков как Java, где зачастую Class name == Source file name. Также это возволяет не выдать внутрених классов, так как после обфускации связь между внутреним и внешним классами обычно разрывается.</p>
+<p>The first rule is already in Android project by default, will skip it. The second rule will switch on saving of source filename and table of line numbers. But the most interesting is the third one that will rename all filename to <code>Source file</code>. It&rsquo;s critical for languages like Java where filenames are usually the same to class name. Also, it will hide relations between inner and outer classes.</p>
 
-<p>В итоге после добавления новых правил мы получим следующую трассировку стека:</p>
+<p>After updating proguard file I got:</p>
 
 <pre><code class="language-java">Caused by: java.lang.RuntimeException: Stack deobfuscation example exception
     at com.druk.myapplication.a.b(SourceFile:42)
@@ -337,7 +213,7 @@ protected void onCreate(Bundle savedInstanceState) {
     at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:615)
 </code></pre>
 
-<p>И после деобфускации:</p>
+<p>And after deobfuscation:</p>
 
 <pre><code class="language-java">Caused by: java.lang.RuntimeException: Stack deobfuscation example exception
     at com.druk.myapplication.MainActivity$CrashHelper.crash(SourceFile:42)
@@ -357,15 +233,13 @@ protected void onCreate(Bundle savedInstanceState) {
     at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:615)
 </code></pre>
 
-<p>Подведем итог: залог успешной поддержки обфусцированного приложения это сохранения всех mapping файлов для всех выпущенных сборок. Хорошой практикой есть построение сборок на CI сервере с сохрарнением apk файлов и mapping файлов с тегами соотвествующих сборок (например 4 первых символа hash коммита). В таком случае если вы знаете с какой сборки былa получена трассировка стека, вы будете знать где искать соответсующий mapping файл. Также возможно стоит посмотреть в сторону сторонних сервисов сбора информации о аварийных ситуациях. Например, такие сервисы как Crashlytics деобфусцируют трасировки стеков на стороне сервера, что весьма удобно и не требует никаких дополнительных действий со стороны разработчика. Но вы должны четко понимать что при каждом построении сборки ваши mapping файлы будут отправляться на сервера Crashlytics. Что может быть не безопасно, ведь человек завладевший этими файлами не будет имееть никаких ограничений по деобфускации всего исходного кода вашего приложения.</p>
+<p>To summarize, I can strongly recommend you to keep all mapping file for your release builds to be able to deobfuscate stack traces from crash logs. Best practice is building releases on your CI server with saving apk and mapping file with tags of releases. At this case, you will always know where you can find mapping file for you release build. Also, there are a lot of services that provide automatic deobfuscation of stack traces such as Fabric or Google Play Developer Console. But keep in mind that you provide your mapping file to 3-rd party service, and they can deobfuscate your builds and get all source code.</p>
 
-			<h1></h1>
-			<br>
-			<div id="disqus_thread"></div>
+                  <div id="disqus_thread"></div>
 <script type="text/javascript">
     var disqus_shortname = 'yetanotherandroiddeveloperblog';
     var disqus_identifier = 'http:\/\/andriydruk.com\/post\/android-deobfuscation\/';
-    var disqus_title = 'Деобфускация трассировок стека';
+    var disqus_title = 'Stacktrace deobfuscation';
     var disqus_url = 'http:\/\/andriydruk.com\/post\/android-deobfuscation\/';
 
     (function() {
@@ -376,82 +250,41 @@ protected void onCreate(Bundle savedInstanceState) {
 </script>
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-			<footer class="footer">
-				
-
-<nav class="pagination" aria-label="Footer">
-  <div class="previous">
-  
-      <a href="http://andriydruk.com/post/what_is_aars/" title="Что такое .aar библиотеки?">
-        <span class="direction">
-          Previous
-        </span>
-        <div class="page">
-          <div class="button button-previous" role="button" aria-label="Previous">
-            <i class="icon icon-back"></i>
-          </div>
-          <div class="stretch">
-            <div class="title">
-              Что такое .aar библиотеки?
+                </div>
             </div>
-          </div>
         </div>
-      </a>
-  
-  </div>
+    </article>
 
-  <div class="next">
-  
-      <a href="http://andriydruk.com/post/mdnsresponder/" title="Bonjour in Android applications">
-        <span class="direction">
-          Next
-        </span>
-        <div class="page">
-          <div class="stretch">
-            <div class="title">
-              Bonjour in Android applications
+
+
+
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-lg-offset-3 col-md-10 col-md-offset-1">
+              <hr>
+              <h4 class="text-center">
+                <small>
+                  <strong>©2016 <a href="mailto:andriy.druk@gmail.com" class="uncolored">Andriy Druk</a></strong>
+                  <br> Build with <a href="https://gohugo.io" class="uncolored">Hugo</a> on <a href="https://pages.github.com" class="uncolored">GitHub pages</a>
+                </small>
+              </h4>
             </div>
-          </div>
-          <div class="button button-next" role="button" aria-label="Next">
-            <i class="icon icon-forward"></i>
-          </div>
         </div>
-      </a>
-  
-  </div>
-</nav>
+    </div>
+</footer>
 
 
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-67278568-1', 'auto');
+  ga('send', 'pageview');
+</script>
 
 
-			</footer>
-		</div>
-	</article>
-
-	<div class="results" role="status" aria-live="polite">
-		<div class="scrollable">
-			<div class="wrapper">
-				<div class="meta"></div>
-				<div class="list"></div>
-			</div>
-		</div>
-	</div>
-</main>
-
-    <script>
-      var base_url = 'http:\/\/andriydruk.com\/';
-      var repo_id  = '';
-    </script>
-    <script src="http://andriydruk.com/javascripts/application.js"></script>
-    
-    
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-      ga('create', 'UA-67278568-1', 'auto');
-      ga('send', 'pageview');
-    </script>
-  </body>
+</body>
 </html>
+
