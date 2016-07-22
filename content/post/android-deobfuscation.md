@@ -7,11 +7,11 @@ title = "Stacktrace deobfuscation"
 
 +++
 
-One of the problems of supporting Android application is deobfuscation or retrace stack traces obtained from obfuscated release build. To figure out how to deobfuscate a stack trace, you need to understand how actually the obfuscation works. The standard way of obfuscation in Android development is using tools such as the ProGuard. That's what the [official documentation] (http://developer.android.com/tools/help/proguard.html#decoding) says
+One of the problems of Android application support is to deofuscate or retrace stack traces obtained from an obfuscated release build. To figure out how to deobfuscate a stack trace, you need to understand how the obfuscation actually works. The standard way of obfuscation in Android development is done using tools such as the ProGuard. That's what the [official documentation] (http://developer.android.com/tools/help/proguard.html#decoding) says
 
 > The ProGuard tool shrinks, optimizesstatic innerand obfuscates your code by removing unused code and renaming classes, fields, and methods with semantically obscure names. 
 
-Well, looks good. Let's try to practice. I will create a new project by using Android Studio and add next options to `build.gradle` file to obfuscate `debug` builds:
+Well, looks good. Let's try it. I will create a new project with Android Studio and add the following options to `build.gradle` file to obfuscate `debug` builds:
 
 ~~~gradle
 buildTypes {
@@ -26,7 +26,7 @@ buildTypes {
 }
 ~~~
     
-Let's throw `Exception` in `onCreate` method of `MainActivity` class:
+Let's throw an `Exception` in the `onCreate` method of `MainActivity` class:
    
 ~~~java
 @Override
@@ -57,7 +57,7 @@ Caused by: java.lang.RuntimeException: Stack deobfuscation example exception
     at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:615)
 ~~~
 
-Why after obfuscation the `MainActivity` is still the `MainActivity`? The fact is that in addition to the configuration file `proguard-rules.pro` in our catalog, ProGuard uses default rules of Android projects obfuscation from the SDK, which weaken obfuscation of `Activity's` inheritors. The documentation contains following guidelines for Android projects:
+Why the `MainActivity` is still the `MainActivity` even after the obfuscation? The thing is that ProGuard uses default rules of Android projects obfuscation from the SDK in addition to the configuration file `proguard-rules.pro` in our catalog. And those default rules weaken the obfuscation of `Activity's` inheritors. The documentation contains the following guidelines for Android projects:
 
 ~~~java
 -keep public class * extends android.app.Activity
@@ -67,7 +67,7 @@ Why after obfuscation the `MainActivity` is still the `MainActivity`? The fact i
 -keep public class * extends android.content.ContentProvider
 ~~~
 
-By default ProGuard will keep names of all inheritance of `android.app.Activity`. Ok, I created an inner static class to avoid this rule.
+By default ProGuard will keep names for all inheritors of `android.app.Activity`. Ok, I created an inner static class to avoid this rule.
 
 ~~~java
 private static class CrashHelper{
@@ -101,7 +101,7 @@ Caused by: java.lang.RuntimeException: Stack deobfuscation example exception
 
 It's exactly what we are looking for: the exception was thrown in method `b` of class `a` that was called from method 'a'.
 
-For deobfuscation we needed file `mapping.txt` from `build`. In my case path ro the file was `app/build/outputs/mapping/debug/mapping.txt`. Next you need to run script retrace.sh from `ANDROID_HOME/tools/proguard/bin` or run GUI utilits called ProguadGUI from `ANDROID_HOME/tools/proguard/lib/proguardgui.jar`. I used GUI utils and got next:
+For deobfuscation we needed file `mapping.txt` from `build`. In my case path ro the file was `app/build/outputs/mapping/debug/mapping.txt`. Next you need to run script retrace.sh from `ANDROID_HOME/tools/proguard/bin` or run GUI utilits called ProguadGUI from `ANDROID_HOME/tools/proguard/lib/proguardgui.jar`. I used GUI utils and got the following:
 
 ![Alt text](/img/Screen Shot 2015-08-04 at 23.34.25.png)
 
@@ -124,7 +124,7 @@ Caused by: java.lang.RuntimeException: Stack deobfuscation example exception
     at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:615)
 ~~~
 
-One more thing, we need numbers of line in a file where the crash occurred instead of current `Unknown Source`. According to [official docs](http://proguard.sourceforge.net/manual/examples.html#stacktrace) for that you should add next lines to ProGuard properties:
+One more thing, we need numbers of lines in a file where the crash occurred instead of current `Unknown Source`. According to [official docs](http://proguard.sourceforge.net/manual/examples.html#stacktrace) for that you should add next lines to ProGuard properties:
  
 ~~~java
 -printmapping out.map
@@ -132,7 +132,7 @@ One more thing, we need numbers of line in a file where the crash occurred inste
 -renamesourcefileattribute SourceFile
 ~~~
 
-The first rule is already in Android project by default, will skip it. The second rule will switch on saving of source filename and table of line numbers. But the most interesting is the third one that will rename all filename to `Source file`. It's critical for languages like Java where filenames are usually the same to class name. Also, it will hide relations between inner and outer classes.
+The first rule is already in Android project by default, we will skip it. The second rule will switch on saving of source filename and table of line numbers. But the most interesting is the third one that will change all filenames to `Source file`. It's critical for languages like Java where filenames are usually the same to class name. Also, it will hide relations between inner and outer classes.
 
 After updating proguard file I got:
 
@@ -176,4 +176,4 @@ Caused by: java.lang.RuntimeException: Stack deobfuscation example exception
     at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:615)
 ~~~
 
-To summarize, I can strongly recommend you to keep all mapping file for your release builds to be able to deobfuscate stack traces from crash logs. Best practice is building releases on your CI server with saving apk and mapping file with tags of releases. At this case, you will always know where you can find mapping file for you release build. Also, there are a lot of services that provide automatic deobfuscation of stack traces such as Fabric or Google Play Developer Console. But keep in mind that you provide your mapping file to 3-rd party service, and they can deobfuscate your builds and get all source code.
+To summarize, I would strongly recommend you to keep all mapping files for your release builds to be able to deobfuscate stack traces from crash logs. The best practice is building releases on your CI server with saving apk and mapping file with tags of releases. In this case, you will always know where you can find a mapping file for you release build. Also, there are a lot of services that provide automatic deobfuscation of stack traces such as Fabric or Google Play Developer Console. But keep in mind that you provide your mapping file to a 3-rd party service, and they can deobfuscate your builds and get all the source code.
