@@ -553,6 +553,177 @@ which implements the mDNS and DNS-SD protocols.&lt;/p&gt;
     </item>
     
     <item>
+      <title>Stacktrace deobfuscation</title>
+      <link>http://andriydruk.com/post/android-deobfuscation/</link>
+      <pubDate>Tue, 04 Aug 2015 22:40:49 +0300</pubDate>
+      
+      <guid>http://andriydruk.com/post/android-deobfuscation/</guid>
+      <description>&lt;p&gt;One of the problems of Android application support is to deofuscate or retrace stack traces obtained from an obfuscated release build. To figure out how to deobfuscate a stack trace, you need to understand how the obfuscation actually works. The standard way of obfuscation in Android development is done using tools such as the ProGuard. That&amp;rsquo;s what the &lt;a href=&#34;http://developer.android.com/tools/help/proguard.html#decoding&#34;&gt;official documentation&lt;/a&gt; says&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;The ProGuard tool shrinks, optimizesstatic innerand obfuscates your code by removing unused code and renaming classes, fields, and methods with semantically obscure names.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Well, looks good. Let&amp;rsquo;s try it. I will create a new project with Android Studio and add the following options to &lt;code&gt;build.gradle&lt;/code&gt; file to obfuscate &lt;code&gt;debug&lt;/code&gt; builds:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-gradle&#34;&gt;buildTypes {
+    debug {
+        minifyEnabled true
+        proguardFiles getDefaultProguardFile(&#39;proguard-android.txt&#39;), &#39;proguard-rules.pro&#39;
+    }
+    release {
+        minifyEnabled false
+        proguardFiles getDefaultProguardFile(&#39;proguard-android.txt&#39;), &#39;proguard-rules.pro&#39;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Let&amp;rsquo;s throw an &lt;code&gt;Exception&lt;/code&gt; in the &lt;code&gt;onCreate&lt;/code&gt; method of &lt;code&gt;MainActivity&lt;/code&gt; class:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+
+    throw new RuntimeException(&amp;quot;Stack deobfuscation example exception&amp;quot;);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;After running you will get something like:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Caused by: java.lang.RuntimeException: Stack deobfuscation example exception
+    at com.druk.myapplication.MainActivity.onCreate(Unknown Source)
+    at android.app.Activity.performCreate(Activity.java:6162)
+    at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1107)
+    at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2370)
+    at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2477)
+    at android.app.ActivityThread.-wrap11(ActivityThread.java)
+    at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1345)
+    at android.os.Handler.dispatchMessage(Handler.java:102)
+    at android.os.Looper.loop(Looper.java:148)
+    at android.app.ActivityThread.main(ActivityThread.java:5415)
+    at java.lang.reflect.Method.invoke(Native Method)
+    at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:725)
+    at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:615)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Why the &lt;code&gt;MainActivity&lt;/code&gt; is still the &lt;code&gt;MainActivity&lt;/code&gt; even after the obfuscation? The thing is that ProGuard uses default rules of Android projects obfuscation from the SDK in addition to the configuration file &lt;code&gt;proguard-rules.pro&lt;/code&gt; in our catalog. And those default rules weaken the obfuscation of &lt;code&gt;Activity&#39;s&lt;/code&gt; inheritors. The documentation contains the following guidelines for Android projects:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;-keep public class * extends android.app.Activity
+-keep public class * extends android.app.Application
+-keep public class * extends android.app.Service
+-keep public class * extends android.content.BroadcastReceiver
+-keep public class * extends android.content.ContentProvider
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;By default ProGuard will keep names for all inheritors of &lt;code&gt;android.app.Activity&lt;/code&gt;. Ok, I created an inner static class to avoid this rule.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;private static class CrashHelper{
+
+    public static void crash(){
+        throw new RuntimeException(&amp;quot;Stack deobfuscation example exception&amp;quot;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now when I call method crash from &lt;code&gt;onCreate&lt;/code&gt; I got:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Caused by: java.lang.RuntimeException: Stack deobfuscation example exception
+     at com.druk.myapplication.a.b(Unknown Source)
+     at com.druk.myapplication.a.a(Unknown Source)
+     at com.druk.myapplication.MainActivity.onCreate(Unknown Source)
+     at android.app.Activity.performCreate(Activity.java:6162)
+     at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1107)
+     at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2370)
+     at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2477)
+     at android.app.ActivityThread.-wrap11(ActivityThread.java)
+     at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1345)
+     at android.os.Handler.dispatchMessage(Handler.java:102)
+     at android.os.Looper.loop(Looper.java:148)
+     at android.app.ActivityThread.main(ActivityThread.java:5415)
+     at java.lang.reflect.Method.invoke(Native Method)
+     at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:725)
+     at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:615)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It&amp;rsquo;s exactly what we are looking for: the exception was thrown in method &lt;code&gt;b&lt;/code&gt; of class &lt;code&gt;a&lt;/code&gt; that was called from method &amp;lsquo;a&amp;rsquo;.&lt;/p&gt;
+
+&lt;p&gt;For deobfuscation we needed file &lt;code&gt;mapping.txt&lt;/code&gt; from &lt;code&gt;build&lt;/code&gt;. In my case path ro the file was &lt;code&gt;app/build/outputs/mapping/debug/mapping.txt&lt;/code&gt;. Next you need to run script retrace.sh from &lt;code&gt;ANDROID_HOME/tools/proguard/bin&lt;/code&gt; or run GUI utilits called ProguadGUI from &lt;code&gt;ANDROID_HOME/tools/proguard/lib/proguardgui.jar&lt;/code&gt;. I used GUI utils and got the following:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://andriydruk.com/img/Screen Shot 2015-08-04 at 23.34.25.png&#34; alt=&#34;Alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Caused by: java.lang.RuntimeException: Stack deobfuscation example exception
+    at com.druk.myapplication.MainActivity$CrashHelper.crash(Unknown Source)
+    at com.druk.myapplication.MainActivity$CrashHelper.access$000(Unknown Source)
+    at com.druk.myapplication.MainActivity.onCreate(Unknown Source)
+    at android.app.Activity.performCreate(Activity.java:6162)
+    at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1107)
+    at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2370)
+    at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2477)
+    at android.app.ActivityThread.-wrap11(ActivityThread.java)
+    at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1345)
+    at android.os.Handler.dispatchMessage(Handler.java:102)
+    at android.os.Looper.loop(Looper.java:148)
+    at android.app.ActivityThread.main(ActivityThread.java:5415)
+    at java.lang.reflect.Method.invoke(Native Method)
+    at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:725)
+    at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:615)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;One more thing, we need numbers of lines in a file where the crash occurred instead of current &lt;code&gt;Unknown Source&lt;/code&gt;. According to &lt;a href=&#34;http://proguard.sourceforge.net/manual/examples.html#stacktrace&#34;&gt;official docs&lt;/a&gt; for that you should add next lines to ProGuard properties:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;-printmapping out.map
+-keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute SourceFile
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The first rule is already in Android project by default, we will skip it. The second rule will switch on saving of source filename and table of line numbers. But the most interesting is the third one that will change all filenames to &lt;code&gt;Source file&lt;/code&gt;. It&amp;rsquo;s critical for languages like Java where filenames are usually the same to class name. Also, it will hide relations between inner and outer classes.&lt;/p&gt;
+
+&lt;p&gt;After updating proguard file I got:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Caused by: java.lang.RuntimeException: Stack deobfuscation example exception
+    at com.druk.myapplication.a.b(SourceFile:42)
+    at com.druk.myapplication.a.a(SourceFile:40)
+    at com.druk.myapplication.MainActivity.onCreate(SourceFile:15)
+    at android.app.Activity.performCreate(Activity.java:6162)
+    at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1107)
+    at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2370)
+    at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2477)
+    at android.app.ActivityThread.-wrap11(ActivityThread.java)
+    at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1345)
+    at android.os.Handler.dispatchMessage(Handler.java:102)
+    at android.os.Looper.loop(Looper.java:148)
+    at android.app.ActivityThread.main(ActivityThread.java:5415)
+    at java.lang.reflect.Method.invoke(Native Method)
+    at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:725)
+    at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:615)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And after deobfuscation:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Caused by: java.lang.RuntimeException: Stack deobfuscation example exception
+    at com.druk.myapplication.MainActivity$CrashHelper.crash(SourceFile:42)
+    at com.druk.myapplication.MainActivity$CrashHelper.access$000(SourceFile:40)
+    at com.druk.myapplication.MainActivity.onCreate(SourceFile:15)
+    at android.app.Activity.performCreate(Activity.java:6162)
+    at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1107)
+    at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2370)
+    at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2477)
+    at android.app.ActivityThread.-wrap11(ActivityThread.java)
+    at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1345)
+    at android.os.Handler.dispatchMessage(Handler.java:102)
+    at android.os.Looper.loop(Looper.java:148)
+    at android.app.ActivityThread.main(ActivityThread.java:5415)
+    at java.lang.reflect.Method.invoke(Native Method)
+    at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:725)
+    at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:615)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To summarize, I would strongly recommend you to keep all mapping files for your release builds to be able to deobfuscate stack traces from crash logs. The best practice is building releases on your CI server with saving apk and mapping file with tags of releases. In this case, you will always know where you can find a mapping file for you release build. Also, there are a lot of services that provide automatic deobfuscation of stack traces such as Fabric or Google Play Developer Console. But keep in mind that you provide your mapping file to a 3-rd party service, and they can deobfuscate your builds and get all the source code.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Welcome</title>
       <link>http://andriydruk.com/post/about/</link>
       <pubDate>Tue, 07 Jul 2015 23:10:36 +0300</pubDate>
