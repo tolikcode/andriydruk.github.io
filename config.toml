@@ -1,0 +1,51 @@
+baseurl = "https://www.andriydruk.com"
+languageCode = "en-us"
+title = "Yet Another Android Developer Blog"
+theme = "min-blog"
+
+metadataformat = "yaml"
+canonifyurls = true
+paginate = 10
+copyright = "Code released under the Apache 2.0 license."
+
+disqusShortname = "yetanotherandroiddeveloperblog"
+
+[author]
+  name = "Andriy Druk"
+
+[params]
+  DateForm = "Mon, Jan 2, 2006"
+  Description = "Hi, my name is Andriy Druk. I'm a software engineer from Ukraine."
+  Author = "Andriy Druk"
+  email = "andriy.druk@gmail.com"
+  Ganalytics = "UA-67278568-1"
+  logo = "img/logo.png"
+  Position = "Software Mobile Engineer"
+  # Google Analytics
+  # 
+  # Add your tracking code as first value followed by a comma
+  google_analytics = ["auto", "UA-67278568-1"]
+
+[[params.social]]
+  title = "twitter"
+  url = "https://twitter.com/AndriyDruk"
+[[params.social]]
+  title = "github"
+  url = "https://github.com/andriydruk"
+[social]
+  twitter = "AndriyDruk"
+  github  = "andriydruk"
+  linkedin = "andriy-druk-23147344"
+
+[[menu.main]]
+  name = "home"
+  url = "/"
+  weight = -200
+[[menu.main]]
+  name = "Archives"
+  url = "/post/"
+  weight = -180
+
+[params.palette]
+   primary = "red"
+   accent  = "pink"

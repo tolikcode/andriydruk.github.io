@@ -1,0 +1,3 @@
+[submodule "themes/min-blog"]
+	path = themes/min-blog
+	url = git@github.com:andriydruk/min-blog-hugo-theme.git
