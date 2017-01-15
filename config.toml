@@ -1,4 +1,4 @@
-baseurl = "http://andriydruk.com/"
+baseurl = "https://www.andriydruk.com"
 languageCode = "en-us"
 title = "Yet Another Android Developer Blog"
 theme = "min-blog"
