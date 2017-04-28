@@ -3,8 +3,8 @@ date = "2015-09-05T14:14:19+03:00"
 description = ""
 draft = false
 image = "/img/material-003.png"
-tags = ["androiddev"]
 title = "Bonjour in Android applications"
+onmain = true
 
 +++
 
@@ -135,4 +135,4 @@ context.getSystemService(Context.NSD_SERVICE);
 
 Otherwise, mDNSResponder will throw a checked exception "DNSD-SD Daemon not available".
 
-**Do you have any examples?** Yep, you can find an example of mDNSResponder usage (containing compiled native libraries with  the latest ndk version for all architectures) in my project Bonjour Browser, all code is available on [GitHub](https://github.com/andriydruk/BonjourBrowser). You can also see it in action in [Google Play.](https://play.google.com/store/apps/details?id=com.druk.bonjour.browser&hl=uk) It works really fast!
+**Do you have any examples?** Yep, you can find an example of mDNSResponder usage (containing compiled native libraries with  the latest ndk version for all architectures) in my project ~~Bonjour Browser~~ I mean Service Browser, all code is available on [GitHub](https://github.com/andriydruk/BonjourBrowser). You can also see it in action in [Google Play.](https://play.google.com/store/apps/details?id=com.druk.servicebrowser&hl=en) It works really fast!

@@ -2,8 +2,8 @@
 date = "2015-09-13T22:51:10+03:00"
 description = ""
 draft = false
-image = "/img/material-005.jpg"
 title = "Wrap Annoying APIs With RxJava"
+onmain = false
 
 +++
 

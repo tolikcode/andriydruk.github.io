@@ -2,10 +2,9 @@
 categories = ["Development"]
 date = "2015-07-15T21:39:00+03:00"
 description = ""
-draft = true
-image = "/img/material-001.jpg"
-tags = ["androiddev"]
+draft = false
 title = "Что такое .aar библиотеки?"
+onmain = false
 
 +++
 
