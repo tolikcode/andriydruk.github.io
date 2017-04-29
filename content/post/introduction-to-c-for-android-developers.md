@@ -8,11 +8,11 @@ onmain = true
 
 ### Introduction
 
-Lately, I've spent a lot of time interviewing Android developers. And I was surprised how little amount of Android devs know C language. Most of the developers know only one language and run they code only on JVM. But I will try to bust this myth:  sometimes C code can be much simpler to write and much simpler to run.
+Lately, I've spent a lot of time interviewing Android developers. And I was surprised how little amount of Android devs know C language. Most of the developers know only one language and run their code only on JVM. But I will try to bust this myth:  sometimes C code can be much simpler to write and much simpler to run.
 
 ### Toolchain
 
-The first step is toolchain. For this tutorial, I will use a very basic set of the toolchain. I already have downloaded latest NDK from the official website, added ANDROID_NDK environment variable, and I'm ready to create toolchain:
+The first step is toolchain. For this tutorial, I will use a very basic set of the toolchain. I already have downloaded the latest NDK from the official website, added ANDROID_NDK environment variable, and I'm ready to create toolchain:
 
 ~~~bash
 $ANDROID_NDK/build/tools/make_standalone_toolchain.py --arch arm --api 21 --unified-headers --install-dir ./toolchain
@@ -24,7 +24,7 @@ This command will generate toolchain for target platform 21 for ARM architecture
 
 ### Hello world
 
-If you are not familiar with C I highly recommend start from "C language" book by Kernighan and Ritchie (also known as K&R C). It's very basic but still very useful in our times. As usual, I will start from Hello world. Here example from this book (slightly modified for modern OS):
+If you are not familiar with C I highly recommend starting from "C language" book by Kernighan and Ritchie (also known as K&R C). It's very basic but still very useful in our time. As usual, I will start from Hello world. Here's an example from this book (slightly modified for modern OS):
 
 ~~~c
 #include <stdio.h>
@@ -35,18 +35,18 @@ int main() {
 }
 ~~~
 
-Ok, next step building and running as command line application on Android device.
+Ok, next step building and running as a command line application on Android device.
 
-I use clang as compiler (this is default compiler in NDK 14). Clang is frontend compiler fot different languages including C and C++ that use LLVM as backend. And a small step into a theory of compilation. In C there are 4 stages of compilation:
+I use clang as a compiler (this is a default compiler in NDK 14). Clang is a frontend compiler for different languages including C and C++ that uses LLVM as backend. And a small step into a theory of compilation. In C there are 4 stages of compilation:
 
 1. Preprocessing
 2. Actual compilation
 3. Assembly
 4. Linking
 
-> Note: In compilers 'frontend' means that compiler performs preprocessing of a source file, parsing code to AST and generate intermediate code (it's stage 1 and 2). Than 'backend' optimizes this code and translates it to machine code for specific CPU architecture (stage 3) (objects file). Than linker perform linking of executables or libraries from objects.
+> Note: In compilers 'frontend' means that compiler performs preprocessing of a source file, parsing code to AST and generates intermediate code (it's stage 1 and 2). Then 'backend' optimizes this code and translates it to machine code for specific CPU architecture (stage 3) (objects file). Then a linker performs linking of executables or libraries from objects.
 
-Back to practice, this command compiles .c file to object and then link it to the executable file for toolchain platform:
+Back to practice, this command compiles .c file to object and then links it to the executable file for toolchain platform:
 
 ~~~sh
 /toolchain/bin/clang helloworld.c -o main
@@ -68,18 +68,18 @@ adb shell /data/local/tmp/main
 hello, world%
 ~~~
 
-Congratulations 🎉, you run your first C command line application for Android. This approach is great for testing some feature in C without needs to create an android app, compile Java, package .apk file, etc. Just copy binary and run - very simple.
+Congratulations 🎉, you've just run your first C command line application for Android. This approach is great for testing some features in C without needing to create an android app, compile Java, package .apk file, etc. Just copy binary and run - very simple.
 
 ### Libraries
 
-In C there are 2 types of libraries:
+There are 2 types of libraries in C:
 
 - static
 - dynamic
 
-In this section, I will create executable linked against libraries of both types. As an example application, I decide to create a small utility that compares result of two implementations of inverse square root: system math library and hack that [was used in Quake III](https://en.wikipedia.org/wiki/Fast_inverse_square_root#Overview_of_the_code). In the static library, I implemented Quake III version of an inverse square root, in dynamic math.h version. And executable will ask a user for an input and print both results.
+In this section, I will create an executable linked against libraries of both types. As an example application, I decide to create a small utility that compares results of two implementations of inverse square root: system math library and hack that [was used in Quake III](https://en.wikipedia.org/wiki/Fast_inverse_square_root#Overview_of_the_code). In the static library, I've implemented Quake III version of an inverse square root, in dynamic -  math.h version. And this executable will ask a user for an input and print both results.
 
-Start with the **static library**. Again, a small step in theory:
+Let's start with the **static library**. Again, a small step in theory:
 
 > Static libraries are simply a collection of ordinary object files. This collection is created using the ar (archiver) program. Static libraries permit users to link to programs without having to recompile its code, saving recompilation time. Static libraries are often useful for developers if they wish to permit programmers to link to their library, but don't want to give the library source code.
 
@@ -104,13 +104,13 @@ float Q_rsqrt( float number )
 }
 ~~~
 
-Compile this strange .c file in object
+Compile this strange .c file into object
 
 ~~~sh
 ./toolchain/bin/clang fast-inverse-square-root.c -c
 ~~~
 
-This command will compile .c file to .o file (object). It's an intermediate object that will be used for creation static library. For more deeper understanding what objects are we will use nm utility:
+This command will compile .c file into .o file (object). It's an intermediate object that will be used for creation of a static library. For deeper understanding what objects are we will use nm utility:
 
 > The nm command can report the list of symbols in a given library. It works on both static and shared libraries. For a given library nm can list the symbol names defined, each symbol's value, and the symbol's type. It can also identify where the symbol was defined in the source code (by filename and line number), if that information is available in the library (see the -l option). The symbol type is displayed as a letter; lowercase means that the symbol is local, while uppercase means that the symbol is global (external). 
 
@@ -137,9 +137,9 @@ As mentioned above T means definition of symbol (in our case method) inside libr
 ./toolchain/bin/arm-linux-androideabi-ar rcs libstatic.a fast-inverse-square-root.o
 ~~~
 
-You should get libstatic.a file. You can checks list of symbols in arhive the same way as we do for .o file.
+You should get a libstatic.a file. You can check a list of symbols in archive the same way we do it for .o files.
 
-**Shared library** more difficult, let's start from definition:
+**Shared library** is more difficult, let's start from definition:
 
 > Shared libraries are libraries that are loaded by programs when they start. When a shared library is installed properly, all programs that start afterwards automatically use the new shared library. It's actually much more flexible and sophisticated than [this](), because the approach used by Linux permits you to: update libraries and still support programs that want to use older, non-backward-compatible versions of those libraries; override specific libraries or even specific functions in a library when executing a particular program; do all this while programs are running using existing libraries.
 
@@ -147,7 +147,7 @@ Since Android API 23 NDK supports dylib SONAME.
 
 > Every shared library has a special name called the `soname`. The soname has the prefix `lib`, the name of the library, the phrase `.so`, followed by a period and a version number that is incremented whenever the interface changes (as a special exception, the lowest-level C libraries don't start with `lib`). A fully-qualified soname includes as a prefix the directory it's in; on a working system a fully-qualified soname is simply a symbolic link to the shared library's `real name`. Every shared library also has a `real name`, which is the filename containing the actual library code. The real name adds to the soname a period, a minor number, another period, and the release number. The last period and release number are optional. The minor number and release number support configuration control by letting you know exactly what version(s) of the library are installed.
 
-There is an "small" problem with soname in Android: all Android 23+ platform require soname, but only Android 23+ can read it. That's why if you current min API lower than 23 you should always set soname == realname. No versioning of soname yet 😔
+There is a "small" problem with soname in Android: all Android 23+ platforms require soname, but only Android 23+ can read it. That's why if you current min API lower than 23 you should always set soname == realname. No versioning of soname yet 😔
 
 Code of inverse square root using math.h:
 
@@ -180,7 +180,7 @@ You should get libdynamic.so. Let's check it with nm:
          U sqrtf
 ~~~
 
-There is 2 intersting row: 
+There are 2 interesting rows: 
 
 - T rsqrt - it's method defined in this library
 - U sqrtf - system sqrtf defined in math.h
@@ -189,7 +189,7 @@ Now check the header of the shared library. For this purpose, we can use readelf
 
 > readelf displays information about one or more ELF format object files.
 
-The biggest advantages of using ELF - it's independence from CPU, ABI or operation system and can be used anywhere for checking any ELF object. If you have gcc tools preinstalled you can use sysytem `readelf`. For macOS user I can reccomend `brew install greadelf`
+The biggest advantages of using ELF - it's independence from CPU, ABI or operation system and can be used anywhere for checking any ELF object. If you have gcc tools preinstalled you can use sysytem `readelf`. For macOS user I can recommend `brew install greadelf`
 
 ~~~sh
 greadelf -d libdynamic.so | grep -E 'NEEDED|SONAME'
@@ -210,7 +210,7 @@ greadelf -d libdynamic.so | grep -E 'NEEDED|SONAME'
  0x0000000e (SONAME)                     Library soname: [libdynamic.so]
 ~~~
 
-Next step is building **executable** (helloworld.h):
+Next step is building of an **executable** (helloworld.h):
 
 ~~~c
 #include <stdio.h>
@@ -236,7 +236,7 @@ helloworld.c:function main: error: undefined reference to 'rsqrt'
 clang38: error: linker command failed with exit code 1 (use -v to see invocation)
 ~~~
 
-Linker said that threre are no `Q_rsqrt` and `rsqrt`. Try to link against libraries:
+Linker said that there are no `Q_rsqrt` and `rsqrt`. Try to link against libraries:
 
 ~~~sh
 ./toolchain/bin/clang -L./ -o helloworld helloworld.c libstatic.a libdynamic.so -fPIE -pie
@@ -256,11 +256,11 @@ Standard inverse square root from 42 is 0.154303
 
 ### Cross-platform compilation and CMake
 
-C is cross-platform language and in general case C code can be compiled for any platform. Headers that I imported in my sample project refers to libc, it's the standard library for the C programming language, as specified in the ANSI C standard. In this section, I will show how to build the sample app for host system (in my case macOS) and Android. For this purpose I use CMake:
+C is a cross-platform language and in general case C code can be compiled for any platform. Headers that I imported in my sample project refers to libc, it's the standard library for the C programming language, as specified in the ANSI C standard. In this section, I will show how to build the sample app for host system (in my case macOS) and Android. For this purpose I use CMake:
 
 > CMake is an open-source, cross-platform family of tools designed to build, test and package software. CMake is used to control the software compilation process using simple platform and compiler independent configuration files, and generate native makefiles and workspaces that can be used in the compiler environment of your choice. 
 
-Android SDK nowadays contains own version CMake, we will us it.
+Android SDK nowadays contains his own version of CMake, we will use it.
 
 All rules of compilation usually describe in CMakeList.txt. You can check syntaxis of [CMake config here](https://cmake.org/cmake-tutorial/).
 My version of CMakeList.txt for fast inverse square root sample is:
@@ -310,7 +310,7 @@ Quick inverse square root from 42 is 0.154036
 Standard inverse square root from 42 is 0.154303
 ~~~
 
-As you can see CMake is very simple tools for building cross-platform C code.
+As you can see CMake is a very simple tool for building cross-platform C code.
 
 > Note: Android CMake configuration provides special [flags](https://developer.android.com/ndk/guides/cmake.html) for Android such as minApi, stl, toolchain, etc.
 
@@ -325,6 +325,6 @@ According to official documentation, Google recommends to use NDK for 2 reasons:
 
 From my point of view, C can be used for any particular code in your project except UI part and communication with a system. Also, it can be useful in the cross-platform development of shared codebase.
 
-I hope my tutorial persuaded you to stop being afraid C code and inspired to write something on your own. My sample of cross-platform compilation is [available on Github](https://github.com/andriydruk).
+I hope my tutorial persuaded you to stop being afraid of C code and inspired to write something on your own. My sample of cross-platform compilation is [available on Github](https://github.com/andriydruk).
 
 
